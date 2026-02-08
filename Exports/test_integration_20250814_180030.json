@@ -1,0 +1,14 @@
+{
+  "exported_at": "2025-08-14T18:00:30.657145",
+  "record_count": 1,
+  "data": [
+    {
+      "title": "Test Business Lead",
+      "author": "test_user",
+      "subreddit": "entrepreneur",
+      "business_score": 8.5,
+      "urgency_level": "high",
+      "created_date": "2025-08-14"
+    }
+  ]
+}

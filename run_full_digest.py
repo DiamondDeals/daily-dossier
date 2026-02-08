@@ -235,3 +235,9 @@ def generate_combined_markdown(results):
 
 if __name__ == "__main__":
     run_full_digest()
+
+# After generating digest, create database with summaries
+print("\n📊 Creating database with summaries...")
+date_str = datetime.now().strftime('%Y-%m-%d_%H%M')
+subprocess.run(['python3', 'complete_with_titles.py'], timeout=180)
+print(f"✅ Database created: Database/complete_with_titles.html")

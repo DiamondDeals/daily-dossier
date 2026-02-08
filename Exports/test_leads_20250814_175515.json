@@ -1,0 +1,36 @@
+{
+  "exported_at": "2025-08-14T17:55:15.324527",
+  "record_count": 2,
+  "data": [
+    {
+      "title": "Need automation for inventory management",
+      "author": "business_owner",
+      "subreddit": "entrepreneur",
+      "business_score": 8.5,
+      "urgency_level": "high",
+      "problem_indicators": [
+        "manual data entry",
+        "time-consuming",
+        "automation"
+      ],
+      "created_date": "2025-08-14",
+      "permalink": "https://reddit.com/r/entrepreneur/comments/test123",
+      "summary": "Small business struggling with manual inventory tracking"
+    },
+    {
+      "title": "Looking for integration solutions",
+      "author": "tech_startup",
+      "subreddit": "startups",
+      "business_score": 7.2,
+      "urgency_level": "medium",
+      "problem_indicators": [
+        "integration",
+        "systems dont talk",
+        "workflow"
+      ],
+      "created_date": "2025-08-14",
+      "permalink": "https://reddit.com/r/startups/comments/test456",
+      "summary": "Startup needs to connect multiple business systems"
+    }
+  ]
+}
