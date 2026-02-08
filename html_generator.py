@@ -60,8 +60,8 @@ class DigestHTMLGenerator:
                 content = re.sub(r'(https?://[^\s]+)', r'<a href="\1" target="_blank">\1</a>', content)
                 html_lines.append(f'<li>{content}</li>')
             
-            # Table rows
-            elif '|' in stripped and not stripped.startswith('|---'):
+            # Table rows (must start with |)
+            elif stripped.startswith('|') and '|' in stripped[1:] and not stripped.startswith('|---'):
                 continue
             
             # Regular paragraphs
