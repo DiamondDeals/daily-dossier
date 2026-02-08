@@ -100,34 +100,34 @@ class DigestHTMLGenerator:
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PLACEHOLDER"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
+  function gtag(){{dataLayer.push(arguments);}}
   gtag('js', new Date());
-  gtag('config', 'G-PLACEHOLDER', {
+  gtag('config', 'G-PLACEHOLDER', {{
     'send_page_view': true,
     'anonymize_ip': true
-  });
-  
+  }});
+
   // Track link clicks
-  document.addEventListener('click', function(e) {
-    if (e.target.tagName === 'A' && e.target.href) {
-      gtag('event', 'click', {
+  document.addEventListener('click', function(e) {{
+    if (e.target.tagName === 'A' && e.target.href) {{
+      gtag('event', 'click', {{
         'event_category': 'outbound',
         'event_label': e.target.href,
         'transport_type': 'beacon'
-      });
-    }
-  });
-  
+      }});
+    }}
+  }});
+
   // Track dark mode toggle
   const themeToggle = document.querySelector('.theme-toggle');
-  if (themeToggle) {
-    themeToggle.addEventListener('click', function() {
-      gtag('event', 'toggle_theme', {
+  if (themeToggle) {{
+    themeToggle.addEventListener('click', function() {{
+      gtag('event', 'toggle_theme', {{
         'event_category': 'engagement',
         'event_label': document.documentElement.getAttribute('data-theme') || 'dark'
-      });
-    });
-  }
+      }});
+    }});
+  }}
 </script>
 
     <meta charset="UTF-8">
