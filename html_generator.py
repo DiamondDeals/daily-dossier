@@ -215,6 +215,12 @@ class DigestHTMLGenerator:
             font-size: 15px;
         }}
         
+        p:has(strong) {{
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }}
+        
         ul {{
             margin-left: 24px;
             margin-bottom: 24px;
@@ -227,13 +233,10 @@ class DigestHTMLGenerator:
         }}
         
         strong {{
-            display: block;
+            display: inline;
             font-size: 22px;
             font-weight: 800;
             color: var(--accent);
-            margin-bottom: 10px;
-            margin-top: 20px;
-            line-height: 1.4;
         }}
         
         a {{
