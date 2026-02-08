@@ -1,0 +1,19 @@
+{
+  "engagement_filters": {
+    "minimum_score": 50,
+    "minimum_comments": 5,
+    "minimum_engagement_score": 75,
+    "exclude_zero_comment_posts": true,
+    "exclude_service_offers": true
+  },
+  "quality_thresholds": {
+    "high_quality": 200,
+    "medium_quality": 100,
+    "minimum_viable": 75
+  },
+  "notes": {
+    "engagement_score": "score + (comments * 2)",
+    "minimum_engagement_score": "Posts below this are filtered out",
+    "updated": "2026-02-07 - Drew wants ONLY posts with real engagement"
+  }
+}

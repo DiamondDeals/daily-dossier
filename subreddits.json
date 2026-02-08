@@ -1,0 +1,148 @@
+{
+  "metadata": {
+    "version": "3.0",
+    "last_updated": "2025-01-07",
+    "total_subreddits": 58,
+    "description": "Categorized subreddits for finding business problems and automation opportunities"
+  },
+  "categories": {
+    "core_business": {
+      "description": "Primary business and entrepreneurship subreddits",
+      "subreddits": [
+        "entrepreneur",
+        "smallbusiness",
+        "business",
+        "startups",
+        "startup",
+        "solopreneur",
+        "SmallBusinessOwners",
+        "small_business_ideas"
+      ]
+    },
+    "marketing_sales": {
+      "description": "Marketing, sales, and customer acquisition",
+      "subreddits": [
+        "marketing",
+        "sales",
+        "DigitalMarketingHelp",
+        "MarketingHelp",
+        "ecommerce",
+        "agency",
+        "customerservice",
+        "growth"
+      ]
+    },
+    "freelance_consulting": {
+      "description": "Independent contractors and consultants",
+      "subreddits": [
+        "freelance",
+        "consulting",
+        "digitalnomad",
+        "remotework",
+        "coaching"
+      ]
+    },
+    "productivity_tools": {
+      "description": "Productivity, workflow, and process optimization",
+      "subreddits": [
+        "productivity",
+        "workflow",
+        "automation",
+        "organization",
+        "projectmanagement",
+        "excel",
+        "Efficiency"
+      ]
+    },
+    "finance_operations": {
+      "description": "Financial management and business operations",
+      "subreddits": [
+        "accounting",
+        "Bookkeeping",
+        "finance",
+        "crm",
+        "analytics",
+        "data"
+      ]
+    },
+    "tech_development": {
+      "description": "Technology and software development",
+      "subreddits": [
+        "webdev",
+        "programming",
+        "SaaS",
+        "it",
+        "sysadmin",
+        "msp"
+      ]
+    },
+    "industry_specific": {
+      "description": "Industry-specific business communities",
+      "subreddits": [
+        "realestate",
+        "insurance",
+        "legaladvice",
+        "legal",
+        "nonprofit",
+        "restaurantowners",
+        "restaurant",
+        "retailowners",
+        "retail",
+        "healthcare",
+        "education",
+        "Training"
+      ]
+    },
+    "support_help": {
+      "description": "General help and motivation communities",
+      "subreddits": [
+        "help",
+        "getmotivated",
+        "juststart",
+        "StartupsHelpStartups"
+      ]
+    },
+    "fitness_wellness": {
+      "description": "Fitness and wellness business communities",
+      "subreddits": [
+        "fitness",
+        "personaltraining"
+      ]
+    }
+  },
+  "search_priorities": {
+    "high_priority": [
+      "entrepreneur",
+      "smallbusiness",
+      "help",
+      "startup",
+      "DigitalMarketingHelp",
+      "MarketingHelp",
+      "SmallBusinessOwners",
+      "automation",
+      "excel",
+      "productivity"
+    ],
+    "medium_priority": [
+      "consulting",
+      "freelance",
+      "ecommerce",
+      "analytics",
+      "Bookkeeping",
+      "projectmanagement",
+      "customerservice",
+      "workflow"
+    ],
+    "specialized": [
+      "sysadmin",
+      "msp",
+      "realestate",
+      "healthcare",
+      "legal",
+      "restaurant",
+      "retail",
+      "nonprofit",
+      "insurance"
+    ]
+  }
+}

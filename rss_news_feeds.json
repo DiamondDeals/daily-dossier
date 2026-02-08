@@ -1,0 +1,58 @@
+{
+  "ai_news": [
+    {
+      "name": "TechCrunch AI",
+      "url": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "category": "AI"
+    },
+    {
+      "name": "The Verge AI",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/rss/index.xml",
+      "category": "AI"
+    },
+    {
+      "name": "MIT Technology Review AI",
+      "url": "https://www.technologyreview.com/topic/artificial-intelligence/feed",
+      "category": "AI"
+    },
+    {
+      "name": "Hacker News",
+      "url": "https://news.ycombinator.com/rss",
+      "category": "Tech"
+    },
+    {
+      "name": "VentureBeat AI",
+      "url": "https://venturebeat.com/category/ai/feed/",
+      "category": "AI"
+    }
+  ],
+  "marketing": [
+    {
+      "name": "Marketing Land",
+      "url": "https://martech.org/feed/",
+      "category": "Marketing"
+    },
+    {
+      "name": "Search Engine Journal",
+      "url": "https://www.searchenginejournal.com/feed/",
+      "category": "SEO/Marketing"
+    },
+    {
+      "name": "Neil Patel Blog",
+      "url": "https://neilpatel.com/feed/",
+      "category": "Marketing"
+    }
+  ],
+  "health": [
+    {
+      "name": "NutritionFacts.org",
+      "url": "https://nutritionfacts.org/feed/",
+      "category": "Health"
+    },
+    {
+      "name": "Forks Over Knives",
+      "url": "https://www.forksoverknives.com/feed/",
+      "category": "Plant-Based"
+    }
+  ]
+}

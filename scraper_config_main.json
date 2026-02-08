@@ -1,0 +1,9 @@
+{
+  "rate_limit": 3.0,
+  "auto_save_interval": 50,
+  "timeout": 30,
+  "max_retries": 1,
+  "output_dir": "Exports",
+  "use_reddit_api": 1,
+  "batch_size": 100
+}

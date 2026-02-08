@@ -1,0 +1,10 @@
+{
+  "processed_count": 0,
+  "nsfw_count": 0,
+  "safe_count": 0,
+  "error_count": 0,
+  "input_file": "Subreddits/Reddit SubReddits - ALL SUBREDDITS.csv",
+  "output_file": "Exports\\subreddit_descriptions_20250814_194954.csv",
+  "total_count": 0,
+  "timestamp": "2025-08-14T20:08:56.827344"
+}

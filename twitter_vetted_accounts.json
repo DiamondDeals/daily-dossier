@@ -1,0 +1,743 @@
+{
+  "list_id": "1219117707150233605",
+  "fetched_at": "2026-02-07",
+  "total_members": 92,
+  "accounts": [
+    {
+      "username": "marktenenholtz",
+      "name": "Mark Tenenholtz",
+      "bio": "Member of Technical Staff @perplexity_ai building @Comet",
+      "followers": 144070,
+      "verified": false,
+      "score": 77
+    },
+    {
+      "username": "itsPaulAi",
+      "name": "Paul Couvert",
+      "bio": "AI and tech Educator \u2013 Build better and faster using AI and No-Code \u2013 Blueshell AI & https://t.co/H8KvD12qNc founder",
+      "followers": 220275,
+      "verified": false,
+      "score": 70
+    },
+    {
+      "username": "javilopen",
+      "name": "Javi Lopez \u26e9\ufe0f",
+      "bio": "Generative AI tutorials, news & crazy creations.\n\nFounder @Magnific_AI (acq. by @freepik). Mystic designer.\n\n\ud83c\udfac YouTube: https://t.co/Wy91d2BwQh",
+      "followers": 124356,
+      "verified": false,
+      "score": 70
+    },
+    {
+      "username": "itsedaxe",
+      "name": "Ed Axe",
+      "bio": "CEO @ Axe Automation // Passionate about AI, automation, productivity, and operations // I've helped 224 (and counting) companies scale and save $ millions",
+      "followers": 21812,
+      "verified": false,
+      "score": 70
+    },
+    {
+      "username": "omarsar0",
+      "name": "elvis",
+      "bio": "Building @dair_ai \u2022 Prev: Meta AI, Elastic, PhD \u2022 New cohort: https://t.co/AqEvlVuYdM",
+      "followers": 287826,
+      "verified": false,
+      "score": 70
+    },
+    {
+      "username": "mckaywrigley",
+      "name": "Mckay Wrigley",
+      "bio": "I build & teach AI stuff. Founder @TakeoffAI + @AgentShare. Come learn to use AI at https://t.co/oJ8PNoAutE.",
+      "followers": 225421,
+      "verified": false,
+      "score": 70
+    },
+    {
+      "username": "marclou",
+      "name": "Marc Lou",
+      "bio": "\ud83d\udee1\ufe0f https://t.co/MZc8tG9xWi $31K/m\n\ud83e\uddd1\u200d\ud83d\udcbb https://t.co/Y30jsaHwz9 $24K/m\n\ud83d\udcc8 https://t.co/3EDxln5mdi $18K/m\n\u26a1\ufe0f https://t.co/vatLDmi9UG $17K/m\n\ud83c\udf5c https://t.co/r07EpGSYJ2 $0/m\n\ud83e\uddfe https://t.co/7olaOzV8Xd $0/m\n\ud83e\uddec https://t.co/SfrVXVtmdA 0$/m\n\n+20 https://t.co/4zCWHGJp1S",
+      "followers": 281793,
+      "verified": false,
+      "score": 70
+    },
+    {
+      "username": "levelsio",
+      "name": "@levelsio",
+      "bio": "\ud83c\uddea\ud83c\uddfahttps://t.co/NdorAWqJC3 @euacc \n\ud83d\udcf8https://t.co/lAyoqmSBRX $110k/m \n\ud83c\udfe1https://t.co/1oqUgfD6CZ $36K/m \n\ud83d\udef0https://t.co/ZHSvI2wjyW $38K/m \n\ud83c\udf0dhttps://t.co/UXK5AFqCaQ $17K/m \n\ud83d\udc59https://t.co/RyXpqGuFM3 $17K/m \n\ud83d\udcbe@pieter $0K/m",
+      "followers": 817348,
+      "verified": false,
+      "score": 70
+    },
+    {
+      "username": "rowancheung",
+      "name": "Rowan Cheung",
+      "bio": "Founder of the world\u2019s most read daily AI newsletter @therundownai. Sharing the latest developments in the world of artificial intelligence.",
+      "followers": 569923,
+      "verified": false,
+      "score": 70
+    },
+    {
+      "username": "KirkDBorne",
+      "name": "Kirk Borne",
+      "bio": "Advisor to startups. Freelancer. @LeadershipData founder. Global Speaker. Top #B2B influencer & social promoter #DataScience #AI #ML. PhD Astrophysics @Caltech",
+      "followers": 480189,
+      "verified": false,
+      "score": 70
+    },
+    {
+      "username": "rileybrown",
+      "name": "Riley Brown",
+      "bio": "Cofounder of @vibecodeapp (the #1 full stack vibe coding platform)",
+      "followers": 152889,
+      "verified": false,
+      "score": 67
+    },
+    {
+      "username": "heykahn",
+      "name": "Zain Kahn",
+      "bio": "Scaled products to 10 million+ users. Sharing playbooks on how to build with AI here.",
+      "followers": 505205,
+      "verified": false,
+      "score": 67
+    },
+    {
+      "username": "llama_index",
+      "name": "LlamaIndex \ud83e\udd99",
+      "bio": "AI Agents for document OCR + workflows\n\nGithub: https://t.co/HC19j7veGE\nDocs: https://t.co/QInqg2yMCJ\nLlamaCloud: https://t.co/yQGTiRSfFL",
+      "followers": 107082,
+      "verified": true,
+      "score": 65
+    },
+    {
+      "username": "AnthropicAI",
+      "name": "Anthropic",
+      "bio": "We're an AI safety and research company that builds reliable, interpretable, and steerable AI systems. Talk to our AI assistant @claudeai on https://t.co/FhDI3KQh0n.",
+      "followers": 804345,
+      "verified": true,
+      "score": 65
+    },
+    {
+      "username": "ibab",
+      "name": "Igor Babuschkin",
+      "bio": "Maybe the real ASI was the friends we made along the way. Co-founder @xAI, Research & Engineering",
+      "followers": 106691,
+      "verified": false,
+      "score": 65
+    },
+    {
+      "username": "AIatMeta",
+      "name": "AI at Meta",
+      "bio": "Together with the AI community, we are pushing the boundaries of what\u2019s possible through open science to create a more connected world.",
+      "followers": 748270,
+      "verified": true,
+      "score": 65
+    },
+    {
+      "username": "GoogleDeepMind",
+      "name": "Google DeepMind",
+      "bio": "We\u2019re a team of scientists, engineers, ethicists and more, committed to solving intelligence, to advance science and benefit humanity.",
+      "followers": 1329625,
+      "verified": true,
+      "score": 65
+    },
+    {
+      "username": "OpenAI",
+      "name": "OpenAI",
+      "bio": "OpenAI\u2019s mission is to ensure that artificial general intelligence benefits all of humanity. We\u2019re hiring: https://t.co/dJGr6LgzPA",
+      "followers": 4614790,
+      "verified": true,
+      "score": 65
+    },
+    {
+      "username": "thdxr",
+      "name": "dax",
+      "bio": "building https://t.co/eVz8bbXqxp at https://t.co/tuf3muzh5t",
+      "followers": 95295,
+      "verified": false,
+      "score": 65
+    },
+    {
+      "username": "LiorOnAI",
+      "name": "Lior Alexander",
+      "bio": "Covering the latest dev news in AI \u2022 Founder @AlphaSignalAI (250k users)\nML Eng since 2017 \u2022 Ex-Mila",
+      "followers": 112222,
+      "verified": false,
+      "score": 65
+    },
+    {
+      "username": "alexandr_wang",
+      "name": "Alexandr Wang",
+      "bio": "chief ai officer @meta, founder @scale_ai. rational in the fullness of time",
+      "followers": 378234,
+      "verified": false,
+      "score": 65
+    },
+    {
+      "username": "AndrewYNg",
+      "name": "Andrew Ng",
+      "bio": "Co-Founder of Coursera; Stanford CS adjunct faculty. Former head of Baidu AI Group/Google Brain. #ai #machinelearning, #deeplearning #MOOCs",
+      "followers": 1355457,
+      "verified": false,
+      "score": 65
+    },
+    {
+      "username": "mathemagic1an",
+      "name": "Jay Hack",
+      "bio": "Head of AI @clickup. Tweets about AI, computing, dev tools and knowledge work. Previously founder @codegen / ML + data @palantir / @stanford. Not a pseudonym.",
+      "followers": 60338,
+      "verified": false,
+      "score": 62
+    },
+    {
+      "username": "jackfriks",
+      "name": "jack friks",
+      "bio": "curious guy creating things @ https://t.co/HXWladhJaA - up and coming wife guy",
+      "followers": 105083,
+      "verified": false,
+      "score": 60
+    },
+    {
+      "username": "perplexity_ai",
+      "name": "Perplexity",
+      "bio": "Curiosity changes everything. Download our free app on iOS, Mac, Windows, and Android: https://t.co/BBZ1kG0TVG",
+      "followers": 379544,
+      "verified": true,
+      "score": 60
+    },
+    {
+      "username": "LeonardoAi",
+      "name": "Leonardo.Ai",
+      "bio": "The advanced creative toolkit for curious makers.",
+      "followers": 59658,
+      "verified": true,
+      "score": 60
+    },
+    {
+      "username": "hasantoxr",
+      "name": "Hasan Toor",
+      "bio": "AI & Tech Educator \u2022 Sharing insights & practical ways to use AI & Tech Tools for you & your daily business",
+      "followers": 420577,
+      "verified": false,
+      "score": 60
+    },
+    {
+      "username": "Saboo_Shubham_",
+      "name": "Shubham Saboo",
+      "bio": "Senior AI Product Manager @google | Open Source Awesome LLM Apps Repo (#1 GitHub with 92k+ stars) | Author of books on GPT-3 & Neural Search | My views",
+      "followers": 102792,
+      "verified": false,
+      "score": 60
+    },
+    {
+      "username": "woj_zaremba",
+      "name": "Wojciech Zaremba",
+      "bio": "Co-Founder of OpenAI\n\nhttps://t.co/OCQ3mpf0IN",
+      "followers": 132108,
+      "verified": false,
+      "score": 60
+    },
+    {
+      "username": "ezekiel_aleke",
+      "name": "Ezekiel",
+      "bio": "Data Analyst | Author: DATA ANALYSIS MADE EASY | Visit: https://t.co/KORc7i06Jr | For Promotion DM",
+      "followers": 119414,
+      "verified": false,
+      "score": 60
+    },
+    {
+      "username": "Elliott__",
+      "name": "Elliott Murray",
+      "bio": "building the greatest ai ghostwriter on earth | founder & ceo @trypostwise | ex-growth lead for justin bieber, lady gaga, cardi b",
+      "followers": 20868,
+      "verified": false,
+      "score": 60
+    },
+    {
+      "username": "_akhaliq",
+      "name": "AK",
+      "bio": "AI research paper tweets, ML @Gradio (acq. by @HuggingFace \ud83e\udd17) dm for promo ,submit papers here: https://t.co/UzmYN5XOCi",
+      "followers": 453865,
+      "verified": false,
+      "score": 60
+    },
+    {
+      "username": "skorusARK",
+      "name": "Sam Korus",
+      "bio": "Director of Research Autonomous Technology & Robotics @ARKinvest. Automation, robotics, energy storage, alternative energy, and space. Disclosure https://t.co/VyzEWqoebV",
+      "followers": 150001,
+      "verified": false,
+      "score": 60
+    },
+    {
+      "username": "rasbt",
+      "name": "Sebastian Raschka",
+      "bio": "ML/AI research engineer. Ex stats professor.\nAuthor of \"Build a Large Language Model From Scratch\" (https://t.co/O8LAAMRzzW) & reasoning (https://t.co/5TueQKx2Fk)",
+      "followers": 389073,
+      "verified": false,
+      "score": 60
+    },
+    {
+      "username": "OfficialLoganK",
+      "name": "Logan Kilpatrick",
+      "bio": "member of the technical staff, working on @GoogleAIStudio & the Gemini API. my views!",
+      "followers": 270523,
+      "verified": false,
+      "score": 60
+    },
+    {
+      "username": "corbin_braun",
+      "name": "corbin",
+      "bio": "Founder @thumio \u00b7 backed by _cafe_",
+      "followers": 45402,
+      "verified": false,
+      "score": 57
+    },
+    {
+      "username": "mreflow",
+      "name": "Matt Wolfe",
+      "bio": "AI Tools Database: https://t.co/mmVmxk2DF9\n\nAI News & Tutorials: https://t.co/vUwzYBz4Ig \n\nThe Next Wave Pod: https://t.co/uxC0RIlu6U",
+      "followers": 108955,
+      "verified": false,
+      "score": 57
+    },
+    {
+      "username": "NikkiSiapno",
+      "name": "Nikki Siapno",
+      "bio": "Eng Manager | ex-Canva | 400k+ audience | Helping you become a great engineer and leader",
+      "followers": 174585,
+      "verified": false,
+      "score": 57
+    },
+    {
+      "username": "Sumanth_077",
+      "name": "Sumanth",
+      "bio": "Simplifying LLMs, RAG, Machine Learning & AI Agents for you! \u2022 ML Developer Advocate \u2022 Shipping Open Source AI apps",
+      "followers": 75698,
+      "verified": false,
+      "score": 55
+    },
+    {
+      "username": "paulabartabajo_",
+      "name": "Pau Labarta Bajo",
+      "bio": "Citizen of the World who teaches AI that **works** | @liquidai | Maths Olympian | Father of 1\u2026 sorry 2 | Opinions are my own",
+      "followers": 66423,
+      "verified": false,
+      "score": 55
+    },
+    {
+      "username": "lightfld",
+      "name": "Lightfield",
+      "bio": "A new kind of CRM.",
+      "followers": 25995,
+      "verified": true,
+      "score": 55
+    },
+    {
+      "username": "_Lia27",
+      "name": "Lia",
+      "bio": "\u2694\ufe0fThe AI Avatar Archangel\ud83c\udf1e\nFighting for Love & Justice, fueled by Hope... and a dash of time travel. \ud83d\ude09",
+      "followers": 358681,
+      "verified": false,
+      "score": 55
+    },
+    {
+      "username": "andriy_mulyar",
+      "name": "Andriy Mulyar",
+      "bio": "building https://t.co/NbsLHLWfy8.\n\nour models accelerate the design and construction of the built world.",
+      "followers": 11592,
+      "verified": false,
+      "score": 55
+    },
+    {
+      "username": "goodfellow_ian",
+      "name": "Ian Goodfellow",
+      "bio": "DeepMind Research Scientist. Opinions my own. Inventor of GANs. Lead author of https://t.co/M6vl8pEQ4I Founding chairman of @pubhealthaction",
+      "followers": 359327,
+      "verified": false,
+      "score": 55
+    },
+    {
+      "username": "machinelearnflx",
+      "name": "Machine Learning FLX",
+      "bio": "Everything about #MachineLearning #NLP #DeepLearning  #AI  #GenAI  #Bigdata #DataMining, #DataScience  #LLM #Learning, #AgentAI | DM for collaborations",
+      "followers": 169905,
+      "verified": false,
+      "score": 55
+    },
+    {
+      "username": "DrJimFan",
+      "name": "Jim Fan",
+      "bio": "NVIDIA Director of Robotics & Distinguished Scientist. Co-Lead of GEAR lab. Solving Physical AGI, one motor at a time. Stanford Ph.D. OpenAI's 1st intern.",
+      "followers": 356750,
+      "verified": false,
+      "score": 55
+    },
+    {
+      "username": "DanKornas",
+      "name": "Dan Kornas",
+      "bio": "AI/ML Engineer\nAI Notes: https://t.co/lC2UKMtRjj\nYoutube: https://t.co/pjpX8NvUn5\nNewsletter: https://t.co/NMMvPSmzua",
+      "followers": 89889,
+      "verified": false,
+      "score": 52
+    },
+    {
+      "username": "srush_nlp",
+      "name": "Sasha Rush",
+      "bio": "Researcher at Cursor\nhttps://t.co/cZl0wTfqGz",
+      "followers": 75416,
+      "verified": false,
+      "score": 52
+    },
+    {
+      "username": "andrew_n_carr",
+      "name": "Andrew Carr \ud83e\udd38",
+      "bio": "co-founder leading science @getcartwheel co-founder advisor @arcade_ai Past: Codex @OpenAI, Brain @GoogleAI, world ranked Tetris player",
+      "followers": 24555,
+      "verified": false,
+      "score": 52
+    },
+    {
+      "username": "ai__pub",
+      "name": "AI Pub",
+      "bio": "AI papers and AI research explained, for technical people. Get hired by the best AI companies: https://t.co/MySVjUGOQ3",
+      "followers": 71734,
+      "verified": false,
+      "score": 50
+    },
+    {
+      "username": "JayaGup10",
+      "name": "Jaya Gupta",
+      "bio": "tweets about AI and other fun stuff. currently @foundationcap; previously McKinsey, @georgiatech alum, @stackfolio (acquired), @peak6, @raymondjames",
+      "followers": 20848,
+      "verified": false,
+      "score": 50
+    },
+    {
+      "username": "JeremyNguyenPhD",
+      "name": "Jeremy Nguyen \u270d\ud83c\udffc \ud83d\udea2",
+      "bio": "A.I. for writing, productivity, business | College Prof, A.I. Educator, A.I. Researcher | Writer on Disney+ show | Father to newborn, so sleepy",
+      "followers": 23351,
+      "verified": false,
+      "score": 50
+    },
+    {
+      "username": "Aakriti_Sarma",
+      "name": "Analytical Aakriti | The SQL Gal",
+      "bio": "Open for DevRel roles!\nData Nerd | Technical Writer | SQL Obsessed | Python Possessed | Let's dig into data the simple, effective and no nonsense way \ud83d\udcca",
+      "followers": 71700,
+      "verified": false,
+      "score": 50
+    },
+    {
+      "username": "_jaydeepkarale",
+      "name": "Jaydeep",
+      "bio": "Follow Me If You Like\n\ud83d\udc0d Python\n\ud83e\udd16 Machine Learning/AI\n\u2699\ufe0f Software Engineering \n\ud83d\udcca Freelancing\n\ud83d\udce9 DM For Collab\n\nhttps://t.co/Hlg3x1aEFa",
+      "followers": 26834,
+      "verified": false,
+      "score": 50
+    },
+    {
+      "username": "geoffreyhinton",
+      "name": "Geoffrey Hinton",
+      "bio": "deep learning",
+      "followers": 546595,
+      "verified": false,
+      "score": 50
+    },
+    {
+      "username": "BaiduResearch",
+      "name": "Baidu Research",
+      "bio": "Baidu Research brings together top talent from around the world to focus on future-looking fundamental researches in #AI #deeplearning #machinelearning.",
+      "followers": 66641,
+      "verified": false,
+      "score": 50
+    },
+    {
+      "username": "cliffweitzman",
+      "name": "Cliff Weitzman",
+      "bio": "CEO / Founder @SpeechifyAI (55 million users)\nDyslexia Advocate, also Kaladin\n\nhttps://t.co/3MWqfuZO4i",
+      "followers": 4337,
+      "verified": false,
+      "score": 50
+    },
+    {
+      "username": "an_open_mind",
+      "name": "Jerome Pesenti",
+      "bio": "CTO at @Campusgrad. Founder @Sizzle_AI. Ex @MetaAI, @Benevolent_AI, @IBMWatson, co-founder Vivisimo (acq. by IBM).",
+      "followers": 16335,
+      "verified": false,
+      "score": 50
+    },
+    {
+      "username": "nevrekaraishwa2",
+      "name": "Aishwarya Nevrekar",
+      "bio": "I post about data science and Ai.\nSometimes business and finance too.\nYour only limit is your mind.\n\nDM for Collaborations \ud83d\udce9",
+      "followers": 45838,
+      "verified": false,
+      "score": 47
+    },
+    {
+      "username": "victormustar",
+      "name": "Victor M",
+      "bio": "\ud83e\udd17 Head of Product @huggingface",
+      "followers": 23204,
+      "verified": false,
+      "score": 47
+    },
+    {
+      "username": "anitakirkovska",
+      "name": "anita",
+      "bio": "creator of @its_avareed \ud83e\udd9e. head of growth @vellum_ai. fulbrighter. AI obsessed",
+      "followers": 9312,
+      "verified": false,
+      "score": 47
+    },
+    {
+      "username": "startupempire_",
+      "name": "Startup Empire",
+      "bio": "I help you turn your ideas into income with cash-flowing businesses. Follow along for trends, startup ideas, tools and growth tactics",
+      "followers": 37973,
+      "verified": false,
+      "score": 45
+    },
+    {
+      "username": "AnimaAnandkumar",
+      "name": "Prof. Anima Anandkumar",
+      "bio": "AI+Science, Bren Professor @caltech, Time100, Fmr Sr Director of #AI research @nvidia Fmr Principal Scientist @awscloud",
+      "followers": 35727,
+      "verified": false,
+      "score": 45
+    },
+    {
+      "username": "copy_ai",
+      "name": "copy.ai",
+      "bio": "Meet the world's first-ever GTM AI Platform. Finally, an AI solution that reduces data silos, connects your entire team, and helps you beat Go-to-Market Bloat.",
+      "followers": 53438,
+      "verified": false,
+      "score": 45
+    },
+    {
+      "username": "SanthoshKumarS_",
+      "name": "Santhosh Kumar",
+      "bio": "Conscious Data Scientist | Jr MLE @OmdenaAI | Sharing My Journey through Tweets.\n\nDM for Collaboration \ud83d\udce9",
+      "followers": 22700,
+      "verified": false,
+      "score": 45
+    },
+    {
+      "username": "SigGravitas",
+      "name": "Toran Bruce Richards",
+      "bio": "Inventor of AutoGPT \ud83d\udc19 \nWorld #1 AI GitHub Repo by Stars \u2b50 \n\nCommitted to making AI Agents work for YOU. \n\nhttps://t.co/IpFu1W1Bmp \n\nhttps://t.co/IdX2LTXwe2",
+      "followers": 50191,
+      "verified": false,
+      "score": 45
+    },
+    {
+      "username": "hausman_k",
+      "name": "Karol Hausman",
+      "bio": "@Physical_int",
+      "followers": 38340,
+      "verified": false,
+      "score": 45
+    },
+    {
+      "username": "abacusai",
+      "name": "Abacus.AI",
+      "bio": "The world's most powerful general-purpose agent and all-in-one AI platform for professionals and enterprises.  Abacus AI is your AGI control center!",
+      "followers": 95255,
+      "verified": true,
+      "score": 40
+    },
+    {
+      "username": "slashML",
+      "name": "/MachineLearning",
+      "bio": "",
+      "followers": 123925,
+      "verified": false,
+      "score": 40
+    },
+    {
+      "username": "spkbbbbbbbbbbbb",
+      "name": "\u2026",
+      "bio": "\u2026",
+      "followers": 2859,
+      "verified": false,
+      "score": 37
+    },
+    {
+      "username": "yanndubs",
+      "name": "Yann Dubois",
+      "bio": "Posttraining @OpenAI |  PhD @StanfordAILab",
+      "followers": 11955,
+      "verified": false,
+      "score": 35
+    },
+    {
+      "username": "PrismaAI",
+      "name": "Prisma Labs",
+      "bio": "New AI avatars are out now! Generated with Stable Diffusion in Lensa app! https://t.co/N5YhsuYoSp",
+      "followers": 9391,
+      "verified": false,
+      "score": 35
+    },
+    {
+      "username": "AzureAutomation",
+      "name": "Azure Automation",
+      "bio": "Official Twitter of the Azure Automation engineering team",
+      "followers": 6325,
+      "verified": false,
+      "score": 35
+    },
+    {
+      "username": "notabotdaily",
+      "name": "Not A Bot",
+      "bio": "One of the most subscribed AI newsletter for 5+ years. Join 40k subscribers, including Mark Cuban, Fortune 50 CEOs, and more. By @AutoblocksAI",
+      "followers": 780,
+      "verified": false,
+      "score": 30
+    },
+    {
+      "username": "PromptableAI",
+      "name": "Promptable.ai",
+      "bio": "OSS AI Apps in Typescript. \n\nhttps://t.co/6mNjOes1QR\n\nhttps://t.co/h8N5h6y6Pv",
+      "followers": 1759,
+      "verified": false,
+      "score": 30
+    },
+    {
+      "username": "aiforanyone",
+      "name": "AI For Anyone",
+      "bio": "Making AI accessible to all since 2015. Founded by @haroonchoudery, writer of the world's biggest AI newsletter, @notabotdaily.",
+      "followers": 2328,
+      "verified": false,
+      "score": 30
+    },
+    {
+      "username": "_RobToews",
+      "name": "Rob Toews",
+      "bio": "Partner @RadicalVCFund, AI columnist @Forbes. \"the machine does not isolate man from the great problems of nature but plunges him more deeply into them.\"",
+      "followers": 4894,
+      "verified": false,
+      "score": 30
+    },
+    {
+      "username": "metatransformr",
+      "name": "Nick Bryant",
+      "bio": "Surfing the singularity and trying to stay alive and afloat and shred",
+      "followers": 4696,
+      "verified": false,
+      "score": 30
+    },
+    {
+      "username": "originalprompts",
+      "name": "Original Prompts",
+      "bio": "Original prompts for @aiarteveryhour bot. Run by @mikkeymoos",
+      "followers": 33,
+      "verified": false,
+      "score": 27
+    },
+    {
+      "username": "ammar_ai_time",
+      "name": "Ammar.ai ( Ai based businesses )",
+      "bio": "Explore the world of AI with our comprehensive directory of over 1000 AI tools and apps, extensive library of videos and articles, created by @3ammarai",
+      "followers": 271,
+      "verified": false,
+      "score": 25
+    },
+    {
+      "username": "kaiznjosh",
+      "name": "Josh Cross",
+      "bio": "| Growth at @Sogni_Protocol |\n| In pursuit of an admirable life |",
+      "followers": 3141,
+      "verified": false,
+      "score": 25
+    },
+    {
+      "username": "avatarsdk",
+      "name": "Avatar SDK",
+      "bio": "AI-powered #3davatar creation toolkit for #gamedev, #VR, #AR. It takes just one selfie! \ud83e\udd16MetaPerson Creator https://t.co/RDjmJQSalT",
+      "followers": 396,
+      "verified": false,
+      "score": 25
+    },
+    {
+      "username": "ThisIsMeIn360VR",
+      "name": "\u2124\ud835\udd3c\ud835\udc0d \u26a1\ufe0f the innovator \ud83d\udca1",
+      "bio": "Helping people craft Ai \ud83e\udd16\nagents & develop their \ud83d\udca1\ngoals with over-agent  \ud83e\ude84\n@ProbSolvio.com (Ai)  \ud83e\uddd9\u200d\u2642\ufe0f \nin https://t.co/NsAhDEmb40   \ud83c\udf03\n\nsee my rep \ud83e\uddf5  in",
+      "followers": 8880,
+      "verified": false,
+      "score": 25
+    },
+    {
+      "username": "ML_Jobs_Feed",
+      "name": "Machine Learning Jobs Feed",
+      "bio": "An automated feed featuring Machine Learning, AI & Deep Learning Jobs!",
+      "followers": 1100,
+      "verified": false,
+      "score": 20
+    },
+    {
+      "username": "victrays",
+      "name": "Victrays \u270c\ufe0f\u2600\ufe0f",
+      "bio": "Find AI resources, including #Aitools, Ai prompts and Ai plugins all in one place.\n\nby https://t.co/ObbbOKNqq2",
+      "followers": 109,
+      "verified": false,
+      "score": 15
+    },
+    {
+      "username": "enbifa",
+      "name": "Vincenzo Bifano",
+      "bio": "Senior Software Architect @ RAI. Writing about JS, AI & Node.js. Tweeting about tech news and tutorials. Building robust and scalable software solutions.",
+      "followers": 844,
+      "verified": false,
+      "score": 15
+    },
+    {
+      "username": "TheGPTQuest",
+      "name": "TheGPTQuest",
+      "bio": "Exploring AI's potential: Can ChatGPT generate $100k with a human interface in a human world? Follow our experiment and find out!",
+      "followers": 3,
+      "verified": false,
+      "score": 10
+    },
+    {
+      "username": "_AI_Samurai",
+      "name": "@_AI_Samurai",
+      "bio": "Your front row seat to the things to come. \n#crypto maximalist, #nft apologist, #AI inevitablist\n\nbc1qfz40zkgyqj59mjvjfa2ta5805d6mx58gk0tq83",
+      "followers": 67,
+      "verified": false,
+      "score": 10
+    },
+    {
+      "username": "Devin_R_Wright",
+      "name": "Devin Robert Wright",
+      "bio": "Joint PhD student \u2013 Cognitive Science & Informatics.\nStories \u2022 worldviews \u2022 religion \u2022 culture. The cognition and complexity of their interaction and evolution.",
+      "followers": 68,
+      "verified": false,
+      "score": 10
+    },
+    {
+      "username": "DylanJWatkins1",
+      "name": "Dylan @ n8n",
+      "bio": "Chief Automation Officer | Technology Consultant | Helping Businesses Install High ROI Scalable Systems & Automated AI Workflows",
+      "followers": 134,
+      "verified": false,
+      "score": 10
+    },
+    {
+      "username": "kureshirfan",
+      "name": "Irfan",
+      "bio": "Exploring the world of science, technology, and innovation. Passionate about new discoveries, cutting-edge tech, and futuristic trends.",
+      "followers": 280,
+      "verified": false,
+      "score": 10
+    },
+    {
+      "username": "atom85721420",
+      "name": "atom",
+      "bio": "build production-ready applications in weeks instead of months\n\nClick Here \ud83d\udc47",
+      "followers": 17,
+      "verified": false,
+      "score": 5
+    }
+  ]
+}
