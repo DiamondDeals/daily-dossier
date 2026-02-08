@@ -176,9 +176,9 @@ class DigestHTMLGenerator:
         
         h1 {{
             color: var(--text-primary);
-            font-size: 48px;
+            font-size: 36px;
             font-weight: 600;
-            letter-spacing: -0.5px;
+            letter-spacing: -0.4px;
             margin-bottom: 12px;
         }}
         
@@ -190,13 +190,13 @@ class DigestHTMLGenerator:
         
         h2 {{
             color: var(--accent);
-            font-size: 48px;
+            font-size: 36px;
             font-weight: 800;
-            margin-top: 60px;
-            margin-bottom: 30px;
-            letter-spacing: -0.5px;
-            border-left: 6px solid var(--accent);
-            padding-left: 24px;
+            margin-top: 50px;
+            margin-bottom: 24px;
+            letter-spacing: -0.4px;
+            border-left: 5px solid var(--accent);
+            padding-left: 20px;
             text-transform: uppercase;
         }}
         
@@ -228,12 +228,12 @@ class DigestHTMLGenerator:
         
         strong {{
             display: block;
-            font-size: 28px;
+            font-size: 22px;
             font-weight: 800;
             color: var(--accent);
-            margin-bottom: 12px;
-            margin-top: 24px;
-            line-height: 1.3;
+            margin-bottom: 10px;
+            margin-top: 20px;
+            line-height: 1.4;
         }}
         
         a {{
