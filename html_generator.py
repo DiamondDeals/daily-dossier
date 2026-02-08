@@ -180,14 +180,15 @@ class DigestHTMLGenerator:
         }}
         
         h2 {{
-            color: var(--text-primary);
-            font-size: 36px;
+            color: var(--accent);
+            font-size: 48px;
             font-weight: 800;
-            margin-top: 48px;
-            margin-bottom: 20px;
-            letter-spacing: -0.3px;
-            border-left: 4px solid var(--accent);
-            padding-left: 20px;
+            margin-top: 60px;
+            margin-bottom: 30px;
+            letter-spacing: -0.5px;
+            border-left: 6px solid var(--accent);
+            padding-left: 24px;
+            text-transform: uppercase;
         }}
         
         h3 {{
@@ -199,9 +200,10 @@ class DigestHTMLGenerator:
         }}
         
         p {{
-            margin-bottom: 16px;
-            color: var(--text-primary);
+            margin-bottom: 12px;
+            color: var(--text-secondary);
             line-height: 1.6;
+            font-size: 15px;
         }}
         
         ul {{
@@ -217,11 +219,12 @@ class DigestHTMLGenerator:
         
         strong {{
             display: block;
-            font-size: 20px;
+            font-size: 28px;
             font-weight: 800;
             color: var(--accent);
-            margin-bottom: 8px;
-            margin-top: 16px;
+            margin-bottom: 12px;
+            margin-top: 24px;
+            line-height: 1.3;
         }}
         
         a {{
