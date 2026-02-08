@@ -71,12 +71,21 @@ class DigestHTMLGenerator:
                     in_list = False
                 
                 content = stripped
-                import re
-                content = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', content)
-                content = re.sub(r'(https?://[^\s]+)', r'<a href="\1" target="_blank">\1</a>', content)
                 
-                if content and content != '---':
-                    html_lines.append(f'<p>{content}</p>')
+                # Allow raw HTML passthrough (don't apply regex transformations)
+                if '<' in content and '>' in content and content.startswith('<'):
+                    # It's HTML, pass through as-is
+                    html_lines.append(content)
+                else:
+                    # It's markdown, apply transformations
+                    import re
+                    content = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', content)
+                    # Only apply link regex if there are no existing <a> tags
+                    if '<a href=' not in content:
+                        content = re.sub(r'(https?://[^\s]+)', r'<a href="\1" target="_blank">\1</a>', content)
+                    
+                    if content and content != '---':
+                        html_lines.append(f'<p>{content}</p>')
         
         if in_list:
             html_lines.append('</ul>')
