@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-HTML Generator for Daily Digest - FIXED VERSION
+HTML Generator for Daily Digest - Apple Style with Dark Mode
 """
 
 import os
@@ -15,18 +15,16 @@ class DigestHTMLGenerator:
         self.current_html = "dossier.html"
         
     def markdown_to_html(self, markdown_content: str, title: str = "Daily Business Dossier") -> str:
-        """Convert markdown to HTML properly"""
+        """Convert markdown to HTML with dark mode"""
         timestamp = datetime.now().strftime("%Y-%m-%d %I:%M %p PST")
         
-        # Split into lines for processing
+        # Parse markdown
         lines = markdown_content.split('\n')
         html_lines = []
         in_list = False
         
         for line in lines:
             stripped = line.strip()
-            
-            # Skip empty lines
             if not stripped:
                 if in_list:
                     html_lines.append('</ul>')
@@ -57,7 +55,6 @@ class DigestHTMLGenerator:
                     html_lines.append('<ul>')
                     in_list = True
                 content = stripped[2:]
-                # Make links clickable
                 import re
                 content = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', content)
                 content = re.sub(r'(https?://[^\s]+)', r'<a href="\1" target="_blank">\1</a>', content)
@@ -65,10 +62,6 @@ class DigestHTMLGenerator:
             
             # Table rows
             elif '|' in stripped and not stripped.startswith('|---'):
-                if in_list:
-                    html_lines.append('</ul>')
-                    in_list = False
-                # Skip for now, tables handled separately
                 continue
             
             # Regular paragraphs
@@ -78,10 +71,8 @@ class DigestHTMLGenerator:
                     in_list = False
                 
                 content = stripped
-                # Bold
                 import re
                 content = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', content)
-                # Links
                 content = re.sub(r'(https?://[^\s]+)', r'<a href="\1" target="_blank">\1</a>', content)
                 
                 if content and content != '---':
@@ -92,7 +83,7 @@ class DigestHTMLGenerator:
         
         html_body = '\n'.join(html_lines)
         
-        # Full HTML with Apple styling
+        # Full HTML with Apple styling + Dark Mode
         full_html = f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -100,6 +91,28 @@ class DigestHTMLGenerator:
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
     <style>
+        :root {{
+            --bg-primary: #1d1d1f;
+            --bg-secondary: #2d2d2f;
+            --text-primary: #f5f5f7;
+            --text-secondary: #a1a1a6;
+            --accent: #0a84ff;
+            --accent-hover: #409cff;
+            --border: #424245;
+            --shadow: rgba(0, 0, 0, 0.5);
+        }}
+        
+        [data-theme="light"] {{
+            --bg-primary: #ffffff;
+            --bg-secondary: #fbfbfd;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent: #0071e3;
+            --accent-hover: #0077ed;
+            --border: #d2d2d7;
+            --shadow: rgba(0, 0, 0, 0.07);
+        }}
+        
         * {{
             margin: 0;
             padding: 0;
@@ -109,29 +122,51 @@ class DigestHTMLGenerator:
         body {{
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
-            color: #1d1d1f;
-            background: #ffffff;
+            color: var(--text-primary);
+            background: var(--bg-primary);
             padding: 20px;
             font-size: 17px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }}
+        
+        .theme-toggle {{
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }}
+        
+        .theme-toggle:hover {{
+            background: var(--accent);
+            color: white;
+            transform: scale(1.05);
         }}
         
         .container {{
             max-width: 980px;
             margin: 0 auto;
-            background: #fbfbfd;
+            background: var(--bg-secondary);
             border-radius: 18px;
             padding: 60px 40px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            box-shadow: 0 4px 6px var(--shadow);
         }}
         
         header {{
-            border-bottom: 1px solid #d2d2d7;
+            border-bottom: 1px solid var(--border);
             padding-bottom: 30px;
             margin-bottom: 40px;
         }}
         
         h1 {{
-            color: #1d1d1f;
+            color: var(--text-primary);
             font-size: 48px;
             font-weight: 600;
             letter-spacing: -0.5px;
@@ -139,13 +174,13 @@ class DigestHTMLGenerator:
         }}
         
         .timestamp {{
-            color: #86868b;
+            color: var(--text-secondary);
             font-size: 15px;
             font-weight: 400;
         }}
         
         h2 {{
-            color: #1d1d1f;
+            color: var(--text-primary);
             font-size: 32px;
             font-weight: 600;
             margin-top: 48px;
@@ -154,7 +189,7 @@ class DigestHTMLGenerator:
         }}
         
         h3 {{
-            color: #1d1d1f;
+            color: var(--text-primary);
             font-size: 24px;
             font-weight: 600;
             margin-top: 32px;
@@ -163,7 +198,7 @@ class DigestHTMLGenerator:
         
         p {{
             margin-bottom: 16px;
-            color: #1d1d1f;
+            color: var(--text-primary);
             line-height: 1.6;
         }}
         
@@ -174,37 +209,39 @@ class DigestHTMLGenerator:
         
         li {{
             margin-bottom: 12px;
-            color: #1d1d1f;
+            color: var(--text-primary);
             line-height: 1.5;
         }}
         
         strong {{
-            color: #1d1d1f;
+            color: var(--text-primary);
             font-weight: 600;
         }}
         
         a {{
-            color: #0071e3;
+            color: var(--accent);
             text-decoration: none;
             transition: color 0.15s ease;
         }}
         
         a:hover {{
-            color: #0077ed;
+            color: var(--accent-hover);
             text-decoration: underline;
         }}
         
         footer {{
             margin-top: 60px;
             padding-top: 24px;
-            border-top: 1px solid #d2d2d7;
+            border-top: 1px solid var(--border);
             text-align: center;
-            color: #86868b;
+            color: var(--text-secondary);
             font-size: 14px;
         }}
     </style>
 </head>
-<body>
+<body data-theme="dark">
+    <button class="theme-toggle" onclick="toggleTheme()">☀️ Light Mode</button>
+    
     <div class="container">
         <header>
             <h1>📊 {title}</h1>
@@ -221,6 +258,30 @@ class DigestHTMLGenerator:
             <p><a href="https://github.com/DiamondDeals/daily-dossier/tree/master/Archive">View Archive</a></p>
         </footer>
     </div>
+    
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {{
+            const body = document.body;
+            const button = document.querySelector('.theme-toggle');
+            const currentTheme = body.getAttribute('data-theme');
+            
+            if (currentTheme === 'dark') {{
+                body.setAttribute('data-theme', 'light');
+                button.textContent = '🌙 Dark Mode';
+                localStorage.setItem('theme', 'light');
+            }} else {{
+                body.setAttribute('data-theme', 'dark');
+                button.textContent = '☀️ Light Mode';
+                localStorage.setItem('theme', 'dark');
+            }}
+        }}
+        
+        // Load saved theme (default to dark)
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.body.setAttribute('data-theme', savedTheme);
+        document.querySelector('.theme-toggle').textContent = savedTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+    </script>
 </body>
 </html>'''
         
@@ -247,7 +308,7 @@ class DigestHTMLGenerator:
     def deploy_to_github(self):
         """Deploy to GitHub"""
         try:
-            subprocess.run(['git', 'add', 'dossier.html', 'Archive'], check=True)
+            subprocess.run(['git', 'add', 'dossier.html', 'Archive', 'html_generator.py'], check=True)
             subprocess.run(['git', 'commit', '-m', f'Update: {datetime.now().strftime("%Y-%m-%d %I:%M %p PST")}'], check=True)
             subprocess.run(['git', 'push'], check=True)
             print(f"✅ Deployed to GitHub Pages")
@@ -258,7 +319,7 @@ class DigestHTMLGenerator:
 
 if __name__ == "__main__":
     gen = DigestHTMLGenerator()
-    with open('Exports/complete_digest_now.md', 'r') as f:
+    with open('Exports/complete_everything.md', 'r') as f:
         md = f.read()
     gen.archive_current_html()
     html = gen.markdown_to_html(md)

@@ -3,30 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Business Dossier</title>
+    <title>Daily Business Dossier - Complete</title>
     <style>
-        :root {
-            --bg-primary: #1d1d1f;
-            --bg-secondary: #2d2d2f;
-            --text-primary: #f5f5f7;
-            --text-secondary: #a1a1a6;
-            --accent: #0a84ff;
-            --accent-hover: #409cff;
-            --border: #424245;
-            --shadow: rgba(0, 0, 0, 0.5);
-        }
-        
-        [data-theme="light"] {
-            --bg-primary: #ffffff;
-            --bg-secondary: #fbfbfd;
-            --text-primary: #1d1d1f;
-            --text-secondary: #86868b;
-            --accent: #0071e3;
-            --accent-hover: #0077ed;
-            --border: #d2d2d7;
-            --shadow: rgba(0, 0, 0, 0.07);
-        }
-        
         * {
             margin: 0;
             padding: 0;
@@ -36,51 +14,29 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
-            color: var(--text-primary);
-            background: var(--bg-primary);
+            color: #1d1d1f;
+            background: #ffffff;
             padding: 20px;
             font-size: 17px;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        
-        .theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 8px 16px;
-            cursor: pointer;
-            font-size: 14px;
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-        
-        .theme-toggle:hover {
-            background: var(--accent);
-            color: white;
-            transform: scale(1.05);
         }
         
         .container {
             max-width: 980px;
             margin: 0 auto;
-            background: var(--bg-secondary);
+            background: #fbfbfd;
             border-radius: 18px;
             padding: 60px 40px;
-            box-shadow: 0 4px 6px var(--shadow);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
         }
         
         header {
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid #d2d2d7;
             padding-bottom: 30px;
             margin-bottom: 40px;
         }
         
         h1 {
-            color: var(--text-primary);
+            color: #1d1d1f;
             font-size: 48px;
             font-weight: 600;
             letter-spacing: -0.5px;
@@ -88,13 +44,13 @@
         }
         
         .timestamp {
-            color: var(--text-secondary);
+            color: #86868b;
             font-size: 15px;
             font-weight: 400;
         }
         
         h2 {
-            color: var(--text-primary);
+            color: #1d1d1f;
             font-size: 32px;
             font-weight: 600;
             margin-top: 48px;
@@ -103,7 +59,7 @@
         }
         
         h3 {
-            color: var(--text-primary);
+            color: #1d1d1f;
             font-size: 24px;
             font-weight: 600;
             margin-top: 32px;
@@ -112,7 +68,7 @@
         
         p {
             margin-bottom: 16px;
-            color: var(--text-primary);
+            color: #1d1d1f;
             line-height: 1.6;
         }
         
@@ -123,43 +79,41 @@
         
         li {
             margin-bottom: 12px;
-            color: var(--text-primary);
+            color: #1d1d1f;
             line-height: 1.5;
         }
         
         strong {
-            color: var(--text-primary);
+            color: #1d1d1f;
             font-weight: 600;
         }
         
         a {
-            color: var(--accent);
+            color: #0071e3;
             text-decoration: none;
             transition: color 0.15s ease;
         }
         
         a:hover {
-            color: var(--accent-hover);
+            color: #0077ed;
             text-decoration: underline;
         }
         
         footer {
             margin-top: 60px;
             padding-top: 24px;
-            border-top: 1px solid var(--border);
+            border-top: 1px solid #d2d2d7;
             text-align: center;
-            color: var(--text-secondary);
+            color: #86868b;
             font-size: 14px;
         }
     </style>
 </head>
-<body data-theme="dark">
-    <button class="theme-toggle" onclick="toggleTheme()">☀️ Light Mode</button>
-    
+<body>
     <div class="container">
         <header>
-            <h1>📊 Daily Business Dossier</h1>
-            <p class="timestamp">Last Updated: 2026-02-07 09:42 PM PST</p>
+            <h1>📊 Daily Business Dossier - Complete</h1>
+            <p class="timestamp">Last Updated: 2026-02-07 08:18 PM PST</p>
             <p class="timestamp">Auto-updates at 6 AM & 5 PM PST</p>
         </header>
         
@@ -581,29 +535,5 @@
             <p><a href="https://github.com/DiamondDeals/daily-dossier/tree/master/Archive">View Archive</a></p>
         </footer>
     </div>
-    
-    <script>
-        // Theme toggle functionality
-        function toggleTheme() {
-            const body = document.body;
-            const button = document.querySelector('.theme-toggle');
-            const currentTheme = body.getAttribute('data-theme');
-            
-            if (currentTheme === 'dark') {
-                body.setAttribute('data-theme', 'light');
-                button.textContent = '🌙 Dark Mode';
-                localStorage.setItem('theme', 'light');
-            } else {
-                body.setAttribute('data-theme', 'dark');
-                button.textContent = '☀️ Light Mode';
-                localStorage.setItem('theme', 'dark');
-            }
-        }
-        
-        // Load saved theme (default to dark)
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        document.body.setAttribute('data-theme', savedTheme);
-        document.querySelector('.theme-toggle').textContent = savedTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
-    </script>
 </body>
 </html>
