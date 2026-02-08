@@ -6,6 +6,8 @@ No subprocess issues - direct imports and execution
 
 import sys
 import os
+import shutil
+import subprocess
 from datetime import datetime
 
 # Import all scanners
@@ -235,6 +237,34 @@ def generate_combined_markdown(results):
 
 if __name__ == "__main__":
     run_full_digest()
+
+    # Create Daily folder structure
+    print("\n📁 Creating Daily folder structure...")
+    date_str = datetime.now().strftime('%Y-%m-%d')
+    time_str = datetime.now().strftime('%I%p').lstrip('0')  # "6AM" or "5PM"
+    daily_folder = f'Daily/{date_str}-{time_str}'
+    
+    os.makedirs(daily_folder, exist_ok=True)
+    
+    # Copy complete database files to Daily folder
+    if os.path.exists(f'Database/all_items_{date_str}.html'):
+        shutil.copy(f'Database/all_items_{date_str}.html', f'{daily_folder}/all_items.html')
+        print(f"✅ Copied complete database: {daily_folder}/all_items.html")
+    
+    if os.path.exists(f'Database/complete_{date_str}.json'):
+        shutil.copy(f'Database/complete_{date_str}.json', f'{daily_folder}/complete.json')
+        print(f"✅ Copied raw data: {daily_folder}/complete.json")
+    
+    # Copy the digest
+    if os.path.exists('dossier.html'):
+        shutil.copy('dossier.html', f'{daily_folder}/digest.html')
+        print(f"✅ Copied highlights: {daily_folder}/digest.html")
+    
+    # Add footer links to main dossier
+    print("\n🔗 Adding footer links...")
+    subprocess.run(['python3', 'add_footer_links.py'], check=True)
+    
+    print(f"\n✅ Daily folder complete: {daily_folder}/")
 
 # After generating digest, create database with summaries
 print("\n📊 Creating database with summaries...")
