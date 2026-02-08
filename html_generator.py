@@ -182,16 +182,18 @@ class DigestHTMLGenerator:
         h2 {{
             color: var(--text-primary);
             font-size: 32px;
-            font-weight: 600;
+            font-weight: 700;
             margin-top: 48px;
             margin-bottom: 20px;
             letter-spacing: -0.3px;
+            border-left: 4px solid var(--accent);
+            padding-left: 20px;
         }}
         
         h3 {{
             color: var(--text-primary);
             font-size: 24px;
-            font-weight: 600;
+            font-weight: 700;
             margin-top: 32px;
             margin-bottom: 16px;
         }}
@@ -215,7 +217,7 @@ class DigestHTMLGenerator:
         
         strong {{
             color: var(--text-primary);
-            font-weight: 600;
+            font-weight: 700;
         }}
         
         a {{
