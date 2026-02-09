@@ -79,7 +79,16 @@ class DigestHTMLGenerator:
                 else:
                     # It's markdown, apply transformations
                     import re
-                    content = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', content)
+                    
+                    # Check if this is a numbered title line (e.g., "1. Title...")
+                    numbered_match = re.match(r'^(\d+\.)\s+(.+)', content)
+                    if numbered_match:
+                        # This is a title line - wrap number + title in <strong>
+                        content = f'<strong>{numbered_match.group(1)} {numbered_match.group(2)}</strong>'
+                    else:
+                        # Apply bold markdown
+                        content = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', content)
+                    
                     # Only apply link regex if there are no existing <a> tags
                     if '<a href=' not in content:
                         content = re.sub(r'(https?://[^\s]+)', r'<a href="\1" target="_blank">\1</a>', content)
