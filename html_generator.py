@@ -365,7 +365,7 @@ class DigestHTMLGenerator:
     
     def save_html(self, html_content: str):
         """Save HTML"""
-        with open(self.current_html, 'w') as f:
+        with open(self.current_html, 'w', encoding='utf-8') as f:
             f.write(html_content)
         print(f"✅ Saved: {self.current_html}")
     
