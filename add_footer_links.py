@@ -3,9 +3,14 @@
 Add footer to dossier with links to complete databases
 """
 
+import sys
 from datetime import datetime
 import os
 import glob
+
+# Fix emoji output on Windows terminals
+if sys.stdout.encoding and sys.stdout.encoding.lower() not in ('utf-8', 'utf8'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
 # Get today's date
 date_str = datetime.now().strftime('%Y-%m-%d')
@@ -54,7 +59,7 @@ footer_html += '''
 '''
 
 # Read current dossier
-with open('dossier.html', 'r') as f:
+with open('dossier.html', 'r', encoding='utf-8') as f:
     html = f.read()
 
 # Check if footer already exists
@@ -69,7 +74,7 @@ else:
     html = html.replace('</main>', footer_html + '\n</main>')
 
 # Save
-with open('dossier.html', 'w') as f:
+with open('dossier.html', 'w', encoding='utf-8') as f:
     f.write(html)
 
 print(f"✅ Added footer with {len(daily_folders)} complete database link(s)")

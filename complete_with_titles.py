@@ -3,18 +3,23 @@
 Complete scan with titles/summaries
 """
 
+import sys
 import subprocess
 import json
 import re
 from datetime import datetime
 import os
 
+# Fix emoji output on Windows terminals
+if sys.stdout.encoding and sys.stdout.encoding.lower() not in ('utf-8', 'utf8'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+
 all_items = []
 
 # Run Reddit scanner and capture output
 print("🟠 Scanning Reddit...")
 result = subprocess.run(['python3', 'reddit_json_client.py'], 
-                       capture_output=True, text=True, timeout=60)
+                       capture_output=True, encoding='utf-8', errors='replace', timeout=60)
 
 lines = result.stdout.split('\n')
 for i, line in enumerate(lines):
@@ -45,7 +50,7 @@ print(f"  Found {len([i for i in all_items if i['platform']=='Reddit'])} Reddit 
 # Run Moltbook scanner
 print("🤖 Scanning Moltbook...")
 result = subprocess.run(['python3', 'moltbook_scanner.py'], 
-                       capture_output=True, text=True, timeout=60)
+                       capture_output=True, encoding='utf-8', errors='replace', timeout=60)
 
 lines = result.stdout.split('\n')
 for i, line in enumerate(lines):
@@ -75,7 +80,7 @@ print(f"  Found {len([i for i in all_items if i['platform']=='Moltbook'])} Moltb
 # Run YouTube scanner
 print("🎥 Scanning YouTube...")
 result = subprocess.run(['python3', 'youtube_ai_monitor.py'], 
-                       capture_output=True, text=True, timeout=60)
+                       capture_output=True, encoding='utf-8', errors='replace', timeout=60)
 
 lines = result.stdout.split('\n')
 for i, line in enumerate(lines):
@@ -104,7 +109,7 @@ print(f"  Found {len([i for i in all_items if i['platform']=='YouTube'])} YouTub
 # Run RSS scanner
 print("📰 Scanning RSS...")
 result = subprocess.run(['python3', 'rss_news_scanner.py'], 
-                       capture_output=True, text=True, timeout=60)
+                       capture_output=True, encoding='utf-8', errors='replace', timeout=60)
 
 lines = result.stdout.split('\n')
 for i, line in enumerate(lines):
@@ -259,7 +264,7 @@ html += """
 </body>
 </html>"""
 
-with open('Database/complete_with_titles.html', 'w') as f:
+with open('Database/complete_with_titles.html', 'w', encoding='utf-8') as f:
     f.write(html)
 
 print(f"✅ Saved: Database/complete_with_titles.html")
