@@ -8,11 +8,27 @@ import sys
 import os
 import shutil
 import subprocess
+import json
+import io
 from datetime import datetime
+from pathlib import Path
+from dotenv import load_dotenv
+
+# Handle encoding for Task Scheduler (no console attached)
+# Force UTF-8 to avoid emoji encoding errors
+if hasattr(sys.stdout, 'buffer'):
+    try:
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace', line_buffering=True)
+        sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace', line_buffering=True)
+    except:
+        pass  # If it fails, continue anyway
+
+# Load environment variables from .env file
+load_dotenv(Path(__file__).parent / '.env')
 
 # Import all scanners
 from reddit_json_client import RedditJSONClient
-from twitter_builders_monitor import TwitterBuildersMonitor
+from twitter_nitter_scraper import TwitterNitterScraper
 from youtube_ai_monitor import YouTubeAIMonitor
 from health_tracker import HealthTracker
 from moltbook_scanner import MoltbookScanner
@@ -32,18 +48,26 @@ def run_full_digest():
     print("🟠 REDDIT - Business Pain Points")
     try:
         reddit = RedditJSONClient()
-        reddit_posts = reddit.scan_subreddits()
+        subreddits = ['entrepreneur', 'smallbusiness', 'startups', 'ecommerce',
+                      'freelance', 'digitalmarketing', 'SideProject', 'passive_income']
+        reddit_posts = []
+        for sub in subreddits:
+            try:
+                posts = reddit.fetch_posts(sub, limit=25)
+                reddit_posts.extend(posts)
+            except Exception:
+                pass
         results['reddit'] = {'count': len(reddit_posts), 'posts': reddit_posts}
         print(f"✅ Found {len(reddit_posts)} Reddit leads\n")
     except Exception as e:
         print(f"❌ Reddit failed: {e}\n")
         results['reddit'] = {'count': 0, 'posts': []}
-    
-    # 2. Twitter
+
+    # 2. Twitter - Using Nitter scraping (free, no API needed)
     print("🔵 TWITTER - Building in Public")
     try:
-        twitter = TwitterBuildersMonitor()
-        twitter_updates = twitter.scan_builders()
+        twitter = TwitterNitterScraper()
+        twitter_updates = twitter.scan_builders(max_accounts=20)
         results['twitter'] = {'count': len(twitter_updates), 'posts': twitter_updates}
         print(f"✅ Found {len(twitter_updates)} Twitter updates\n")
     except Exception as e:
@@ -79,7 +103,10 @@ def run_full_digest():
     # 5. Health
     print("🟢 HEALTH - Pritikin & WFPB")
     try:
-        health = HealthTracker()
+        bearer_token = os.getenv("TWITTER_BEARER_TOKEN", "")
+        if not bearer_token:
+            raise ValueError("No TWITTER_BEARER_TOKEN in .env - skipping")
+        health = HealthTracker(bearer_token)
         health_posts = health.scan_all()
         results['health'] = {'count': len(health_posts), 'posts': health_posts}
         print(f"✅ Found {len(health_posts)} Health posts\n")
@@ -117,9 +144,78 @@ def run_full_digest():
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     md_file = f"Exports/full_digest_{timestamp}.md"
     os.makedirs("Exports", exist_ok=True)
-    with open(md_file, 'w') as f:
+    with open(md_file, 'w', encoding='utf-8') as f:
         f.write(markdown)
     print(f"✅ Saved markdown to: {md_file}\n")
+
+    # Save dated database files for Daily folder archiving
+    date_str = datetime.now().strftime('%Y-%m-%d')
+    os.makedirs("Database", exist_ok=True)
+
+    # Save complete JSON database
+    database = {
+        'date': datetime.now().isoformat(),
+        'total_count': total,
+        'results': results
+    }
+    json_file = f'Database/complete_{date_str}.json'
+    with open(json_file, 'w', encoding='utf-8') as f:
+        json.dump(database, f, indent=2, ensure_ascii=False)
+    print(f"✅ Saved database JSON: {json_file}")
+
+    # Save all_items HTML database
+    html_file = f'Database/all_items_{date_str}.html'
+    all_items_html = f"""<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Complete Database - {date_str}</title>
+    <style>
+        body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+               background: #1d1d1f; color: #f5f5f7; padding: 20px; }}
+        h1 {{ color: #0a84ff; }}
+        h2 {{ color: #0a84ff; margin-top: 40px; }}
+        .count {{ color: #30d158; font-size: 20px; font-weight: bold; }}
+        .item {{ margin: 20px 0; padding: 15px; background: #2d2d2f; border-radius: 8px; }}
+        .platform {{ display: inline-block; padding: 4px 8px; border-radius: 4px;
+                     font-size: 12px; font-weight: bold; margin-right: 10px; }}
+        .reddit {{ background: #ff4500; }}
+        .twitter {{ background: #1da1f2; }}
+        .youtube {{ background: #ff0000; }}
+        .moltbook {{ background: #8b5cf6; }}
+        .health {{ background: #10b981; }}
+        .rss {{ background: #f59e0b; }}
+        a {{ color: #0a84ff; text-decoration: none; }}
+        a:hover {{ text-decoration: underline; }}
+    </style>
+</head>
+<body>
+    <h1>📊 Complete Database - {date_str}</h1>
+    <p class="count">Total Items: {total}</p>
+"""
+
+    # Add all items by platform
+    for platform_name, platform_data in [
+        ('reddit', '🟠 Reddit'), ('twitter', '🔵 Twitter'), ('youtube', '🎥 YouTube'),
+        ('moltbook', '🤖 Moltbook'), ('health', '🟢 Health'), ('rss', '📰 RSS')
+    ]:
+        count = results[platform_name]['count']
+        all_items_html += f"\n<h2>{platform_data} ({count} items)</h2>\n"
+
+        if count > 0:
+            items = results[platform_name].get('posts', results[platform_name].get('videos', results[platform_name].get('articles', [])))
+            for item in items:
+                title = item.get('title', 'Untitled')
+                url = item.get('url', '#')
+                all_items_html += f'<div class="item"><span class="platform {platform_name}">{platform_data}</span><strong>{title}</strong><br><a href="{url}" target="_blank">{url}</a></div>\n'
+        else:
+            all_items_html += "<p>No items found</p>\n"
+
+    all_items_html += "</body></html>"
+
+    with open(html_file, 'w', encoding='utf-8') as f:
+        f.write(all_items_html)
+    print(f"✅ Saved all items HTML: {html_file}\n")
     
     # Generate HTML
     print("🌐 Generating HTML...")
@@ -145,24 +241,9 @@ def generate_combined_markdown(results):
     """Generate combined markdown digest"""
     timestamp = datetime.now().strftime("%Y-%m-%d %I:%M %p PST")
     total = sum(r['count'] for r in results.values())
-    
-    md = f"""# 📊 Daily Business Dossier
-## {timestamp}
 
-**Total Opportunities: {total}**
-
----
-
-## 📊 Platform Summary
-
-| Platform | Count | Status |
-|----------|-------|--------|
-| 🟠 Reddit | {results['reddit']['count']} | {'✅' if results['reddit']['count'] > 0 else '⚠️'} |
-| 🔵 Twitter | {results['twitter']['count']} | {'✅' if results['twitter']['count'] > 0 else '⚠️'} |
-| 🎥 YouTube | {results['youtube']['count']} | {'✅' if results['youtube']['count'] > 0 else '⚠️'} |
-| 🤖 Moltbook | {results['moltbook']['count']} | {'✅' if results['moltbook']['count'] > 0 else '⚠️'} |
-| 🟢 Health | {results['health']['count']} | {'✅' if results['health']['count'] > 0 else '⚠️'} |
-| 📰 RSS News | {results['rss']['count']} | {'✅' if results['rss']['count'] > 0 else '⚠️'} |
+    # NOTE: Title and date are in HTML template, don't duplicate in markdown body
+    md = f"""**Total Opportunities: {total}**
 
 ---
 
