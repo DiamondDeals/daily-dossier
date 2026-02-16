@@ -227,15 +227,10 @@ def run_full_digest():
     # Convert to HTML
     html = html_gen.markdown_to_html(markdown, "Daily Business Dossier")
     html_gen.save_html(html)
-    
-    # Deploy to GitHub
-    print("\n📤 Deploying to GitHub Pages...")
-    url = html_gen.deploy_to_github()
-    
-    if url:
-        print(f"\n✅ COMPLETE! View at: {url}")
-    
-    return results
+
+    print(f"\n✅ Digest generated! (deployment happens after post-processing)")
+
+    return results, html_gen
 
 def generate_combined_markdown(results):
     """Generate combined markdown digest"""
@@ -317,38 +312,45 @@ def generate_combined_markdown(results):
     return md
 
 if __name__ == "__main__":
-    run_full_digest()
+    results, html_gen = run_full_digest()
 
     # Create Daily folder structure
     print("\n📁 Creating Daily folder structure...")
     date_str = datetime.now().strftime('%Y-%m-%d')
     time_str = datetime.now().strftime('%I%p').lstrip('0')  # "6AM" or "5PM"
     daily_folder = f'Daily/{date_str}-{time_str}'
-    
+
     os.makedirs(daily_folder, exist_ok=True)
-    
+
     # Copy complete database files to Daily folder
     if os.path.exists(f'Database/all_items_{date_str}.html'):
         shutil.copy(f'Database/all_items_{date_str}.html', f'{daily_folder}/all_items.html')
         print(f"✅ Copied complete database: {daily_folder}/all_items.html")
-    
+
     if os.path.exists(f'Database/complete_{date_str}.json'):
         shutil.copy(f'Database/complete_{date_str}.json', f'{daily_folder}/complete.json')
         print(f"✅ Copied raw data: {daily_folder}/complete.json")
-    
+
     # Copy the digest
     if os.path.exists('dossier.html'):
         shutil.copy('dossier.html', f'{daily_folder}/digest.html')
         print(f"✅ Copied highlights: {daily_folder}/digest.html")
-    
+
     # Add footer links to main dossier
     print("\n🔗 Adding footer links...")
     subprocess.run(['python3', 'add_footer_links.py'], check=True)
-    
+
     print(f"\n✅ Daily folder complete: {daily_folder}/")
 
-# After generating digest, create database with summaries
-print("\n📊 Creating database with summaries...")
-date_str = datetime.now().strftime('%Y-%m-%d_%H%M')
-subprocess.run(['python3', 'complete_with_titles.py'], timeout=180)
-print(f"✅ Database created: Database/complete_with_titles.html")
+    # After generating digest, create database with summaries
+    print("\n📊 Creating database with summaries...")
+    date_str_time = datetime.now().strftime('%Y-%m-%d_%H%M')
+    subprocess.run(['python3', 'complete_with_titles.py'], timeout=180)
+    print(f"✅ Database created: Database/complete_with_titles.html")
+
+    # NOW deploy to GitHub (after ALL post-processing)
+    print("\n📤 Deploying to GitHub Pages...")
+    url = html_gen.deploy_to_github()
+
+    if url:
+        print(f"\n✅ COMPLETE! View at: {url}")
