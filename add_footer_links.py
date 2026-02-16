@@ -32,11 +32,13 @@ footer_html = '''
 
 # Add links for each Daily folder found
 for folder in daily_folders:
+    # Convert Windows backslashes to forward slashes for URLs
+    folder_url = folder.replace('\\', '/')
     folder_name = os.path.basename(folder)  # e.g., "2026-02-07-6AM" or "2026-02-07-5PM"
     time_label = folder_name.split('-')[-1]  # "6AM" or "5PM"
-    
+
     footer_html += f'''
-        <a href="{folder}/all_items.html" style="
+        <a href="{folder_url}/all_items.html" style="
             display: inline-block;
             background: var(--accent);
             color: white;
