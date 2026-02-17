@@ -338,14 +338,14 @@ if __name__ == "__main__":
 
     # Add footer links to main dossier
     print("\n🔗 Adding footer links...")
-    subprocess.run(['python3', 'add_footer_links.py'], check=True)
+    subprocess.run([sys.executable, 'add_footer_links.py'], check=True)
 
     print(f"\n✅ Daily folder complete: {daily_folder}/")
 
     # After generating digest, create database with summaries
     print("\n📊 Creating database with summaries...")
     date_str_time = datetime.now().strftime('%Y-%m-%d_%H%M')
-    subprocess.run(['python3', 'complete_with_titles.py'], timeout=180)
+    subprocess.run([sys.executable, 'complete_with_titles.py'], timeout=180)
     print(f"✅ Database created: Database/complete_with_titles.html")
 
     # NOW deploy to GitHub (after ALL post-processing)
