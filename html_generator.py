@@ -4,6 +4,7 @@ HTML Generator for Daily Digest - Apple Style with Dark Mode
 """
 
 import os
+import shutil
 import subprocess
 from datetime import datetime
 
@@ -359,7 +360,7 @@ class DigestHTMLGenerator:
         os.makedirs(self.archive_dir, exist_ok=True)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         archive_path = os.path.join(self.archive_dir, f"dossier_{timestamp}.html")
-        subprocess.run(['cp', self.current_html, archive_path], check=True)
+        shutil.copy2(self.current_html, archive_path)
         print(f"📦 Archived to: {archive_path}")
         return archive_path
     
