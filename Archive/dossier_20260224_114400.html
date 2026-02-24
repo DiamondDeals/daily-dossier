@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PLACEHOLDER"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PLACEHOLDER', {
+    'send_page_view': true,
+    'anonymize_ip': true
+  });
+
+  // Track link clicks
+  document.addEventListener('click', function(e) {
+    if (e.target.tagName === 'A' && e.target.href) {
+      gtag('event', 'click', {
+        'event_category': 'outbound',
+        'event_label': e.target.href,
+        'transport_type': 'beacon'
+      });
+    }
+  });
+
+  // Track dark mode toggle
+  const themeToggle = document.querySelector('.theme-toggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function() {
+      gtag('event', 'toggle_theme', {
+        'event_category': 'engagement',
+        'event_label': document.documentElement.getAttribute('data-theme') || 'dark'
+      });
+    });
+  }
+</script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Business Dossier</title>
+    <style>
+        :root {
+            --bg-primary: #1d1d1f;
+            --bg-secondary: #2d2d2f;
+            --text-primary: #f5f5f7;
+            --text-secondary: #a1a1a6;
+            --accent: #0a84ff;
+            --accent-hover: #409cff;
+            --border: #424245;
+            --shadow: rgba(0, 0, 0, 0.5);
+        }
+        
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #fbfbfd;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent: #0071e3;
+            --accent-hover: #0077ed;
+            --border: #d2d2d7;
+            --shadow: rgba(0, 0, 0, 0.07);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            padding: 20px;
+            font-size: 17px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .theme-toggle:hover {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+            background: var(--bg-secondary);
+            border-radius: 18px;
+            padding: 60px 40px;
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+        
+        header {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            color: var(--text-primary);
+            font-size: 36px;
+            font-weight: 600;
+            letter-spacing: -0.4px;
+            margin-bottom: 12px;
+        }
+        
+        .timestamp {
+            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 400;
+        }
+        
+        h2 {
+            color: var(--accent);
+            font-size: 36px;
+            font-weight: 800;
+            margin-top: 50px;
+            margin-bottom: 24px;
+            letter-spacing: -0.4px;
+            border-left: 5px solid var(--accent);
+            padding-left: 20px;
+            text-transform: uppercase;
+        }
+        
+        h3 {
+            color: var(--text-primary);
+            font-size: 24px;
+            font-weight: 800;
+            margin-top: 32px;
+            margin-bottom: 16px;
+        }
+        
+        p {
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 15px;
+        }
+        
+        p:has(strong) {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        ul {
+            margin-left: 24px;
+            margin-bottom: 24px;
+        }
+        
+        li {
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+        
+        strong {
+            display: inline;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--accent);
+        }
+        
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.15s ease;
+        }
+        
+        a:hover {
+            color: var(--accent-hover);
+            text-decoration: underline;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <button class="theme-toggle" onclick="toggleTheme()">☀️ Light Mode</button>
+    
+    <div class="container">
+        <header>
+            <h1>📊 Daily Business Dossier</h1>
+            <p class="timestamp">Last Updated: 2026-02-23 06:02 AM PST</p>
+            <p class="timestamp">Auto-updates at 6 AM & 5 PM PST</p>
+        </header>
+        
+        <main>
+<p><strong>Total Opportunities: 190</strong></p>
+
+
+<h2>🟠 Reddit Business Leads</h2>
+
+
+<p><strong>1. What’s an unpopular strategy that ended up driving the biggest growth for your business?</strong></p>
+<ul>
+<li>r/entrepreneur • u/Sure_Marsupial_4309</li>
+<li>Score: 25 (↑0 • 💬13)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1rcdwj5/whats_an_unpopular_strategy_that_ended_up_driving/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1rcdwj5/whats_an_unpopular_strategy_that_ended_up_driving/</a></li>
+</ul>
+
+<p><strong>2. Before you build anything, spend 4 hours here first. Saved me months of wasted time.</strong></p>
+<ul>
+<li>r/entrepreneur • u/Jumpy_Examination470</li>
+<li>Score: 12 (↑0 • 💬5)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1rcbpc1/before_you_build_anything_spend_4_hours_here/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1rcbpc1/before_you_build_anything_spend_4_hours_here/</a></li>
+</ul>
+
+<p><strong>3. Is a stable $3,000/mo realistic for a solo dev starting today? Looking for a roadmap.</strong></p>
+<ul>
+<li>r/entrepreneur • u/FactorHappy4794</li>
+<li>Score: 5 (↑0 • 💬7)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1rcdogj/is_a_stable_3000mo_realistic_for_a_solo_dev/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1rcdogj/is_a_stable_3000mo_realistic_for_a_solo_dev/</a></li>
+</ul>
+
+<p><strong>4. Starting a small service business taught me something I didn’t expect</strong></p>
+<ul>
+<li>r/entrepreneur • u/Straight-Concert8257</li>
+<li>Score: 2 (↑0 • 💬7)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1rcdtad/starting_a_small_service_business_taught_me/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1rcdtad/starting_a_small_service_business_taught_me/</a></li>
+</ul>
+
+<p><strong>5. How do you market products and how do you validate and get initial customers?</strong></p>
+<ul>
+<li>r/entrepreneur • u/YH002</li>
+<li>Score: 3 (↑0 • 💬6)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1rcgppl/how_do_you_market_products_and_how_do_you/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1rcgppl/how_do_you_market_products_and_how_do_you/</a></li>
+</ul>
+
+<p><strong>6. Is SEO worth it for early-stage SaaS, or is it a distraction?</strong></p>
+<ul>
+<li>r/entrepreneur • u/Time-Spell472</li>
+<li>Score: 1 (↑0 • 💬6)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1rcfk0b/is_seo_worth_it_for_earlystage_saas_or_is_it_a/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1rcfk0b/is_seo_worth_it_for_earlystage_saas_or_is_it_a/</a></li>
+</ul>
+
+<p><strong>7. Most churn advice ignores the easiest win</strong></p>
+<ul>
+<li>r/entrepreneur • u/cheap_blanket</li>
+<li>Score: 1 (↑0 • 💬6)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1rcbd63/most_churn_advice_ignores_the_easiest_win/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1rcbd63/most_churn_advice_ignores_the_easiest_win/</a></li>
+</ul>
+
+<p><strong>8. Stop saying 'there are no ideas left' I launched in a 'dead' market 4 days ago and people actually showed up</strong></p>
+<ul>
+<li>r/entrepreneur • u/Low-Leg8115</li>
+<li>Score: 0 (↑0 • 💬6)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1rccy2r/stop_saying_there_are_no_ideas_left_i_launched_in/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1rccy2r/stop_saying_there_are_no_ideas_left_i_launched_in/</a></li>
+</ul>
+
+<p><strong>9. The people you help who wants to see you fail in the end...</strong></p>
+<ul>
+<li>r/entrepreneur • u/goodmorning_tomorrow</li>
+<li>Score: 4 (↑0 • 💬3)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1rchl9g/the_people_you_help_who_wants_to_see_you_fail_in/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1rchl9g/the_people_you_help_who_wants_to_see_you_fail_in/</a></li>
+</ul>
+
+<p><strong>10. Fanvue: Alternative to Fanvue ?</strong></p>
+<ul>
+<li>r/entrepreneur • u/PsychologicalFoot912</li>
+<li>Score: 8 (↑0 • 💬1)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1rcdpwt/fanvue_alternative_to_fanvue/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1rcdpwt/fanvue_alternative_to_fanvue/</a></li>
+</ul>
+
+
+<h2>🔵 Twitter Building Updates</h2>
+
+<p><strong>1. @levelsio</strong></p>
+<ul>
+<li><p>I think HN is more negative lately since devs are feeling the force of AI pressing down on them<br /></li>
+</ul>
+<br />
+<p>The most active HN user base seems to be 9 to 5 devs and they're most at risk of AI taki...</p>
+<ul>
+<li>❤️0 🔁0 💬0</li>
+<li><a href="https://nitter.net/levelsio/status/2025430673285071295#m" target="_blank">https://nitter.net/levelsio/status/2025430673285071295#m</a></li>
+</ul>
+
+<p><strong>2. @levelsio</strong></p>
+<ul>
+<li><p>Finally reaching limits for the first time<br /></li>
+</ul>
+<br />
+<p>Been shipping like crazy getting to the last remaining feature requests and bugs on <a href="http://ideasandbugs.com">ideasandbugs.com</a><br...</p>
+<ul>
+<li>❤️0 🔁0 💬0</li>
+<li><a href="https://nitter.net/levelsio/status/2025690510694990325#m" target="_blank">https://nitter.net/levelsio/status/2025690510694990325#m</a></li>
+</ul>
+
+<p><strong>3. @dvassallo</strong></p>
+<ul>
+<li><p>I learned geometry twice.<br /></li>
+</ul>
+<br />
+<p>I was forced to learn it at school. It made no sense and I hated it. I forgot everything after I passed the exam.<br /></p>
+<br />
+<p>I learned it again when I got o...</p>
+<ul>
+<li>❤️0 🔁0 💬0</li>
+<li><a href="https://nitter.net/dvassallo/status/2025620737571373176#m" target="_blank">https://nitter.net/dvassallo/status/2025620737571373176#m</a></li>
+</ul>
+
+<p><strong>4. @dvassallo</strong></p>
+<ul>
+<li><p>Coaching my kids to vibe code taught me you have to build empathy with the model to make it do what you want. It knows nothing about what’s in your head. If you take too much for granted, you’ll ge...</li>
+<li>❤️0 🔁0 💬0</li>
+<li><a href="https://nitter.net/dvassallo/status/2025438337272873156#m" target="_blank">https://nitter.net/dvassallo/status/2025438337272873156#m</a></li>
+</ul>
+
+<p><strong>5. @dvassallo</strong></p>
+<ul>
+<li><p>YC is a kindergarten for grown up children.</p></li>
+</ul>
+<hr />
+<blockquote>
+<b>Y Combinator (@ycombinator)</b>
+<p>
+<p>With the takeoff of OpenClaw and MoltBook, a new agent-driven economy is taking shape.<...
+<ul>
+<li>❤️0 🔁0 💬0</li>
+<li><a href="https://nitter.net/dvassallo/status/2025431664633983178#m" target="_blank">https://nitter.net/dvassallo/status/2025431664633983178#m</a></li>
+</ul>
+
+<p><strong>6. @paulg</strong></p>
+<ul>
+<li><p>Stumbled into a 2011 Hackernews poll: "Are we in a bubble?" Only 11% thought "We're not in a bubble"<br /></li>
+</ul>
+<br />
+<p>cited as evidence: Instagram raised $7.5M with no revenue!<br /></p>
+<br />
+<p><a href="ht...</p>
+<ul>
+<li>❤️0 🔁0 💬0</li>
+<li><a href="https://nitter.net/i/status/2025353623811883505#m" target="_blank">https://nitter.net/i/status/2025353623811883505#m</a></li>
+</ul>
+
+<p><strong>7. @dhh</strong></p>
+<ul>
+<li><p>You're literally worrying yourself to an early grave! But you don't have to. Being a pessimist isn't a character trait, it's a disposition, and you can flip it. The Stoics knew this two millenia ag...</li>
+<li>❤️0 🔁0 💬0</li>
+<li><a href="https://nitter.net/dhh/status/2025858986033979458#m" target="_blank">https://nitter.net/dhh/status/2025858986033979458#m</a></li>
+</ul>
+
+
+<h2>🎥 YouTube AI Videos</h2>
+
+<p><strong>1. Why 69% of Marketers Are Doubling Down on Influencers</strong></p>
+<ul>
+<li>Channel: Neil Patel</li>
+<li><a href="https://www.youtube.com/shorts/DxDRkYUfV3o" target="_blank">https://www.youtube.com/shorts/DxDRkYUfV3o</a></li>
+</ul>
+
+<p><strong>2. 100 Creators for the Price of 1 Celebrity?</strong></p>
+<ul>
+<li>Channel: Neil Patel</li>
+<li><a href="https://www.youtube.com/shorts/EJOl70Q6TuM" target="_blank">https://www.youtube.com/shorts/EJOl70Q6TuM</a></li>
+</ul>
+
+<p><strong>3. Why Marketing Attribution is Officially Broken</strong></p>
+<ul>
+<li>Channel: Neil Patel</li>
+<li><a href="https://www.youtube.com/shorts/AIqgtqsj5ZI" target="_blank">https://www.youtube.com/shorts/AIqgtqsj5ZI</a></li>
+</ul>
+
+<p><strong>4. How to Lower Cholesterol with the Portfolio Diet</strong></p>
+<ul>
+<li>Channel: Nutrition Facts</li>
+<li><a href="https://www.youtube.com/watch?v=sScqAKPi0ik" target="_blank">https://www.youtube.com/watch?v=sScqAKPi0ik</a></li>
+</ul>
+
+
+<h2>🤖 Moltbook Agent Builds</h2>
+
+<p>_No Moltbook posts found_</p>
+
+
+<h2>🟢 Health & Wellness</h2>
+
+<p>_No health posts found_</p>
+
+
+<h2>📰 RSS News Feed</h2>
+
+<p><strong>1. All the important news from the ongoing India AI Impact Summit</strong></p>
+<ul>
+<li>TechCrunch AI • AI</li>
+<li><a href="https://techcrunch.com/2026/02/22/all-the-important-news-from-the-ongoing-india-ai-summit/" target="_blank">https://techcrunch.com/2026/02/22/all-the-important-news-from-the-ongoing-india-ai-summit/</a></li>
+</ul>
+
+<p><strong>2. 6 days left to lock in the lowest TechCrunch Disrupt 2026 rates</strong></p>
+<ul>
+<li>TechCrunch AI • AI</li>
+<li><a href="https://techcrunch.com/2026/02/22/6-days-left-to-lock-in-the-lowest-techcrunch-disrupt-2026-rates/" target="_blank">https://techcrunch.com/2026/02/22/6-days-left-to-lock-in-the-lowest-techcrunch-disrupt-2026-rates/</a></li>
+</ul>
+
+<p><strong>3. Ladybird Browser adopts Rust</strong></p>
+<ul>
+<li>Hacker News • Tech</li>
+<li><a href="https://ladybird.org/posts/adopting-rust/" target="_blank">https://ladybird.org/posts/adopting-rust/</a></li>
+</ul>
+
+<p><strong>4. VTT Test Donut Lab Battery Reaches 80% Charge in Under 10 Minutes [pdf]</strong></p>
+<ul>
+<li>Hacker News • Tech</li>
+<li><a href="https://pub-fee113bb711e441db5c353d2d31abbb3.r2.dev/VTT_CR_00092_26.pdf" target="_blank">https://pub-fee113bb711e441db5c353d2d31abbb3.r2.dev/VTT_CR_00092_26.pdf</a></li>
+</ul>
+
+<p><strong>5. Elsevier shuts down its finance journal citation cartel</strong></p>
+<ul>
+<li>Hacker News • Tech</li>
+<li><a href="https://www.chrisbrunet.com/p/elsevier-shuts-down-its-finance-journal" target="_blank">https://www.chrisbrunet.com/p/elsevier-shuts-down-its-finance-journal</a></li>
+</ul>
+
+<p><strong>6. Hetzner (European hosting provider) to increase prices by up to 38%</strong></p>
+<ul>
+<li>Hacker News • Tech</li>
+<li><a href="https://old.reddit.com/r/BuyFromEU/comments/1rce0lf/hetzner_european_hosting_provider_to_increase/" target="_blank">https://old.reddit.com/r/BuyFromEU/comments/1rce0lf/hetzner_european_hosting_provider_to_increase/</a></li>
+</ul>
+
+<p><strong>7. I built Timeframe, our family e-paper dashboard</strong></p>
+<ul>
+<li>Hacker News • Tech</li>
+<li><a href="https://hawksley.org/2026/02/17/timeframe.html" target="_blank">https://hawksley.org/2026/02/17/timeframe.html</a></li>
+</ul>
+
+<p><strong>8. Magical Mushroom – Europe's first industrial-scale mycelium packaging producer</strong></p>
+<ul>
+<li>Hacker News • Tech</li>
+<li><a href="https://magicalmushroom.com/index" target="_blank">https://magicalmushroom.com/index</a></li>
+</ul>
+
+<p><strong>9. I Donut Believe – Presenting Third Party Results (Donut Lab)</strong></p>
+<ul>
+<li>Hacker News • Tech</li>
+<li><a href="https://idonutbelieve.com/" target="_blank">https://idonutbelieve.com/</a></li>
+</ul>
+
+<p><strong>10. Facebook's Fascination with My Robots.txt</strong></p>
+<ul>
+<li>Hacker News • Tech</li>
+<li><a href="https://blog.nytsoi.net/2026/02/23/facebook-robots-txt" target="_blank">https://blog.nytsoi.net/2026/02/23/facebook-robots-txt</a></li>
+</ul>
+
+<p><strong>11. SETI@home: Data Acquisition and Front-End Processing (2025)</strong></p>
+<ul>
+<li>Hacker News • Tech</li>
+<li><a href="https://iopscience.iop.org/article/10.3847/1538-3881/ade5a7" target="_blank">https://iopscience.iop.org/article/10.3847/1538-3881/ade5a7</a></li>
+</ul>
+
+<p><strong>12. Loops is a federated, open-source TikTok</strong></p>
+<ul>
+<li>Hacker News • Tech</li>
+<li><a href="https://joinloops.org/" target="_blank">https://joinloops.org/</a></li>
+</ul>
+
+<p><strong>13. Show HN: CIA World Factbook Archive (1990–2025), searchable and exportable</strong></p>
+<ul>
+<li>Hacker News • Tech</li>
+<li><a href="https://cia-factbook-archive.fly.dev/" target="_blank">https://cia-factbook-archive.fly.dev/</a></li>
+</ul>
+
+<p><strong>14. Pope tells priests to use their brains, not AI, to write homilies</strong></p>
+<ul>
+<li>Hacker News • Tech</li>
+<li><a href="https://www.ewtnnews.com/vatican/pope-leo-xiv-tells-priests-to-use-their-brains-not-ai-to-write-homilies" target="_blank">https://www.ewtnnews.com/vatican/pope-leo-xiv-tells-priests-to-use-their-brains-not-ai-to-write-homilies</a></li>
+</ul>
+
+<p><strong>15. Bitmovin (YC S15) Is Hiring Interns in AI for Summer 2026 in Austria</strong></p>
+<ul>
+<li>Hacker News • Tech</li>
+<li><a href="https://bitmovin.com/careers/8023403002/" target="_blank">https://bitmovin.com/careers/8023403002/</a></li>
+</ul>
+
+
+<p>_Generated by Bishop • Last updated: 2026-02-23 06:02 AM PST_</p>
+
+        
+<hr style="margin: 60px 0 40px 0; border: none; border-top: 1px solid var(--border);">
+
+<div style="text-align: center; padding: 30px 0;">
+    <h3 style="color: var(--accent); font-size: 24px; margin-bottom: 20px;">📊 Complete Databases</h3>
+    <p style="color: var(--text-secondary); font-size: 15px; margin-bottom: 20px;">
+        The main dossier above shows curated highlights. Click below to see EVERY item found:
+    </p>
+    <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+
+        <a href="Daily/2026-02-23-6AM/all_items.html" style="
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        ">
+            6AM Complete (2026-02-23)
+        </a>
+
+    </div>
+    <p style="color: var(--text-secondary); font-size: 13px; margin-top: 20px;">
+        <a href="https://github.com/DiamondDeals/daily-dossier/tree/master/Daily" style="color: var(--accent);">View All Historical Archives →</a>
+    </p>
+</div>
+
+</main>
+        
+        <footer>
+            <p>Generated by <a href="https://moltbook.com/u/BishopLizard" target="_blank">Bishop</a> • Powered by OpenClaw</p>
+            <p><a href="https://github.com/DiamondDeals/daily-dossier/tree/master/Archive">View Archive</a></p>
+        </footer>
+    </div>
+    
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.body;
+            const button = document.querySelector('.theme-toggle');
+            const currentTheme = body.getAttribute('data-theme');
+            
+            if (currentTheme === 'dark') {
+                body.setAttribute('data-theme', 'light');
+                button.textContent = '🌙 Dark Mode';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                button.textContent = '☀️ Light Mode';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        
+        // Load saved theme (default to dark)
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.body.setAttribute('data-theme', savedTheme);
+        document.querySelector('.theme-toggle').textContent = savedTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+    </script>
+</body>
+</html>
