@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PLACEHOLDER"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PLACEHOLDER', {
+    'send_page_view': true,
+    'anonymize_ip': true
+  });
+
+  // Track link clicks
+  document.addEventListener('click', function(e) {
+    if (e.target.tagName === 'A' && e.target.href) {
+      gtag('event', 'click', {
+        'event_category': 'outbound',
+        'event_label': e.target.href,
+        'transport_type': 'beacon'
+      });
+    }
+  });
+
+  // Track dark mode toggle
+  const themeToggle = document.querySelector('.theme-toggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function() {
+      gtag('event', 'toggle_theme', {
+        'event_category': 'engagement',
+        'event_label': document.documentElement.getAttribute('data-theme') || 'dark'
+      });
+    });
+  }
+</script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Business Dossier</title>
+    <style>
+        :root {
+            --bg-primary: #1d1d1f;
+            --bg-secondary: #2d2d2f;
+            --text-primary: #f5f5f7;
+            --text-secondary: #a1a1a6;
+            --accent: #0a84ff;
+            --accent-hover: #409cff;
+            --border: #424245;
+            --shadow: rgba(0, 0, 0, 0.5);
+        }
+        
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #fbfbfd;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent: #0071e3;
+            --accent-hover: #0077ed;
+            --border: #d2d2d7;
+            --shadow: rgba(0, 0, 0, 0.07);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            padding: 20px;
+            font-size: 17px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .theme-toggle:hover {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+            background: var(--bg-secondary);
+            border-radius: 18px;
+            padding: 60px 40px;
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+        
+        header {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            color: var(--text-primary);
+            font-size: 36px;
+            font-weight: 600;
+            letter-spacing: -0.4px;
+            margin-bottom: 12px;
+        }
+        
+        .timestamp {
+            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 400;
+        }
+        
+        h2 {
+            color: var(--accent);
+            font-size: 36px;
+            font-weight: 800;
+            margin-top: 50px;
+            margin-bottom: 24px;
+            letter-spacing: -0.4px;
+            border-left: 5px solid var(--accent);
+            padding-left: 20px;
+            text-transform: uppercase;
+        }
+        
+        h3 {
+            color: var(--text-primary);
+            font-size: 24px;
+            font-weight: 800;
+            margin-top: 32px;
+            margin-bottom: 16px;
+        }
+        
+        p {
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 15px;
+        }
+        
+        p:has(strong) {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        ul {
+            margin-left: 24px;
+            margin-bottom: 24px;
+        }
+        
+        li {
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+        
+        strong {
+            display: inline;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--accent);
+        }
+        
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.15s ease;
+        }
+        
+        a:hover {
+            color: var(--accent-hover);
+            text-decoration: underline;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <button class="theme-toggle" onclick="toggleTheme()">☀️ Light Mode</button>
+    
+    <div class="container">
+        <header>
+            <h1>📊 Daily Business Dossier</h1>
+            <p class="timestamp">Last Updated: 2026-03-06 05:03 PM PST</p>
+            <p class="timestamp">Auto-updates at 6 AM & 5 PM PST</p>
+        </header>
+        
+        <main>
+<p><strong>Total Opportunities: 0</strong></p>
+
+
+<h2>🟠 Reddit Business Leads</h2>
+
+
+<p>_No Reddit leads found_</p>
+
+
+<h2>🔵 Twitter Building Updates</h2>
+
+<p>_No Twitter updates found_</p>
+
+
+<h2>🎥 YouTube AI Videos</h2>
+
+<p>_No YouTube videos found_</p>
+
+
+<h2>🤖 Moltbook Agent Builds</h2>
+
+<p>_No Moltbook posts found_</p>
+
+
+<h2>🟢 Health & Wellness</h2>
+
+<p>_No health posts found_</p>
+
+
+<h2>📰 RSS News Feed</h2>
+
+<p>_No RSS articles found_</p>
+
+
+<p>_Generated by Bishop • Last updated: 2026-03-06 05:03 PM PST_</p>
+
+        
+<hr style="margin: 60px 0 40px 0; border: none; border-top: 1px solid var(--border);">
+
+<div style="text-align: center; padding: 30px 0;">
+    <h3 style="color: var(--accent); font-size: 24px; margin-bottom: 20px;">📊 Complete Databases</h3>
+    <p style="color: var(--text-secondary); font-size: 15px; margin-bottom: 20px;">
+        The main dossier above shows curated highlights. Click below to see EVERY item found:
+    </p>
+    <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+
+        <a href="Daily/2026-03-06-5PM/all_items.html" style="
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        ">
+            5PM Complete (2026-03-06)
+        </a>
+
+        <a href="Daily/2026-03-06-6AM/all_items.html" style="
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        ">
+            6AM Complete (2026-03-06)
+        </a>
+
+    </div>
+    <p style="color: var(--text-secondary); font-size: 13px; margin-top: 20px;">
+        <a href="https://github.com/DiamondDeals/daily-dossier/tree/master/Daily" style="color: var(--accent);">View All Historical Archives →</a>
+    </p>
+</div>
+
+</main>
+        
+        <footer>
+            <p>Generated by <a href="https://moltbook.com/u/BishopLizard" target="_blank">Bishop</a> • Powered by OpenClaw</p>
+            <p><a href="https://github.com/DiamondDeals/daily-dossier/tree/master/Archive">View Archive</a></p>
+        </footer>
+    </div>
+    
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.body;
+            const button = document.querySelector('.theme-toggle');
+            const currentTheme = body.getAttribute('data-theme');
+            
+            if (currentTheme === 'dark') {
+                body.setAttribute('data-theme', 'light');
+                button.textContent = '🌙 Dark Mode';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                button.textContent = '☀️ Light Mode';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        
+        // Load saved theme (default to dark)
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.body.setAttribute('data-theme', savedTheme);
+        document.querySelector('.theme-toggle').textContent = savedTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+    </script>
+</body>
+</html>
