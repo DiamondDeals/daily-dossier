@@ -196,5 +196,96 @@
     "category": "AI & Cybersecurity",
     "priority": "high",
     "note": "Unsupervised Learning - AI security, prompt engineering, future of work"
+  },
+  {
+    "name": "Veritasium",
+    "channel_id": "UCHnyfMqiRRG1u-2MsSQLbXA",
+    "category": "Science",
+    "priority": "high",
+    "note": "Science explainers, physics, engineering"
+  },
+  {
+    "name": "Kurzgesagt",
+    "channel_id": "UCsXVk37bltHxD1rDPwtNM8Q",
+    "category": "Science",
+    "priority": "high",
+    "note": "Animated science, existential topics, biology"
+  },
+  {
+    "name": "3Blue1Brown",
+    "channel_id": "UCYO_jab_esuFRV4b17AJtAw",
+    "category": "Science",
+    "priority": "high",
+    "note": "Math visualizations, neural networks, geometry"
+  },
+  {
+    "name": "Mark Rober",
+    "channel_id": "UCY1kMZp36IQSyNx_9h4mpCg",
+    "category": "Science & Engineering",
+    "priority": "medium",
+    "note": "Engineering projects, science experiments"
+  },
+  {
+    "name": "SmarterEveryDay",
+    "channel_id": "UC6107grRI4m0o2-emgoDnAA",
+    "category": "Science",
+    "priority": "medium",
+    "note": "Deep dives into science and engineering"
+  },
+  {
+    "name": "Andrew Huberman",
+    "channel_id": "UC2D2CMWXMOVWx7giW1n3LIg",
+    "category": "Health & Self-Improvement",
+    "priority": "high",
+    "note": "Neuroscience-based health, sleep, focus, exercise protocols"
+  },
+  {
+    "name": "Ali Abdaal",
+    "channel_id": "UCoOae5nYA7VqaXzerajD0lg",
+    "category": "Productivity & Business",
+    "priority": "high",
+    "note": "Productivity systems, creator economy, business"
+  },
+  {
+    "name": "Yannic Kilcher",
+    "channel_id": "UCZHmQk67mSJgfCCTn7xBfew",
+    "category": "AI Research",
+    "priority": "high",
+    "note": "AI paper deep dives, ML research explained"
+  },
+  {
+    "name": "TheAIGRID",
+    "channel_id": "UCbY9xX3_jW5c2fjlZVBI4cg",
+    "category": "AI News",
+    "priority": "high",
+    "note": "Daily AI news and developments"
+  },
+  {
+    "name": "Matthew Berman",
+    "channel_id": "UCawZsQWqfGSbCI5yjkdVkTA",
+    "category": "AI Tools",
+    "priority": "high",
+    "note": "AI tool reviews, coding with AI, LLM comparisons"
+  },
+  {
+    "name": "Graham Stephan",
+    "channel_id": "UCV6KDgJskWaEckne5aPA0aQ",
+    "category": "Finance & Business",
+    "priority": "medium",
+    "note": "Real estate investing, personal finance, money"
+  },
+  {
+    "name": "Patrick Boyle",
+    "channel_id": "UCASM0cgfkJxQ1ICmRilfHLw",
+    "category": "Finance",
+    "priority": "medium",
+    "note": "Hedge fund analysis, financial markets, economics"
+  },
+  {
+    "name": "ColdFusion",
+    "channel_id": "UC4QZ_LsYcvcq7qOsOhpAX4A",
+    "category": "Tech & Science",
+    "priority": "medium",
+    "note": "Tech documentaries, science deep dives, business stories"
   }
 ]

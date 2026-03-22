@@ -15,6 +15,18 @@
     {"name": "OpenAI Blog", "url": "https://openai.com/blog/rss/", "category": "AI Research"},
     {"name": "Hacker News", "url": "https://news.ycombinator.com/rss", "category": "Tech"}
   ],
+  "science": [
+    {"name": "Nature", "url": "https://www.nature.com/nature.rss", "category": "Science"},
+    {"name": "ScienceDaily Top Science", "url": "https://www.sciencedaily.com/rss/top/science.xml", "category": "Science"},
+    {"name": "Quanta Magazine", "url": "https://www.quantamagazine.org/feed/", "category": "Science"},
+    {"name": "Nautilus", "url": "https://nautil.us/feed/", "category": "Science"}
+  ],
+  "self_improvement": [
+    {"name": "Farnam Street", "url": "https://fs.blog/feed/", "category": "Thinking & Decision Making"},
+    {"name": "Mark Manson", "url": "https://markmanson.net/feed", "category": "Self-Improvement"},
+    {"name": "Wait But Why", "url": "https://waitbutwhy.com/feed", "category": "Deep Thinking"},
+    {"name": "Stratechery", "url": "https://stratechery.com/feed/", "category": "Tech Strategy"}
+  ],
   "seo_marketing": [
     {"name": "Search Engine Land", "url": "https://searchengineland.com/feed", "category": "SEO"},
     {"name": "Moz Blog", "url": "https://moz.com/blog/feed", "category": "SEO"},

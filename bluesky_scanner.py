@@ -45,6 +45,19 @@ class BlueskyScanner:
             # Cybersecurity
             ("troyhunt.com", "cybersecurity"),        # Troy Hunt - Have I Been Pwned, 16k followers
             ("schneier.com", "cybersecurity"),        # Bruce Schneier - security expert, 1.1k followers
+
+            # Major accounts (high-reach, diverse content)
+            ("mcuban.bsky.social", "business"),       # Mark Cuban - investor/entrepreneur, 1.49M followers
+            ("techcrunch.com", "tech"),               # TechCrunch - tech news, 209k followers
+            ("wired.com", "tech"),                    # WIRED - tech/science, 406k followers
+            ("theverge.com", "tech"),                 # The Verge - tech news, 296k followers
+            ("arstechnica.com", "tech"),              # Ars Technica - tech deep dives, 114k followers
+
+            # Science / Health
+            ("neildegrassetyson.com", "science"),     # Neil deGrasse Tyson - science, 282k followers
+            ("nature.com", "science"),                # Nature journal, 88k followers
+            ("erictopol.bsky.social", "health"),      # Eric Topol - medicine/AI, 169k followers
+            ("hubermanlab.com", "health"),            # Andrew Huberman - neuroscience/health, 3k followers
         ]
 
         # Builder keywords for scoring

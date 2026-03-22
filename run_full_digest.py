@@ -51,14 +51,19 @@ def run_full_digest():
         subreddits = [
             # Core Business & Pain Points (from Reddit Helper Helper project)
             'entrepreneur', 'smallbusiness', 'startups', 'ecommerce',
-            'freelance', 'solopreneur', 'SideProject', 'passive_income',
+            'freelance', 'solopreneur', 'Solopreneur', 'SideProject', 'passive_income',
             'SmallBusinessOwners', 'sweatystartup',
             # Marketing & Sales (Drew's expertise)
             'digitalmarketing', 'SEO', 'marketing', 'sales',
             'digital_marketing', 'MarketingHelp', 'agency', 'growth',
-            # Pain Point Discovery
-            'SomebodyMakeThis', 'AppIdeas', 'automation',
-            'productivity', 'workflow', 'excel',
+            # Pain Point Discovery - people complaining about manual processes
+            'SomebodyMakeThis', 'AppIdeas', 'automation', 'Automate',
+            'productivity', 'workflow', 'excel', 'nocode',
+            # Tech Professionals Pain Points
+            'sysadmin', 'webdev', 'selfhosted', 'devops', 'dataengineering',
+            # Service Industry Pain Points (trades, professional)
+            'Accounting', 'CRM', 'legaladvice',
+            'Plumbing', 'HVAC', 'Electricians',
             # AI & Tech
             'artificial', 'LocalLLaMA', 'ChatGPT', 'ClaudeAI',
             'MachineLearning', 'singularity',
@@ -68,7 +73,7 @@ def run_full_digest():
             'consulting', 'SaaS', 'projectmanagement',
             'Bookkeeping', 'customerservice',
             # Industry Opportunities
-            'realestate', 'restaurantowners', 'msp',
+            'realestate', 'realestateinvesting', 'restaurantowners', 'msp', 'tax',
         ]
         reddit_posts = []
         for sub in subreddits:
@@ -176,6 +181,17 @@ def run_full_digest():
         json.dump(database, f, indent=2, ensure_ascii=False)
     print(f"✅ Saved database JSON: {json_file}")
 
+    # Build prior days archive sidebar links
+    db_dir = Path('Database')
+    archive_files = sorted(db_dir.glob('all_items_*.html'), reverse=True)
+    archive_links_html = ""
+    for af in archive_files[:30]:  # Last 30 days
+        af_date = af.stem.replace('all_items_', '')
+        if af_date == date_str:
+            archive_links_html += f'<div class="arc-link current">{af_date} (today)</div>\n'
+        else:
+            archive_links_html += f'<a class="arc-link" href="all_items_{af_date}.html">{af_date}</a>\n'
+
     # Save all_items HTML database
     html_file = f'Database/all_items_{date_str}.html'
     all_items_html = f"""<!DOCTYPE html>
@@ -185,7 +201,17 @@ def run_full_digest():
     <title>Complete Database - {date_str}</title>
     <style>
         body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-               background: #1d1d1f; color: #f5f5f7; padding: 20px; max-width: 980px; margin: 0 auto; }}
+               background: #1d1d1f; color: #f5f5f7; padding: 20px; margin: 0; }}
+        .page-layout {{ display: flex; max-width: 1280px; margin: 0 auto; gap: 24px; }}
+        .main-content {{ flex: 1; min-width: 0; }}
+        .archive-sidebar {{ width: 200px; flex-shrink: 0; position: sticky; top: 20px; align-self: flex-start;
+                            max-height: calc(100vh - 40px); overflow-y: auto; }}
+        .archive-sidebar h3 {{ color: #a1a1a6; font-size: 13px; text-transform: uppercase;
+                               letter-spacing: 1px; margin: 0 0 12px 0; }}
+        .arc-link {{ display: block; padding: 6px 10px; color: #0a84ff; text-decoration: none;
+                     font-size: 13px; border-radius: 6px; margin-bottom: 2px; }}
+        .arc-link:hover {{ background: #2d2d2f; }}
+        .arc-link.current {{ color: #30d158; font-weight: bold; background: #2d2d2f; }}
         h1 {{ color: #0a84ff; }}
         h2 {{ color: #0a84ff; margin-top: 40px; }}
         .top-bar {{ display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }}
@@ -236,14 +262,23 @@ def run_full_digest():
                        box-shadow: 0 2px 10px rgba(0,0,0,0.4); }}
         .scroll-top.visible {{ opacity: 1; pointer-events: auto; }}
         .scroll-top:hover {{ transform: scale(1.1); }}
+        @media (max-width: 900px) {{
+            .page-layout {{ flex-direction: column; }}
+            .archive-sidebar {{ width: 100%; position: static; max-height: none;
+                                display: flex; flex-wrap: wrap; gap: 4px; }}
+            .archive-sidebar h3 {{ width: 100%; }}
+        }}
     </style>
 </head>
 <body>
-    <div class="top-bar">
+    <div class="top-bar" style="max-width: 1280px; margin: 0 auto 20px auto;">
         <a class="back-link" href="../dossier.html">&larr; Back to Dossier</a>
         <button class="saved-toggle" onclick="togglePanel()">Saved (0)</button>
     </div>
     <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({{top:0,behavior:'smooth'}})">&uarr;</button>
+
+    <div class="page-layout">
+    <div class="main-content">
     <h1>Complete Database - {date_str}</h1>
     <p class="count">Total Items: {total}</p>
 
@@ -285,30 +320,37 @@ def run_full_digest():
         else:
             all_items_html += "<p>No items found</p>\n"
 
-    all_items_html += """
+    all_items_html += f"""
+    </div><!-- end main-content -->
+    <div class="archive-sidebar">
+        <h3>Prior Days</h3>
+        {archive_links_html}
+    </div>
+    </div><!-- end page-layout -->
+
 <script>
-function gBm(){try{return JSON.parse(localStorage.getItem('dossier_bookmarks')||'[]')}catch{return[]}}
-function sBm(b){localStorage.setItem('dossier_bookmarks',JSON.stringify(b));uBadge()}
-function uBadge(){document.querySelector('.saved-toggle').textContent='Saved ('+gBm().length+')'}
-function togglePanel(){var p=document.getElementById('sp');p.classList.toggle('open');if(p.classList.contains('open'))rList()}
-function rList(){var l=document.getElementById('sl'),b=gBm();
-if(!b.length){l.innerHTML='<p style="color:#a1a1a6;font-style:italic">No saved items yet.</p>';return}
+function gBm(){{try{{return JSON.parse(localStorage.getItem('dossier_bookmarks')||'[]')}}catch{{return[]}}}}
+function sBm(b){{localStorage.setItem('dossier_bookmarks',JSON.stringify(b));uBadge()}}
+function uBadge(){{document.querySelector('.saved-toggle').textContent='Saved ('+gBm().length+')'}}
+function togglePanel(){{var p=document.getElementById('sp');p.classList.toggle('open');if(p.classList.contains('open'))rList()}}
+function rList(){{var l=document.getElementById('sl'),b=gBm();
+if(!b.length){{l.innerHTML='<p style="color:#a1a1a6;font-style:italic">No saved items yet.</p>';return}}
 l.innerHTML=b.map((m,i)=>'<div class="si"><a href="'+m.url+'" target="_blank">'+m.title+'</a><span class="meta">'+
-(m.section||'')+' &middot; '+( m.date||'')+'</span><br><button class="rm" onclick="rbm('+i+')">&times; Remove</button></div>').join('')}
-function rbm(i){var b=gBm();b.splice(i,1);sBm(b);rList();syncBtns()}
-function tbm(btn){var t=btn.getAttribute('data-title'),u=btn.getAttribute('data-url'),
+(m.section||'')+' &middot; '+(m.date||'')+'</span><br><button class="rm" onclick="rbm('+i+')">&times; Remove</button></div>').join('')}}
+function rbm(i){{var b=gBm();b.splice(i,1);sBm(b);rList();syncBtns()}}
+function tbm(btn){{var t=btn.getAttribute('data-title'),u=btn.getAttribute('data-url'),
 s=btn.getAttribute('data-section'),b=gBm(),x=b.findIndex(m=>m.title===t);
-if(x>=0){b.splice(x,1);btn.classList.remove('saved');btn.innerHTML='&#9734;'}
-else{b.push({title:t,url:u,section:s,date:new Date().toLocaleDateString()});btn.classList.add('saved');btn.innerHTML='&#9733;'}
-sBm(b)}
-function syncBtns(){var b=gBm();document.querySelectorAll('.bm').forEach(btn=>{
+if(x>=0){{b.splice(x,1);btn.classList.remove('saved');btn.innerHTML='&#9734;'}}
+else{{b.push({{title:t,url:u,section:s,date:new Date().toLocaleDateString()}});btn.classList.add('saved');btn.innerHTML='&#9733;'}}
+sBm(b)}}
+function syncBtns(){{var b=gBm();document.querySelectorAll('.bm').forEach(btn=>{{
 var t=btn.getAttribute('data-title'),s=b.some(m=>m.title===t);
-btn.classList.toggle('saved',s);btn.innerHTML=s?'&#9733;':'&#9734;'})}
-function filterPlatform(p,btn){document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-btn.classList.add('active');document.querySelectorAll('.item').forEach(el=>{
-el.style.display=(p==='all'||el.getAttribute('data-platform')===p)?'flex':'none'})}
-window.addEventListener('scroll',function(){document.getElementById('scrollTop').classList.toggle('visible',window.scrollY>400)});
-document.addEventListener('DOMContentLoaded',function(){uBadge();syncBtns()});
+btn.classList.toggle('saved',s);btn.innerHTML=s?'&#9733;':'&#9734;'}})}}
+function filterPlatform(p,btn){{document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+btn.classList.add('active');document.querySelectorAll('.item').forEach(el=>{{
+el.style.display=(p==='all'||el.getAttribute('data-platform')===p)?'flex':'none'}})}}
+window.addEventListener('scroll',function(){{document.getElementById('scrollTop').classList.toggle('visible',window.scrollY>400)}});
+document.addEventListener('DOMContentLoaded',function(){{uBadge();syncBtns()}});
 </script>
 </body></html>"""
 
