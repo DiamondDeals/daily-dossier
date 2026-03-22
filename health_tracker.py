@@ -35,7 +35,7 @@ class HealthTracker:
             'HeartHealth', 'CardiacRecovery',
             'EatCheapAndHealthy', 'MealPrepSunday',
             'loseit', 'HealthyFood', 'veganfitness',
-            'ScientificNutrition', 'Mediterranean_Diet'
+            'ScientificNutrition', 'mediterraneandiet'
         ]
 
         # RSS feeds specifically for health content

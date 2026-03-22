@@ -55,7 +55,7 @@ def run_full_digest():
             'SmallBusinessOwners', 'sweatystartup',
             # Marketing & Sales (Drew's expertise)
             'digitalmarketing', 'SEO', 'marketing', 'sales',
-            'DigitalMarketingHelp', 'MarketingHelp', 'agency', 'growth',
+            'digital_marketing', 'MarketingHelp', 'agency', 'growth',
             # Pain Point Discovery
             'SomebodyMakeThis', 'AppIdeas', 'automation',
             'productivity', 'workflow', 'excel',

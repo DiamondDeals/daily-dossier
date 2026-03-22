@@ -57,7 +57,7 @@ class RSSNewsScanner:
             print(f"Error fetching {feed_url}: {str(e)}")
             return []
     
-    def scan_all_feeds(self, hours_back: int = 24) -> Dict[str, List[Dict]]:
+    def scan_all_feeds(self, hours_back: int = 48) -> Dict[str, List[Dict]]:
         """Scan all configured feeds"""
         results = {}
         
