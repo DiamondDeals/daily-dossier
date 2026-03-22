@@ -58,14 +58,16 @@ class BlueskySanner:
             "startup", "founder", "entrepreneur", "business"
         ]
 
-    def search_posts(self, query, limit=25):
+    def search_posts(self, query, limit=25, hours_back=168):
         """Search Bluesky posts using public API"""
         try:
+            since = (datetime.now(timezone.utc) - timedelta(hours=hours_back)).strftime('%Y-%m-%dT%H:%M:%SZ')
             url = f"{self.base_url}/xrpc/app.bsky.feed.searchPosts"
             params = {
                 'q': query,
                 'limit': min(limit, 25),
-                'sort': 'latest'
+                'sort': 'latest',
+                'since': since
             }
             response = requests.get(url, params=params, timeout=15)
             if response.status_code == 200:
@@ -152,7 +154,7 @@ class BlueskySanner:
         print("  Scanning Bluesky for builder content...")
 
         all_builds = []
-        cutoff = datetime.now(timezone.utc) - timedelta(hours=72)
+        cutoff = datetime.now(timezone.utc) - timedelta(hours=168)  # 7 days
 
         # 1. Search for building-in-public content
         search_queries = [
@@ -208,6 +210,17 @@ class BlueskySanner:
                 feed = self.get_author_feed(handle, limit=5)
                 for item in feed:
                     parsed = self._parse_post(item)
+
+                    # Filter out old posts
+                    try:
+                        pub_date = datetime.fromisoformat(parsed['published'])
+                        if pub_date.tzinfo is None:
+                            pub_date = pub_date.replace(tzinfo=timezone.utc)
+                        if pub_date < cutoff:
+                            continue
+                    except:
+                        pass
+
                     score, keywords = self.score_post(parsed['text'])
 
                     if score >= 1 and parsed['engagement'] >= 3:
