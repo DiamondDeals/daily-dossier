@@ -34,7 +34,7 @@ if db_exists:
     footer_html += f'''
         <a href="Database/all_items_{date_str}.html" style="
             display: inline-block;
-            background: linear-gradient(135deg, #0a84ff 0%, #30d158 100%);
+            background: var(--accent);
             color: white;
             padding: 16px 32px;
             border-radius: 12px;
