@@ -229,6 +229,13 @@ def run_full_digest():
         .filter-btn {{ padding: 6px 14px; border-radius: 16px; border: 1px solid #424245;
                        background: none; color: #a1a1a6; cursor: pointer; font-size: 13px; }}
         .filter-btn:hover, .filter-btn.active {{ background: #0a84ff; color: white; border-color: #0a84ff; }}
+        .scroll-top {{ position: fixed; bottom: 30px; right: 30px; width: 48px; height: 48px;
+                       border-radius: 50%; background: #0a84ff; color: white; border: none;
+                       font-size: 22px; cursor: pointer; z-index: 1000; opacity: 0;
+                       pointer-events: none; transition: opacity 0.3s ease;
+                       box-shadow: 0 2px 10px rgba(0,0,0,0.4); }}
+        .scroll-top.visible {{ opacity: 1; pointer-events: auto; }}
+        .scroll-top:hover {{ transform: scale(1.1); }}
     </style>
 </head>
 <body>
@@ -236,6 +243,7 @@ def run_full_digest():
         <a class="back-link" href="../dossier.html">&larr; Back to Dossier</a>
         <button class="saved-toggle" onclick="togglePanel()">Saved (0)</button>
     </div>
+    <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({{top:0,behavior:'smooth'}})">&uarr;</button>
     <h1>Complete Database - {date_str}</h1>
     <p class="count">Total Items: {total}</p>
 
@@ -295,6 +303,7 @@ btn.classList.toggle('saved',s);btn.innerHTML=s?'&#9733;':'&#9734;'})}
 function filterPlatform(p,btn){document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
 btn.classList.add('active');document.querySelectorAll('.item').forEach(el=>{
 el.style.display=(p==='all'||el.getAttribute('data-platform')===p)?'flex':'none'})}
+window.addEventListener('scroll',function(){document.getElementById('scrollTop').classList.toggle('visible',window.scrollY>400)});
 document.addEventListener('DOMContentLoaded',function(){uBadge();syncBtns()});
 </script>
 </body></html>"""
