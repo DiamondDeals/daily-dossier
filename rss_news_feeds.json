@@ -16,43 +16,120 @@
       "category": "AI"
     },
     {
-      "name": "Hacker News",
-      "url": "https://news.ycombinator.com/rss",
-      "category": "Tech"
+      "name": "Ars Technica AI",
+      "url": "https://arstechnica.com/ai/feed/",
+      "category": "AI"
     },
     {
       "name": "VentureBeat AI",
       "url": "https://venturebeat.com/category/ai/feed/",
       "category": "AI"
+    },
+    {
+      "name": "Anthropic Blog",
+      "url": "https://www.anthropic.com/feed.xml",
+      "category": "AI Research"
+    },
+    {
+      "name": "OpenAI Blog",
+      "url": "https://openai.com/blog/rss/",
+      "category": "AI Research"
+    },
+    {
+      "name": "Hacker News",
+      "url": "https://news.ycombinator.com/rss",
+      "category": "Tech"
     }
   ],
-  "marketing": [
+  "business": [
     {
-      "name": "Marketing Land",
-      "url": "https://martech.org/feed/",
-      "category": "Marketing"
+      "name": "Indie Hackers",
+      "url": "https://www.indiehackers.com/feed.xml",
+      "category": "Entrepreneur"
+    },
+    {
+      "name": "Y Combinator Blog",
+      "url": "https://www.ycombinator.com/blog/rss/",
+      "category": "Startups"
+    },
+    {
+      "name": "First Round Review",
+      "url": "https://review.firstround.com/feed.xml",
+      "category": "Startups"
+    },
+    {
+      "name": "a16z Blog",
+      "url": "https://a16z.com/feed/",
+      "category": "VC & Tech"
     },
     {
       "name": "Search Engine Journal",
       "url": "https://www.searchenginejournal.com/feed/",
-      "category": "SEO/Marketing"
+      "category": "SEO"
     },
     {
-      "name": "Neil Patel Blog",
-      "url": "https://neilpatel.com/feed/",
-      "category": "Marketing"
+      "name": "Product Hunt",
+      "url": "https://www.producthunt.com/feed",
+      "category": "Products"
+    },
+    {
+      "name": "SaaStr Blog",
+      "url": "https://www.saastr.com/feed/",
+      "category": "SaaS"
     }
   ],
   "health": [
     {
       "name": "NutritionFacts.org",
       "url": "https://nutritionfacts.org/feed/",
-      "category": "Health"
+      "category": "Plant-Based Health"
     },
     {
       "name": "Forks Over Knives",
       "url": "https://www.forksoverknives.com/feed/",
-      "category": "Plant-Based"
+      "category": "Plant-Based Health"
+    },
+    {
+      "name": "PCRM News",
+      "url": "https://www.pcrm.org/news/feed",
+      "category": "Nutrition Research"
+    },
+    {
+      "name": "Cleveland Clinic Heart",
+      "url": "https://health.clevelandclinic.org/category/heart/feed/",
+      "category": "Heart Health"
+    },
+    {
+      "name": "American Heart Association News",
+      "url": "https://newsroom.heart.org/feeds/news_releases.rss",
+      "category": "Heart Health"
+    },
+    {
+      "name": "Pritikin Blog",
+      "url": "https://www.pritikin.com/blog/feed/",
+      "category": "Pritikin"
+    },
+    {
+      "name": "Medical News Today - Nutrition",
+      "url": "https://www.medicalnewstoday.com/nutrition/rss",
+      "category": "Nutrition"
+    }
+  ],
+  "cybersecurity": [
+    {
+      "name": "Krebs on Security",
+      "url": "https://krebsonsecurity.com/feed/",
+      "category": "Cybersecurity"
+    },
+    {
+      "name": "The Hacker News",
+      "url": "https://feeds.feedburner.com/TheHackersNews",
+      "category": "Cybersecurity"
+    },
+    {
+      "name": "Dark Reading",
+      "url": "https://www.darkreading.com/rss.xml",
+      "category": "Cybersecurity"
     }
   ]
 }

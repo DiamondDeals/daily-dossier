@@ -371,9 +371,13 @@ class DigestHTMLGenerator:
         print(f"✅ Saved: {self.current_html}")
     
     def deploy_to_github(self):
-        """Deploy to GitHub"""
+        """Deploy to GitHub - includes dossier, database, and daily archives"""
         try:
-            subprocess.run(['git', 'add', 'dossier.html', 'Archive', 'html_generator.py'], check=True)
+            subprocess.run(['git', 'add', 'dossier.html', 'Archive', 'Database', 'Daily',
+                            'html_generator.py', 'youtube_ai_channels.json',
+                            'rss_news_feeds.json', 'bluesky_scanner.py',
+                            'health_tracker.py', 'youtube_ai_monitor.py',
+                            'run_full_digest.py', 'add_footer_links.py'], check=True)
             subprocess.run(['git', 'commit', '-m', f'Update: {datetime.now().strftime("%Y-%m-%d %I:%M %p PST")}'], check=True)
             subprocess.run(['git', 'push'], check=True)
             print(f"✅ Deployed to GitHub Pages")

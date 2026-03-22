@@ -28,7 +28,7 @@ load_dotenv(Path(__file__).parent / '.env')
 
 # Import all scanners
 from reddit_json_client import RedditJSONClient
-from twitter_nitter_scraper import TwitterNitterScraper
+from bluesky_scanner import BlueskySanner
 from youtube_ai_monitor import YouTubeAIMonitor
 from health_tracker import HealthTracker
 from moltbook_scanner import MoltbookScanner
@@ -44,16 +44,36 @@ def run_full_digest():
     
     results = {}
     
-    # 1. Reddit
-    print("🟠 REDDIT - Business Pain Points")
+    # 1. Reddit - Business pain points, AI, tech, cybersecurity, opportunities
+    print("🟠 REDDIT - Pain Points, AI, Business & Opportunities")
     try:
         reddit = RedditJSONClient()
-        subreddits = ['entrepreneur', 'smallbusiness', 'startups', 'ecommerce',
-                      'freelance', 'digitalmarketing', 'SideProject', 'passive_income']
+        subreddits = [
+            # Core Business & Pain Points (from Reddit Helper Helper project)
+            'entrepreneur', 'smallbusiness', 'startups', 'ecommerce',
+            'freelance', 'solopreneur', 'SideProject', 'passive_income',
+            'SmallBusinessOwners', 'sweatystartup',
+            # Marketing & Sales (Drew's expertise)
+            'digitalmarketing', 'SEO', 'marketing', 'sales',
+            'DigitalMarketingHelp', 'MarketingHelp', 'agency', 'growth',
+            # Pain Point Discovery
+            'SomebodyMakeThis', 'AppIdeas', 'automation',
+            'productivity', 'workflow', 'excel',
+            # AI & Tech
+            'artificial', 'LocalLLaMA', 'ChatGPT', 'ClaudeAI',
+            'MachineLearning', 'singularity',
+            # Cybersecurity (Drew's interest)
+            'netsec', 'cybersecurity', 'hacking',
+            # Business Operations
+            'consulting', 'SaaS', 'projectmanagement',
+            'Bookkeeping', 'customerservice',
+            # Industry Opportunities
+            'realestate', 'restaurantowners', 'msp',
+        ]
         reddit_posts = []
         for sub in subreddits:
             try:
-                posts = reddit.fetch_posts(sub, limit=25)
+                posts = reddit.fetch_posts(sub, limit=15)
                 reddit_posts.extend(posts)
             except Exception:
                 pass
@@ -63,15 +83,15 @@ def run_full_digest():
         print(f"❌ Reddit failed: {e}\n")
         results['reddit'] = {'count': 0, 'posts': []}
 
-    # 2. Twitter - Using Nitter scraping (free, no API needed)
-    print("🔵 TWITTER - Building in Public")
+    # 2. Bluesky - Building in Public (replaces dead Twitter/Nitter)
+    print("🦋 BLUESKY - Building in Public")
     try:
-        twitter = TwitterNitterScraper()
-        twitter_updates = twitter.scan_builders(max_accounts=20)
-        results['twitter'] = {'count': len(twitter_updates), 'posts': twitter_updates}
-        print(f"✅ Found {len(twitter_updates)} Twitter updates\n")
+        bluesky = BlueskySanner()
+        bluesky_updates = bluesky.scan_builders(max_accounts=20)
+        results['twitter'] = {'count': len(bluesky_updates), 'posts': bluesky_updates}
+        print(f"✅ Found {len(bluesky_updates)} Bluesky builder updates\n")
     except Exception as e:
-        print(f"❌ Twitter failed: {e}\n")
+        print(f"❌ Bluesky failed: {e}\n")
         results['twitter'] = {'count': 0, 'posts': []}
     
     # 3. YouTube
@@ -100,13 +120,10 @@ def run_full_digest():
         print(f"❌ Moltbook failed: {e}\n")
         results['moltbook'] = {'count': 0, 'posts': []}
     
-    # 5. Health
-    print("🟢 HEALTH - Pritikin & WFPB")
+    # 5. Health (Reddit + RSS, no Twitter API needed)
+    print("🟢 HEALTH - Pritikin, Heart Health & WFPB")
     try:
-        bearer_token = os.getenv("TWITTER_BEARER_TOKEN", "")
-        if not bearer_token:
-            raise ValueError("No TWITTER_BEARER_TOKEN in .env - skipping")
-        health = HealthTracker(bearer_token)
+        health = HealthTracker()
         health_posts = health.scan_all()
         results['health'] = {'count': len(health_posts), 'posts': health_posts}
         print(f"✅ Found {len(health_posts)} Health posts\n")
@@ -118,7 +135,7 @@ def run_full_digest():
     print("📰 RSS NEWS - AI, Marketing, Health News")
     try:
         rss = RSSNewsScanner()
-        rss_articles = rss.scan_all_feeds(hours_back=24)
+        rss_articles = rss.scan_all_feeds(hours_back=48)
         # Flatten
         all_articles = []
         for articles in rss_articles.values():
@@ -196,7 +213,7 @@ def run_full_digest():
 
     # Add all items by platform
     for platform_name, platform_data in [
-        ('reddit', '🟠 Reddit'), ('twitter', '🔵 Twitter'), ('youtube', '🎥 YouTube'),
+        ('reddit', '🟠 Reddit'), ('twitter', '🦋 Bluesky'), ('youtube', '🎥 YouTube'),
         ('moltbook', '🤖 Moltbook'), ('health', '🟢 Health'), ('rss', '📰 RSS')
     ]:
         count = results[platform_name]['count']
@@ -238,7 +255,17 @@ def generate_combined_markdown(results):
     total = sum(r['count'] for r in results.values())
 
     # NOTE: Title and date are in HTML template, don't duplicate in markdown body
+    date_str_db = datetime.now().strftime('%Y-%m-%d')
     md = f"""**Total Opportunities: {total}**
+
+<div style="background: linear-gradient(135deg, #0a84ff 0%, #30d158 100%); border-radius: 12px; padding: 20px 30px; margin: 20px 0 30px 0; text-align: center;">
+<a href="Database/all_items_{date_str_db}.html" style="color: white; text-decoration: none; font-size: 20px; font-weight: 700;">
+VIEW ALL {total} ITEMS &rarr;
+</a>
+<p style="color: rgba(255,255,255,0.8); font-size: 14px; margin: 8px 0 0 0;">
+The dossier below shows top 10 per section. Click above to see everything.
+</p>
+</div>
 
 ---
 
@@ -256,16 +283,17 @@ def generate_combined_markdown(results):
     else:
         md += "\n_No Reddit leads found_\n"
     
-    md += "\n---\n\n## 🔵 Twitter Building Updates\n"
-    
+    md += "\n---\n\n## 🦋 Bluesky Builder Updates\n"
+
     if results['twitter']['count'] > 0:
-        for i, tweet in enumerate(results['twitter']['posts'][:10], 1):
-            md += f"\n**{i}. @{tweet.get('username', 'unknown')}**\n"
-            md += f"- {tweet.get('text', '')[:200]}...\n"
-            md += f"- ❤️{tweet.get('likes', 0)} 🔁{tweet.get('retweets', 0)} 💬{tweet.get('replies', 0)}\n"
-            md += f"- {tweet.get('url', '')}\n"
+        for i, post in enumerate(results['twitter']['posts'][:10], 1):
+            name = post.get('display_name', post.get('username', 'unknown'))
+            md += f"\n**{i}. {name}** (@{post.get('username', 'unknown')})\n"
+            md += f"- {post.get('text', '')[:200]}...\n"
+            md += f"- ❤️{post.get('likes', 0)} 🔁{post.get('reposts', 0)} 💬{post.get('replies', 0)}\n"
+            md += f"- {post.get('url', '')}\n"
     else:
-        md += "\n_No Twitter updates found_\n"
+        md += "\n_No Bluesky updates found_\n"
     
     md += "\n---\n\n## 🎥 YouTube AI Videos\n"
     

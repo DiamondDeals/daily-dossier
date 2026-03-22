@@ -12,28 +12,16 @@
     "priority": "high"
   },
   {
-    "name": "Alex Finn",
-    "channel_id": "UCYMnLwPa_VPt-VtP8lS_pAA",
-    "category": "AI & Marketing",
-    "priority": "medium"
-  },
-  {
     "name": "Wes Roth",
     "channel_id": "UCnFEGGGu5w_z1AEDCRmqYBw",
     "category": "AI News",
     "priority": "high"
   },
   {
-    "name": "Matt Berman",
-    "channel_id": "UCbhJVU6SzQQ4cLhJXhG8Ywg",
-    "category": "AI Coding",
-    "priority": "medium"
-  },
-  {
     "name": "AI Explained",
     "channel_id": "UCNJ1Ymd5yFuUPtn21xtRbbw",
     "category": "Technical Deep Dives",
-    "priority": "medium"
+    "priority": "high"
   },
   {
     "name": "Fireship",
@@ -48,40 +36,99 @@
     "priority": "medium"
   },
   {
-    "name": "David Ondrej",
-    "channel_id": "UCCGPPOh6xI7Yq8BEIefDODQ",
-    "category": "AI Business",
-    "priority": "medium"
-  },
-  {
     "name": "Cole Medin",
     "channel_id": "UCchvKtRjL2HVWDfFD5_3FnA",
     "category": "AI Tools",
     "priority": "medium"
   },
   {
-    "name": "AI Advantage",
-    "channel_id": "UCx6nQDILk9bEn8jH4Z-K9Xg",
-    "category": "AI Tools",
+    "name": "All About AI",
+    "channel_id": "UCqcCthAhIFtzx66D9zj-fxQ",
+    "category": "AI News",
     "priority": "medium"
   },
   {
-    "name": "Marcus Jones Marketing",
-    "channel_id": "UC3EjN8YjOp6N5LYkpRmXNjg",
-    "category": "Marketing",
-    "priority": "low"
+    "name": "Anthropic",
+    "channel_id": "UCr8qxwgRO9rLqGwOF9zx4Sw",
+    "category": "AI Research",
+    "priority": "high"
   },
   {
-    "name": "Neil Patel",
-    "channel_id": "UCl-Zrl0QhF66lu1aGXaTbfw",
-    "category": "Marketing & SEO",
-    "priority": "medium"
+    "name": "Two Minute Papers",
+    "channel_id": "UCbfYPyITQ-7l4upoX8nvctg",
+    "category": "AI Research",
+    "priority": "high",
+    "note": "Cutting-edge AI research explained simply"
   },
   {
-    "name": "Nathan Latka",
-    "channel_id": "UC7i4AKwOjdDjwUxPu5zBq7Q",
-    "category": "SaaS & Business",
-    "priority": "medium"
+    "name": "NetworkChuck",
+    "channel_id": "UC9-y-6csu5WGm29I7JiwpnA",
+    "category": "Cybersecurity & Tech",
+    "priority": "high",
+    "note": "Networking, hacking, cybersecurity tutorials"
+  },
+  {
+    "name": "David Bombal",
+    "channel_id": "UCP7WmQ_U4GB3K51Od9QvM0w",
+    "category": "Cybersecurity",
+    "priority": "medium",
+    "note": "Network security, ethical hacking, certifications"
+  },
+  {
+    "name": "Alex Hormozi",
+    "channel_id": "UCyjw26uB9AZGsJZ20xdMNVw",
+    "category": "Business Scaling",
+    "priority": "high",
+    "note": "Sales psychology, scaling businesses"
+  },
+  {
+    "name": "Justin Welsh",
+    "channel_id": "UCGgNEJVLGS8sA3JZXnHCUvw",
+    "category": "Solo Business",
+    "priority": "high",
+    "note": "Solo entrepreneurship, LinkedIn growth"
+  },
+  {
+    "name": "Dan Koe",
+    "channel_id": "UC9ZyxQMUTsLz8Y4QOvNJc1Q",
+    "category": "Digital Business",
+    "priority": "high",
+    "note": "Personal brand, philosophical approach to business"
+  },
+  {
+    "name": "Codie Sanchez",
+    "channel_id": "UCqLRxKQKTj6P2LkNmO_Q4Qw",
+    "category": "Acquisitions",
+    "priority": "high",
+    "note": "Buying boring businesses, Main Street acquisitions"
+  },
+  {
+    "name": "My First Million",
+    "channel_id": "UCdjC8EnFXKCJw7s7FIiJN9g",
+    "category": "Business Podcast",
+    "priority": "high",
+    "note": "Sam Parr & Shaan Puri - business ideas and trends"
+  },
+  {
+    "name": "Greg Isenberg",
+    "channel_id": "UCF1hKZhGVl8xsJpWlIvJkjQ",
+    "category": "Startup Ideas",
+    "priority": "high",
+    "note": "Community-driven business ideas, startup concepts"
+  },
+  {
+    "name": "Y Combinator",
+    "channel_id": "UCcefcZRL2oaA_uBNeo5UOWg",
+    "category": "Startups",
+    "priority": "high",
+    "note": "Startup School, founder interviews, YC advice"
+  },
+  {
+    "name": "Lenny Rachitsky",
+    "channel_id": "UCddiUEpeqJcYeBxX1IVBKvQ",
+    "category": "Product & Growth",
+    "priority": "high",
+    "note": "Product management, growth strategy, founder interviews"
   },
   {
     "name": "Nutrition Facts",
@@ -96,79 +143,17 @@
     "priority": "medium"
   },
   {
-    "name": "WFPB.ORG",
-    "channel_id": "UCxfuS7sLqNfldwN1lKvjBTA",
-    "category": "Whole Food Plant-Based",
-    "priority": "low"
-  },
-  {
     "name": "Dr. McDougall",
-    "channel_id": "UC2TfTHuuL39Dm5Hc3W6pztg",
+    "channel_id": "UCt9xmcj8KA2-4PJ0vLXN7fA",
     "category": "Plant-Based Health",
     "priority": "medium"
-  },
-  {
-    "name": "Alex Hormozi",
-    "channel_id": "UCyjw26uB9AZGsJZ20xdMNVw",
-    "category": "Business Scaling",
-    "priority": "high",
-    "note": "Sales psychology, scaling businesses - CRITICAL for entrepreneur pain points"
-  },
-  {
-    "name": "Justin Welsh",
-    "channel_id": "UCGgNEJVLGS8sA3JZXnHCUvw",
-    "category": "Solo Business",
-    "priority": "high",
-    "note": "Solo entrepreneurship, LinkedIn growth, building in public"
-  },
-  {
-    "name": "Dan Koe",
-    "channel_id": "UC9ZyxQMUTsLz8Y4QOvNJc1Q",
-    "category": "Digital Business",
-    "priority": "high",
-    "note": "Writing, personal brand, philosophical approach to business"
-  },
-  {
-    "name": "Codie Sanchez",
-    "channel_id": "UCqLRxKQKTj6P2LkNmO_Q4Qw",
-    "category": "Acquisitions",
-    "priority": "high",
-    "note": "Main Street acquisitions, buying boring businesses"
-  },
-  {
-    "name": "My First Million",
-    "channel_id": "UCdjC8EnFXKCJw7s7FIiJN9g",
-    "category": "Business Podcast",
-    "priority": "high",
-    "note": "Sam Parr & Shaan Puri - business ideas, trends, founder interviews"
   },
   {
     "name": "Dr. Caldwell Esselstyn Jr",
     "channel_id": "UCt9xmcj8KA2-4PJ0vLXN7fA",
     "category": "Heart Health",
     "priority": "critical",
-    "note": "Prevent & Reverse Heart Disease author - CRITICAL for post-heart attack recovery"
-  },
-  {
-    "name": "Starter Story",
-    "channel_id": "UCZLfr8cVnQn2OymXZ5zy_Hw",
-    "category": "Ecommerce",
-    "priority": "medium",
-    "note": "Ecommerce founder interviews, revenue transparency"
-  },
-  {
-    "name": "All About AI",
-    "channel_id": "UCqcCthAhIFtzx66D9zj-fxQ",
-    "category": "AI News",
-    "priority": "medium",
-    "note": "Daily AI news aggregation"
-  },
-  {
-    "name": "Anthropic",
-    "channel_id": "UCr8qxwgRO9rLqGwOF9zx4Sw",
-    "category": "AI Research",
-    "priority": "high",
-    "note": "Official Claude updates, AI safety research"
+    "note": "Prevent & Reverse Heart Disease - CRITICAL for post-heart attack recovery"
   },
   {
     "name": "Mic the Vegan",
@@ -176,5 +161,33 @@
     "category": "Plant-Based Health",
     "priority": "medium",
     "note": "Evidence-based vegan nutrition, debunks myths"
+  },
+  {
+    "name": "Dr. Pradip Jamnadas",
+    "channel_id": "UCRCSn-cGRBdBsvhMuP1TLSg",
+    "category": "Heart Health",
+    "priority": "high",
+    "note": "Cardiologist - heart disease prevention, fasting, metabolic health"
+  },
+  {
+    "name": "Plant Chompers",
+    "channel_id": "UC8hBwZh2oCNnraZbPUjSMYQ",
+    "category": "Plant-Based Health",
+    "priority": "medium",
+    "note": "Evidence-based nutrition science, myth debunking"
+  },
+  {
+    "name": "PCRM",
+    "channel_id": "UCYxzRhBih0xGBcEp0hWaEHQ",
+    "category": "Plant-Based Health",
+    "priority": "high",
+    "note": "Physicians Committee for Responsible Medicine - clinical nutrition research"
+  },
+  {
+    "name": "Starter Story",
+    "channel_id": "UCZLfr8cVnQn2OymXZ5zy_Hw",
+    "category": "Ecommerce",
+    "priority": "medium",
+    "note": "Ecommerce founder interviews, revenue transparency"
   }
 ]
