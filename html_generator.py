@@ -202,6 +202,32 @@ class DigestHTMLGenerator:
             color: white;
             transform: scale(1.05);
         }}
+
+        .scroll-top {{
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+        }}
+        .scroll-top.visible {{
+            opacity: 1;
+            pointer-events: auto;
+        }}
+        .scroll-top:hover {{
+            transform: scale(1.1);
+        }}
         
         .container {{
             max-width: 980px;
@@ -404,6 +430,7 @@ class DigestHTMLGenerator:
 <body data-theme="dark">
     <button class="theme-toggle" onclick="toggleTheme()">☀️ Light Mode</button>
     <button class="saved-panel-toggle" onclick="toggleSavedPanel()">Saved (0)</button>
+    <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({{top:0,behavior:'smooth'}})" title="Back to top">&uarr;</button>
 
     <div class="saved-panel" id="savedPanel">
         <button class="close-btn" onclick="toggleSavedPanel()">&times;</button>
@@ -449,6 +476,11 @@ class DigestHTMLGenerator:
             }}
         }}
         
+        // Scroll-to-top button visibility
+        window.addEventListener('scroll', function() {{
+            document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 400);
+        }});
+
         // Load saved theme (default to dark)
         const savedTheme = localStorage.getItem('theme') || 'dark';
         document.body.setAttribute('data-theme', savedTheme);
