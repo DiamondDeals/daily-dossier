@@ -476,16 +476,61 @@ class DigestHTMLGenerator:
             const list = document.getElementById('savedList');
             const bm = getBookmarks();
             if (bm.length === 0) {{
-                list.innerHTML = '<p class="saved-empty">No saved items yet. Click the bookmark icon next to any item to save it.</p>';
+                list.innerHTML = '<p class="saved-empty">No saved items yet. Click the ★ star next to any item to save it.</p>';
                 return;
             }}
-            list.innerHTML = bm.map((item, i) => `
+            let html = '<div style="margin-bottom:16px;display:flex;gap:8px;">';
+            html += '<button onclick="exportBookmarks()" style="padding:6px 12px;border-radius:8px;border:1px solid #424245;background:none;color:#0a84ff;cursor:pointer;font-size:12px;">Export JSON</button>';
+            html += '<label style="padding:6px 12px;border-radius:8px;border:1px solid #424245;color:#0a84ff;cursor:pointer;font-size:12px;">Import JSON<input type="file" accept=".json" onchange="importBookmarks(event)" style="display:none;"></label>';
+            html += '</div>';
+            html += bm.map((item, i) => `
                 <div class="saved-item">
                     <a href="${{item.url}}" target="_blank">${{item.title}}</a>
                     <span class="saved-meta">${{item.section || ''}} &middot; Saved ${{item.date || ''}}</span>
                     <br><button class="remove-btn" onclick="removeBookmark(${{i}})">&times; Remove</button>
                 </div>
             `).join('');
+            list.innerHTML = html;
+        }}
+        function exportBookmarks() {{
+            const bm = getBookmarks();
+            const blob = new Blob([JSON.stringify(bm, null, 2)], {{type: 'application/json'}});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'dossier_saved_items.json';
+            a.click();
+        }}
+        function importBookmarks(evt) {{
+            const file = evt.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {{
+                try {{
+                    const imported = JSON.parse(e.target.result);
+                    if (!Array.isArray(imported)) {{ alert('Invalid file'); return; }}
+                    const bm = getBookmarks();
+                    // Merge without duplicates
+                    const existing = new Set(bm.map(b => b.title));
+                    let added = 0;
+                    imported.forEach(item => {{
+                        if (!existing.has(item.title)) {{
+                            bm.push(item);
+                            added++;
+                        }}
+                    }});
+                    saveBookmarks(bm);
+                    renderSavedList();
+                    // Sync star buttons
+                    document.querySelectorAll('.bookmark-btn').forEach(btn => {{
+                        const t = btn.getAttribute('data-title');
+                        const s = bm.some(b => b.title === t);
+                        btn.classList.toggle('saved', s);
+                        btn.textContent = s ? '\u2605' : '\u2606';
+                    }});
+                    alert('Imported ' + added + ' new items (' + imported.length + ' total in file)');
+                }} catch {{ alert('Error reading file'); }}
+            }};
+            reader.readAsText(file);
         }}
         function removeBookmark(idx) {{
             const bm = getBookmarks();
