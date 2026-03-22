@@ -90,29 +90,24 @@
       "category": "Plant-Based Health"
     },
     {
-      "name": "PCRM News",
-      "url": "https://www.pcrm.org/news/feed",
-      "category": "Nutrition Research"
-    },
-    {
-      "name": "Cleveland Clinic Heart",
-      "url": "https://health.clevelandclinic.org/category/heart/feed/",
-      "category": "Heart Health"
-    },
-    {
-      "name": "American Heart Association News",
-      "url": "https://newsroom.heart.org/feeds/news_releases.rss",
-      "category": "Heart Health"
-    },
-    {
-      "name": "Pritikin Blog",
-      "url": "https://www.pritikin.com/blog/feed/",
+      "name": "Pritikin",
+      "url": "https://www.pritikin.com/feed/",
       "category": "Pritikin"
     },
     {
-      "name": "Medical News Today - Nutrition",
-      "url": "https://www.medicalnewstoday.com/nutrition/rss",
-      "category": "Nutrition"
+      "name": "AHA Circulation",
+      "url": "https://www.ahajournals.org/action/showFeed?type=etoc&feed=rss&jc=circ",
+      "category": "Heart Health"
+    },
+    {
+      "name": "ScienceDaily Heart",
+      "url": "https://www.sciencedaily.com/rss/health_medicine/heart_disease.xml",
+      "category": "Heart Health"
+    },
+    {
+      "name": "ScienceDaily Nutrition",
+      "url": "https://www.sciencedaily.com/rss/health_medicine/nutrition.xml",
+      "category": "Nutrition Research"
     }
   ],
   "cybersecurity": [

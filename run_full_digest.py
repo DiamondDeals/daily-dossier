@@ -134,10 +134,8 @@ def run_full_digest():
     try:
         rss = RSSNewsScanner()
         rss_articles = rss.scan_all_feeds(hours_back=48)
-        # Flatten
-        all_articles = []
-        for articles in rss_articles.values():
-            all_articles.extend(articles)
+        # Flatten with max 3 per source so no one dominates
+        all_articles = rss.cap_per_source(rss_articles, max_per_source=3)
         results['rss'] = {'count': len(all_articles), 'articles': all_articles}
         print(f"✅ Found {len(all_articles)} RSS articles\n")
     except Exception as e:

@@ -82,12 +82,27 @@ class RSSNewsScanner:
         
         return results
     
-    def format_digest(self, results: Dict[str, List[Dict]]) -> str:
-        """Format results into digest format"""
+    def cap_per_source(self, results: Dict[str, List[Dict]], max_per_source: int = 3) -> List[Dict]:
+        """Flatten results with a cap per source so no one dominates"""
         all_articles = []
         for articles in results.values():
             all_articles.extend(articles)
-        
+        # Sort newest first
+        all_articles.sort(key=lambda x: x.get('published', ''), reverse=True)
+        # Cap per source
+        source_counts = {}
+        diverse = []
+        for article in all_articles:
+            src = article.get('source', 'unknown')
+            source_counts[src] = source_counts.get(src, 0) + 1
+            if source_counts[src] <= max_per_source:
+                diverse.append(article)
+        return diverse
+
+    def format_digest(self, results: Dict[str, List[Dict]]) -> str:
+        """Format results into digest format"""
+        all_articles = self.cap_per_source(results, max_per_source=3)
+
         if not all_articles:
             return "No new articles found in the last 24 hours."
         
