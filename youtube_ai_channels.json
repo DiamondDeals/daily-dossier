@@ -189,5 +189,12 @@
     "category": "Ecommerce",
     "priority": "medium",
     "note": "Ecommerce founder interviews, revenue transparency"
+  },
+  {
+    "name": "Daniel Miessler",
+    "channel_id": "UCnCikd0s4i9KoDtaHPlK-JA",
+    "category": "AI & Cybersecurity",
+    "priority": "high",
+    "note": "Unsupervised Learning - AI security, prompt engineering, future of work"
   }
 ]
