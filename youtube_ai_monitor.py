@@ -166,12 +166,19 @@ class YouTubeAIMonitor:
         
         return results
     
+    def cap_per_channel(self, results: Dict[str, List[Dict]], max_per_channel: int = 2) -> List[Dict]:
+        """Flatten results with a cap per channel so no one dominates"""
+        all_videos = []
+        for channel_name, channel_videos in results.items():
+            # Sort each channel's videos by date (newest first), take top N
+            channel_videos.sort(key=lambda x: x.get('published', ''), reverse=True)
+            all_videos.extend(channel_videos[:max_per_channel])
+        return all_videos
+
     def format_digest(self, results: Dict[str, List[Dict]]) -> str:
         """Format results into digest format"""
-        all_videos = []
-        for channel_videos in results.values():
-            all_videos.extend(channel_videos)
-        
+        all_videos = self.cap_per_channel(results, max_per_channel=2)
+
         if not all_videos:
             return "No new AI videos found in the last 7 days."
         

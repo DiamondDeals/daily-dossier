@@ -99,10 +99,8 @@ def run_full_digest():
     try:
         youtube = YouTubeAIMonitor()
         youtube_videos = youtube.scan_all_channels()
-        # Flatten dict to list
-        all_videos = []
-        for channel_videos in youtube_videos.values():
-            all_videos.extend(channel_videos)
+        # Flatten with max 2 per channel so no one dominates
+        all_videos = youtube.cap_per_channel(youtube_videos, max_per_channel=2)
         results['youtube'] = {'count': len(all_videos), 'videos': all_videos}
         print(f"✅ Found {len(all_videos)} YouTube videos\n")
     except Exception as e:
