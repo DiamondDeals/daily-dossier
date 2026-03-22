@@ -203,9 +203,9 @@ def run_full_digest():
         .rss {{ background: #f59e0b; }}
         a {{ color: #0a84ff; text-decoration: none; }}
         a:hover {{ text-decoration: underline; }}
-        .bm {{ cursor: pointer; font-size: 20px; opacity: 0.3; border: none;
-               background: none; color: #f5f5f7; padding: 4px; flex-shrink: 0; }}
-        .bm:hover {{ opacity: 0.7; }}
+        .bm {{ cursor: pointer; font-size: 20px; opacity: 0.5; border: none;
+               background: none; color: #ffd60a; padding: 4px; flex-shrink: 0; }}
+        .bm:hover {{ opacity: 1; }}
         .bm.saved {{ opacity: 1; color: #ffd60a; }}
         .back-link {{ color: #0a84ff; font-size: 15px; }}
         .saved-toggle {{ background: #2d2d2f; border: 1px solid #424245; border-radius: 20px;

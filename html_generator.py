@@ -306,17 +306,18 @@ class DigestHTMLGenerator:
         /* Bookmark system */
         .bookmark-btn {{
             cursor: pointer;
-            font-size: 16px;
-            margin-left: 8px;
-            opacity: 0.4;
-            transition: opacity 0.15s ease;
+            font-size: 18px;
+            margin-left: 10px;
+            color: #ffd60a;
+            opacity: 0.5;
+            transition: all 0.15s ease;
             border: none;
             background: none;
             padding: 2px 4px;
             vertical-align: middle;
         }}
-        .bookmark-btn:hover {{ opacity: 0.8; }}
-        .bookmark-btn.saved {{ opacity: 1; }}
+        .bookmark-btn:hover {{ opacity: 1; }}
+        .bookmark-btn.saved {{ opacity: 1; color: #ffd60a; }}
 
         .saved-panel-toggle {{
             position: fixed;
