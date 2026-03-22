@@ -302,11 +302,117 @@ class DigestHTMLGenerator:
             color: var(--text-secondary);
             font-size: 14px;
         }}
+
+        /* Bookmark system */
+        .bookmark-btn {{
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 8px;
+            opacity: 0.4;
+            transition: opacity 0.15s ease;
+            border: none;
+            background: none;
+            padding: 2px 4px;
+            vertical-align: middle;
+        }}
+        .bookmark-btn:hover {{ opacity: 0.8; }}
+        .bookmark-btn.saved {{ opacity: 1; }}
+
+        .saved-panel-toggle {{
+            position: fixed;
+            top: 20px;
+            right: 140px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }}
+        .saved-panel-toggle:hover {{
+            background: var(--accent);
+            color: white;
+        }}
+
+        .saved-panel {{
+            display: none;
+            position: fixed;
+            top: 0; right: 0;
+            width: 420px;
+            height: 100vh;
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--border);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 24px;
+            box-shadow: -4px 0 20px var(--shadow);
+        }}
+        .saved-panel.open {{ display: block; }}
+
+        .saved-panel h2 {{
+            font-size: 22px;
+            margin: 0 0 8px 0;
+            padding: 0;
+            border: none;
+            text-transform: none;
+        }}
+        .saved-panel .close-btn {{
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+        }}
+        .saved-item {{
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }}
+        .saved-item a {{
+            font-weight: 600;
+            font-size: 15px;
+            display: block;
+            margin-bottom: 4px;
+        }}
+        .saved-item .saved-meta {{
+            font-size: 12px;
+            color: var(--text-secondary);
+        }}
+        .saved-item .remove-btn {{
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 12px;
+            border: none;
+            background: none;
+            padding: 2px 6px;
+            margin-top: 4px;
+        }}
+        .saved-item .remove-btn:hover {{ color: #ff453a; }}
+        .saved-empty {{
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-top: 20px;
+        }}
     </style>
 </head>
 <body data-theme="dark">
     <button class="theme-toggle" onclick="toggleTheme()">☀️ Light Mode</button>
-    
+    <button class="saved-panel-toggle" onclick="toggleSavedPanel()">Saved (0)</button>
+
+    <div class="saved-panel" id="savedPanel">
+        <button class="close-btn" onclick="toggleSavedPanel()">&times;</button>
+        <h2>Saved Items</h2>
+        <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 16px;">
+            Bookmarks persist in your browser across visits.
+        </p>
+        <div id="savedList"></div>
+    </div>
+
     <div class="container">
         <header>
             <h1>📊 {title}</h1>
@@ -346,6 +452,110 @@ class DigestHTMLGenerator:
         const savedTheme = localStorage.getItem('theme') || 'dark';
         document.body.setAttribute('data-theme', savedTheme);
         document.querySelector('.theme-toggle').textContent = savedTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+
+        // ---- Bookmark / Read Later System ----
+        function getBookmarks() {{
+            try {{ return JSON.parse(localStorage.getItem('dossier_bookmarks') || '[]'); }}
+            catch {{ return []; }}
+        }}
+        function saveBookmarks(bm) {{
+            localStorage.setItem('dossier_bookmarks', JSON.stringify(bm));
+            updateBadge();
+        }}
+        function updateBadge() {{
+            const count = getBookmarks().length;
+            document.querySelector('.saved-panel-toggle').textContent = 'Saved (' + count + ')';
+        }}
+        function toggleSavedPanel() {{
+            const panel = document.getElementById('savedPanel');
+            panel.classList.toggle('open');
+            if (panel.classList.contains('open')) renderSavedList();
+        }}
+        function renderSavedList() {{
+            const list = document.getElementById('savedList');
+            const bm = getBookmarks();
+            if (bm.length === 0) {{
+                list.innerHTML = '<p class="saved-empty">No saved items yet. Click the bookmark icon next to any item to save it.</p>';
+                return;
+            }}
+            list.innerHTML = bm.map((item, i) => `
+                <div class="saved-item">
+                    <a href="${{item.url}}" target="_blank">${{item.title}}</a>
+                    <span class="saved-meta">${{item.section || ''}} &middot; Saved ${{item.date || ''}}</span>
+                    <br><button class="remove-btn" onclick="removeBookmark(${{i}})">&times; Remove</button>
+                </div>
+            `).join('');
+        }}
+        function removeBookmark(idx) {{
+            const bm = getBookmarks();
+            bm.splice(idx, 1);
+            saveBookmarks(bm);
+            renderSavedList();
+            // Update all bookmark button states
+            document.querySelectorAll('.bookmark-btn').forEach(btn => {{
+                const title = btn.getAttribute('data-title');
+                btn.classList.toggle('saved', bm.some(b => b.title === title));
+                btn.textContent = bm.some(b => b.title === title) ? '\u2605' : '\u2606';
+            }});
+        }}
+        function toggleBookmark(btn) {{
+            const title = btn.getAttribute('data-title');
+            const url = btn.getAttribute('data-url');
+            const section = btn.getAttribute('data-section');
+            const bm = getBookmarks();
+            const exists = bm.findIndex(b => b.title === title);
+            if (exists >= 0) {{
+                bm.splice(exists, 1);
+                btn.classList.remove('saved');
+                btn.textContent = '\u2606';
+            }} else {{
+                bm.push({{ title, url, section, date: new Date().toLocaleDateString() }});
+                btn.classList.add('saved');
+                btn.textContent = '\u2605';
+            }}
+            saveBookmarks(bm);
+        }}
+
+        // Inject bookmark buttons into every numbered item
+        document.addEventListener('DOMContentLoaded', function() {{
+            const bm = getBookmarks();
+            updateBadge();
+
+            // Find all strong elements that look like numbered titles
+            document.querySelectorAll('p > strong').forEach(el => {{
+                const text = el.textContent;
+                const match = text.match(/^\d+\.\s+(.+)/);
+                if (!match) return;
+
+                const title = match[1];
+                // Find the URL in the next sibling list
+                let url = '';
+                let section = '';
+                let sibling = el.parentElement.nextElementSibling;
+                while (sibling) {{
+                    if (sibling.tagName === 'UL') {{
+                        const links = sibling.querySelectorAll('a');
+                        if (links.length > 0) url = links[links.length - 1].href;
+                        break;
+                    }}
+                    sibling = sibling.nextElementSibling;
+                }}
+                // Get section from nearest h2
+                let h2 = el.parentElement.previousElementSibling;
+                while (h2 && h2.tagName !== 'H2') h2 = h2.previousElementSibling;
+                if (h2) section = h2.textContent;
+
+                const isSaved = bm.some(b => b.title === title);
+                const btn = document.createElement('button');
+                btn.className = 'bookmark-btn' + (isSaved ? ' saved' : '');
+                btn.textContent = isSaved ? '\u2605' : '\u2606';
+                btn.setAttribute('data-title', title);
+                btn.setAttribute('data-url', url);
+                btn.setAttribute('data-section', section);
+                btn.onclick = function() {{ toggleBookmark(this); }};
+                el.appendChild(btn);
+            }});
+        }});
     </script>
 </body>
 </html>'''
