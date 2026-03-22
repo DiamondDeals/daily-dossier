@@ -171,9 +171,14 @@ class BlueskyScanner:
 
                     score, keywords = self.score_post(parsed['text'])
 
-                    # Accept posts from verified accounts with any engagement
-                    # or keyword match (these are curated accounts, lower threshold)
+                    # Accept posts with keyword match or decent engagement
                     if score >= 1 or parsed['engagement'] >= 5:
+                        # Score: keyword relevance matters MORE than raw engagement
+                        # A relevant AI/business post should beat a viral joke
+                        # Keyword score * 50 so 3 keywords = 150 points
+                        # Engagement capped at 100 so viral posts don't dominate
+                        final_score = (score * 50) + min(parsed['engagement'], 100)
+
                         all_builds.append({
                             'username': parsed['handle'],
                             'display_name': parsed['author'],
@@ -182,7 +187,7 @@ class BlueskyScanner:
                             'likes': parsed['likes'],
                             'reposts': parsed['reposts'],
                             'replies': parsed['replies'],
-                            'score': score + parsed['engagement'],
+                            'score': final_score,
                             'keywords': keywords[:5],
                             'category': category,
                             'source': 'account'
@@ -204,9 +209,18 @@ class BlueskyScanner:
         # Sort by score
         unique_builds.sort(key=lambda x: x['score'], reverse=True)
 
+        # Cap at 2 posts per author so no one dominates the feed
+        author_counts = {}
+        diverse_builds = []
+        for build in unique_builds:
+            author = build['username']
+            author_counts[author] = author_counts.get(author, 0) + 1
+            if author_counts[author] <= 2:
+                diverse_builds.append(build)
+
         print(f"    Accounts: {success} OK, {failed} failed")
-        print(f"    Found {len(unique_builds)} builder updates (last 7 days)")
-        return unique_builds[:30]
+        print(f"    Found {len(diverse_builds)} builder updates (last 7 days, max 2/author)")
+        return diverse_builds[:30]
 
 
 if __name__ == "__main__":
