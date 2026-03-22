@@ -144,6 +144,11 @@ class DigestHTMLGenerator:
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
     <style>
+        * {{ scrollbar-width: thin; scrollbar-color: #424245 #1d1d1f; }}
+        ::-webkit-scrollbar {{ width: 8px; }}
+        ::-webkit-scrollbar-track {{ background: var(--bg-primary, #1d1d1f); }}
+        ::-webkit-scrollbar-thumb {{ background: #424245; border-radius: 4px; }}
+        ::-webkit-scrollbar-thumb:hover {{ background: #636366; }}
         :root {{
             --bg-primary: #1d1d1f;
             --bg-secondary: #2d2d2f;

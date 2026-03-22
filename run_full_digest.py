@@ -200,6 +200,11 @@ def run_full_digest():
     <meta charset="UTF-8">
     <title>Complete Database - {date_str}</title>
     <style>
+        * {{ scrollbar-width: thin; scrollbar-color: #424245 #1d1d1f; }}
+        ::-webkit-scrollbar {{ width: 8px; }}
+        ::-webkit-scrollbar-track {{ background: #1d1d1f; }}
+        ::-webkit-scrollbar-thumb {{ background: #424245; border-radius: 4px; }}
+        ::-webkit-scrollbar-thumb:hover {{ background: #636366; }}
         body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
                background: #1d1d1f; color: #f5f5f7; padding: 20px; margin: 0; }}
         .page-layout {{ display: flex; max-width: 1280px; margin: 0 auto; gap: 24px; }}
