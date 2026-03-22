@@ -425,6 +425,17 @@ class DigestHTMLGenerator:
             font-style: italic;
             margin-top: 20px;
         }}
+        .sv-filter {{
+            padding: 4px 10px; border-radius: 12px; border: 1px solid var(--border);
+            background: none; color: var(--text-secondary); cursor: pointer; font-size: 12px;
+        }}
+        .sv-filter:hover, .sv-filter.active {{
+            background: var(--accent); color: white; border-color: var(--accent);
+        }}
+        .sv-group-header {{
+            font-size: 13px; font-weight: 700; color: var(--accent);
+            margin: 16px 0 6px 0; padding-bottom: 4px; border-bottom: 1px solid var(--border);
+        }}
     </style>
 </head>
 <body data-theme="dark">
@@ -435,9 +446,17 @@ class DigestHTMLGenerator:
     <div class="saved-panel" id="savedPanel">
         <button class="close-btn" onclick="toggleSavedPanel()">&times;</button>
         <h2>Saved Items</h2>
-        <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 16px;">
+        <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 8px;">
             Bookmarks persist in your browser across visits.
         </p>
+        <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;">
+            <button class="sv-filter active" onclick="svFilter('all',this)">All</button>
+            <button class="sv-filter" onclick="svFilter('date',this)">By Date</button>
+            <button class="sv-filter" onclick="svFilter('platform',this)">By Platform</button>
+        </div>
+        <input id="svSearch" type="text" placeholder="Search saved..." oninput="renderSavedList()"
+               style="width:100%;padding:8px 12px;border-radius:8px;border:1px solid #424245;
+               background:#1d1d1f;color:#f5f5f7;font-size:13px;margin-bottom:12px;box-sizing:border-box;">
         <div id="savedList"></div>
     </div>
 
@@ -504,25 +523,50 @@ class DigestHTMLGenerator:
             panel.classList.toggle('open');
             if (panel.classList.contains('open')) renderSavedList();
         }}
+        var _svMode = 'all';
+        function svFilter(mode, btn) {{
+            _svMode = mode;
+            document.querySelectorAll('.sv-filter').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderSavedList();
+        }}
         function renderSavedList() {{
             const list = document.getElementById('savedList');
-            const bm = getBookmarks();
+            let bm = getBookmarks();
+            const q = (document.getElementById('svSearch') || {{}}).value || '';
+            if (q) bm = bm.filter(b => (b.title + ' ' + (b.section||'')).toLowerCase().includes(q.toLowerCase()));
             if (bm.length === 0) {{
-                list.innerHTML = '<p class="saved-empty">No saved items yet. Click the ★ star next to any item to save it.</p>';
+                list.innerHTML = '<p class="saved-empty">' + (q ? 'No matches.' : 'No saved items yet. Click the star next to any item to save it.') + '</p>';
                 return;
             }}
-            let html = '<div style="margin-bottom:16px;display:flex;gap:8px;">';
-            html += '<button onclick="exportBookmarks()" style="padding:6px 12px;border-radius:8px;border:1px solid #424245;background:none;color:#0a84ff;cursor:pointer;font-size:12px;">Export JSON</button>';
-            html += '<label style="padding:6px 12px;border-radius:8px;border:1px solid #424245;color:#0a84ff;cursor:pointer;font-size:12px;">Import JSON<input type="file" accept=".json" onchange="importBookmarks(event)" style="display:none;"></label>';
+            let html = '<div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap;">';
+            html += '<button onclick="exportBookmarks()" style="padding:5px 10px;border-radius:8px;border:1px solid #424245;background:none;color:#0a84ff;cursor:pointer;font-size:12px;">Export</button>';
+            html += '<label style="padding:5px 10px;border-radius:8px;border:1px solid #424245;color:#0a84ff;cursor:pointer;font-size:12px;">Import<input type="file" accept=".json" onchange="importBookmarks(event)" style="display:none;"></label>';
+            html += '<button onclick="if(confirm(\'Clear all saved items?\')){{saveBookmarks([]);renderSavedList();document.querySelectorAll(\'.bookmark-btn\').forEach(b=>{{b.classList.remove(\'saved\');b.textContent=\'\\u2606\'}})}}" style="padding:5px 10px;border-radius:8px;border:1px solid #ff453a;background:none;color:#ff453a;cursor:pointer;font-size:12px;">Clear All</button>';
             html += '</div>';
-            html += bm.map((item, i) => `
-                <div class="saved-item">
-                    <a href="${{item.url}}" target="_blank">${{item.title}}</a>
-                    <span class="saved-meta">${{item.section || ''}} &middot; Saved ${{item.date || ''}}</span>
-                    <br><button class="remove-btn" onclick="removeBookmark(${{i}})">&times; Remove</button>
-                </div>
-            `).join('');
+            if (_svMode === 'date') {{
+                const groups = {{}};
+                bm.forEach((item, i) => {{ const d = item.date || 'Unknown'; if (!groups[d]) groups[d] = []; groups[d].push({{item, i}}); }});
+                Object.keys(groups).sort().reverse().forEach(d => {{
+                    html += '<div class="sv-group-header">' + d + ' (' + groups[d].length + ')</div>';
+                    groups[d].forEach(({{item, i}}) => {{ html += svItemHtml(item, i); }});
+                }});
+            }} else if (_svMode === 'platform') {{
+                const groups = {{}};
+                bm.forEach((item, i) => {{ const s = item.section || 'Other'; if (!groups[s]) groups[s] = []; groups[s].push({{item, i}}); }});
+                Object.keys(groups).sort().forEach(s => {{
+                    html += '<div class="sv-group-header">' + s + ' (' + groups[s].length + ')</div>';
+                    groups[s].forEach(({{item, i}}) => {{ html += svItemHtml(item, i); }});
+                }});
+            }} else {{
+                bm.forEach((item, i) => {{ html += svItemHtml(item, i); }});
+            }}
             list.innerHTML = html;
+        }}
+        function svItemHtml(item, i) {{
+            return '<div class="saved-item"><a href="' + item.url + '" target="_blank">' + item.title + '</a>' +
+                '<span class="saved-meta">' + (item.section || '') + ' &middot; Saved ' + (item.date || '') + '</span>' +
+                '<br><button class="remove-btn" onclick="removeBookmark(' + i + ')">&times; Remove</button></div>';
         }}
         function exportBookmarks() {{
             const bm = getBookmarks();

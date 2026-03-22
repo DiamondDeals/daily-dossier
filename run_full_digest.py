@@ -251,6 +251,11 @@ def run_full_digest():
         .si .rm {{ cursor: pointer; color: #a1a1a6; font-size: 12px; border: none;
                    background: none; padding: 2px 6px; margin-top: 4px; }}
         .si .rm:hover {{ color: #ff453a; }}
+        .sv-filter {{ padding: 4px 10px; border-radius: 12px; border: 1px solid #424245;
+                      background: none; color: #a1a1a6; cursor: pointer; font-size: 12px; }}
+        .sv-filter:hover, .sv-filter.active {{ background: #0a84ff; color: white; border-color: #0a84ff; }}
+        .sv-gh {{ font-size: 13px; font-weight: 700; color: #0a84ff;
+                  margin: 16px 0 6px 0; padding-bottom: 4px; border-bottom: 1px solid #424245; }}
         .filter-bar {{ margin: 20px 0; display: flex; gap: 8px; flex-wrap: wrap; }}
         .filter-btn {{ padding: 6px 14px; border-radius: 16px; border: 1px solid #424245;
                        background: none; color: #a1a1a6; cursor: pointer; font-size: 13px; }}
@@ -295,6 +300,15 @@ def run_full_digest():
     <div class="saved-panel" id="sp">
         <button class="close-btn" onclick="togglePanel()">&times;</button>
         <h2>Saved Items</h2>
+        <p style="color:#a1a1a6;font-size:12px;margin:0 0 8px 0;">Bookmarks persist across visits.</p>
+        <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;">
+            <button class="sv-filter active" onclick="svF('all',this)">All</button>
+            <button class="sv-filter" onclick="svF('date',this)">By Date</button>
+            <button class="sv-filter" onclick="svF('platform',this)">By Platform</button>
+        </div>
+        <input id="svQ" type="text" placeholder="Search saved..." oninput="rList()"
+               style="width:100%;padding:7px 10px;border-radius:8px;border:1px solid #424245;
+               background:#1d1d1f;color:#f5f5f7;font-size:12px;margin-bottom:10px;box-sizing:border-box;">
         <div id="sl"></div>
     </div>
 """
@@ -333,10 +347,23 @@ function gBm(){{try{{return JSON.parse(localStorage.getItem('dossier_bookmarks')
 function sBm(b){{localStorage.setItem('dossier_bookmarks',JSON.stringify(b));uBadge()}}
 function uBadge(){{document.querySelector('.saved-toggle').textContent='Saved ('+gBm().length+')'}}
 function togglePanel(){{var p=document.getElementById('sp');p.classList.toggle('open');if(p.classList.contains('open'))rList()}}
-function rList(){{var l=document.getElementById('sl'),b=gBm();
-if(!b.length){{l.innerHTML='<p style="color:#a1a1a6;font-style:italic">No saved items yet.</p>';return}}
-l.innerHTML=b.map((m,i)=>'<div class="si"><a href="'+m.url+'" target="_blank">'+m.title+'</a><span class="meta">'+
-(m.section||'')+' &middot; '+(m.date||'')+'</span><br><button class="rm" onclick="rbm('+i+')">&times; Remove</button></div>').join('')}}
+var _svM='all';
+function svF(mode,btn){{_svM=mode;document.querySelectorAll('.sv-filter').forEach(b=>b.classList.remove('active'));btn.classList.add('active');rList()}}
+function siHtml(m,i){{return'<div class="si"><a href="'+m.url+'" target="_blank">'+m.title+'</a><span class="meta">'+(m.section||'')+' &middot; '+(m.date||'')+'</span><br><button class="rm" onclick="rbm('+i+')">&times; Remove</button></div>'}}
+function rList(){{var l=document.getElementById('sl'),b=gBm(),q=(document.getElementById('svQ')||{{}}).value||'';
+if(q)b=b.filter(m=>(m.title+' '+(m.section||'')).toLowerCase().includes(q.toLowerCase()));
+if(!b.length){{l.innerHTML='<p style="color:#a1a1a6;font-style:italic">'+(q?'No matches.':'No saved items yet.')+'</p>';return}}
+var h='<div style="margin-bottom:10px;display:flex;gap:6px;flex-wrap:wrap;">';
+h+='<button onclick="exportBm()" style="padding:4px 8px;border-radius:8px;border:1px solid #424245;background:none;color:#0a84ff;cursor:pointer;font-size:11px;">Export</button>';
+h+='<label style="padding:4px 8px;border-radius:8px;border:1px solid #424245;color:#0a84ff;cursor:pointer;font-size:11px;">Import<input type="file" accept=".json" onchange="importBm(event)" style="display:none;"></label>';
+h+='<button onclick="if(confirm(\'Clear all?\')){{sBm([]);rList();syncBtns()}}" style="padding:4px 8px;border-radius:8px;border:1px solid #ff453a;background:none;color:#ff453a;cursor:pointer;font-size:11px;">Clear</button>';
+h+='</div>';
+if(_svM==='date'){{var g={{}};b.forEach(function(m,i){{var d=m.date||'Unknown';if(!g[d])g[d]=[];g[d].push({{m:m,i:i}})}});Object.keys(g).sort().reverse().forEach(function(d){{h+='<div class="sv-gh">'+d+' ('+g[d].length+')</div>';g[d].forEach(function(o){{h+=siHtml(o.m,o.i)}})}})}}
+else if(_svM==='platform'){{var g={{}};b.forEach(function(m,i){{var s=m.section||'Other';if(!g[s])g[s]=[];g[s].push({{m:m,i:i}})}});Object.keys(g).sort().forEach(function(s){{h+='<div class="sv-gh">'+s+' ('+g[s].length+')</div>';g[s].forEach(function(o){{h+=siHtml(o.m,o.i)}})}})}}
+else{{b.forEach(function(m,i){{h+=siHtml(m,i)}})}}
+l.innerHTML=h}}
+function exportBm(){{var b=gBm(),bl=new Blob([JSON.stringify(b,null,2)],{{type:'application/json'}}),a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download='dossier_saved.json';a.click()}}
+function importBm(evt){{var f=evt.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(e){{try{{var imp=JSON.parse(e.target.result);if(!Array.isArray(imp))return;var b=gBm(),ex=new Set(b.map(x=>x.title)),n=0;imp.forEach(function(x){{if(!ex.has(x.title)){{b.push(x);n++}}}});sBm(b);rList();syncBtns();alert('Imported '+n+' new items')}}catch{{}}}};r.readAsText(f)}}
 function rbm(i){{var b=gBm();b.splice(i,1);sBm(b);rList();syncBtns()}}
 function tbm(btn){{var t=btn.getAttribute('data-title'),u=btn.getAttribute('data-url'),
 s=btn.getAttribute('data-section'),b=gBm(),x=b.findIndex(m=>m.title===t);
