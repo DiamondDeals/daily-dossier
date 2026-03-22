@@ -275,7 +275,11 @@ def run_full_digest():
         if count > 0:
             items = results[platform_name].get('posts', results[platform_name].get('videos', results[platform_name].get('articles', [])))
             for item in items:
-                title = item.get('title', 'Untitled').replace('"', '&quot;').replace("'", "&#39;")
+                # Bluesky posts have 'text' + 'display_name', not 'title'
+                raw_title = item.get('title', '') or item.get('text', '') or 'Untitled'
+                if not item.get('title') and item.get('display_name'):
+                    raw_title = f"@{item.get('username', '')} ({item.get('display_name', '')}): {raw_title[:150]}"
+                title = raw_title[:200].replace('"', '&quot;').replace("'", "&#39;").replace('<', '&lt;').replace('>', '&gt;')
                 url = item.get('url', '#')
                 all_items_html += f'<div class="item" data-platform="{platform_name}"><button class="bm" data-title="{title}" data-url="{url}" data-section="{platform_data}" onclick="tbm(this)">&#9734;</button><div class="item-content"><span class="platform {platform_name}">{platform_data}</span><strong>{title}</strong><br><a href="{url}" target="_blank">{url}</a></div></div>\n'
         else:
