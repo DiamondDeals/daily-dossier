@@ -2,7 +2,7 @@
 """
 Bluesky Scanner - Free public API, no auth needed
 Replaces dead Nitter/Twitter scraping for builder content
-Uses AT Protocol public endpoints
+Uses AT Protocol public endpoints (account feeds only - search API is blocked)
 """
 import sys
 import requests
@@ -16,32 +16,35 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() not in ('utf-8', 'utf8'):
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
 
-class BlueskySanner:
+class BlueskyScanner:
     def __init__(self):
         self.base_url = "https://public.api.bsky.app"
 
-        # Builder/entrepreneur accounts on Bluesky
+        # Verified real accounts with meaningful follower counts
+        # Each tuple: (handle, category)
         self.builder_accounts = [
-            "levelsio.bsky.social",
-            "swyx.bsky.social",
-            "dhh.bsky.social",
-            "jasonfried.bsky.social",
-            "paulg.bsky.social",
-            "naval.bsky.social",
-            "patio11.bsky.social",
-            "gregisenberg.bsky.social",
-            "marclouvion.bsky.social",
-            "dannypostmaa.bsky.social",
-            "shl.bsky.social",
-            "tdinh.bsky.social",
-            "bentossell.bsky.social",
-            "rowancheung.bsky.social",
-            "alexhormozi.bsky.social",
-            "codiesanchez.bsky.social",
-            "justinwelsh.bsky.social",
-            "lennyrachitsky.bsky.social",
-            "sahilbloom.bsky.social",
-            "jarydhermannseolondon.bsky.social",
+            # AI / Tech
+            ("emollick.bsky.social", "ai"),          # Ethan Mollick - AI researcher, 33k followers
+            ("simonwillison.net", "ai"),              # Simon Willison - AI/LLM tools, 44k followers
+            ("swyx.io", "ai"),                        # swyx - AI/dev, 8.7k followers
+            ("caseynewton.bsky.social", "tech"),      # Casey Newton - tech journalist, 255k followers
+            ("kottke.org", "tech"),                    # kottke.org - tech/culture, 30k followers
+            ("om.co", "tech"),                        # Om Malik - tech/VC, 2.8k followers
+
+            # Business / Entrepreneurs
+            ("levels.io", "business"),                # Pieter Levels - indie maker, 10.8k followers
+            ("jasonfried.bsky.social", "business"),   # Jason Fried - Basecamp, 4.7k followers
+            ("sahilbloom.bsky.social", "business"),   # Sahil Bloom - business/growth, 11.5k followers
+            ("codiesanchez.bsky.social", "business"), # Codie Sanchez - business, 995 followers
+            ("gregisenberg.bsky.social", "business"), # Greg Isenberg - startups, 1.1k followers
+            ("shl.bsky.social", "business"),          # Sahil Lavingia - Gumroad founder, 1.4k followers
+            ("garyvee.com", "business"),              # Gary Vaynerchuk - marketing/business, 5.3k followers
+            ("danshipper.bsky.social", "business"),   # Dan Shipper - Every.to, 3k followers
+            ("balajis.bsky.social", "business"),      # Balaji Srinivasan - tech/crypto, 655 followers
+
+            # Cybersecurity
+            ("troyhunt.com", "cybersecurity"),        # Troy Hunt - Have I Been Pwned, 16k followers
+            ("schneier.com", "cybersecurity"),        # Bruce Schneier - security expert, 1.1k followers
         ]
 
         # Builder keywords for scoring
@@ -55,26 +58,11 @@ class BlueskySanner:
             "reached", "milestone", "growth",
             "learned", "lesson", "mistake", "what i wish",
             "advice", "tip", "strategy", "how i",
-            "startup", "founder", "entrepreneur", "business"
+            "startup", "founder", "entrepreneur", "business",
+            "ai", "llm", "gpt", "claude", "model", "agent",
+            "security", "vulnerability", "breach", "hack",
+            "cybersecurity", "privacy", "encryption"
         ]
-
-    def search_posts(self, query, limit=25, hours_back=168):
-        """Search Bluesky posts using public API"""
-        try:
-            since = (datetime.now(timezone.utc) - timedelta(hours=hours_back)).strftime('%Y-%m-%dT%H:%M:%SZ')
-            url = f"{self.base_url}/xrpc/app.bsky.feed.searchPosts"
-            params = {
-                'q': query,
-                'limit': min(limit, 25),
-                'sort': 'latest',
-                'since': since
-            }
-            response = requests.get(url, params=params, timeout=15)
-            if response.status_code == 200:
-                return response.json().get('posts', [])
-            return []
-        except Exception:
-            return []
 
     def get_author_feed(self, handle, limit=10):
         """Get recent posts from a specific Bluesky user"""
@@ -133,7 +121,6 @@ class BlueskySanner:
         uri = post.get('uri', '')
 
         # Convert AT URI to web URL
-        # at://did:plc:xxx/app.bsky.feed.post/yyy -> https://bsky.app/profile/handle/post/yyy
         post_id = uri.split('/')[-1] if '/' in uri else ''
         web_url = f"https://bsky.app/profile/{handle}/post/{post_id}" if post_id else ''
 
@@ -150,64 +137,25 @@ class BlueskySanner:
         }
 
     def scan_builders(self, max_accounts=20):
-        """Scan Bluesky for builder content"""
+        """Scan Bluesky for builder content from verified accounts"""
         print("  Scanning Bluesky for builder content...")
 
         all_builds = []
         cutoff = datetime.now(timezone.utc) - timedelta(hours=168)  # 7 days
-
-        # 1. Search for building-in-public content
-        search_queries = [
-            "buildinginpublic",
-            "launched today",
-            "shipped feature",
-            "startup revenue MRR",
-            "just launched saas"
-        ]
-
-        for query in search_queries:
-            print(f"    Search: '{query}'...", end=" ", flush=True)
-            posts = self.search_posts(query, limit=15)
-            found = 0
-
-            for post_data in posts:
-                parsed = self._parse_post(post_data)
-                score, keywords = self.score_post(parsed['text'])
-
-                if score >= 2:
-                    try:
-                        pub_date = datetime.fromisoformat(parsed['published'])
-                        if pub_date.tzinfo is None:
-                            pub_date = pub_date.replace(tzinfo=timezone.utc)
-                        if pub_date < cutoff:
-                            continue
-                    except:
-                        pass
-
-                    all_builds.append({
-                        'username': parsed['handle'],
-                        'display_name': parsed['author'],
-                        'text': parsed['text'][:250],
-                        'url': parsed['url'],
-                        'likes': parsed['likes'],
-                        'reposts': parsed['reposts'],
-                        'replies': parsed['replies'],
-                        'score': score + parsed['engagement'],
-                        'keywords': keywords[:5],
-                        'source': 'search'
-                    })
-                    found += 1
-
-            print(f"{found}")
-            time.sleep(0.5)
-
-        # 2. Check known builder accounts
-        print(f"    Checking {min(max_accounts, len(self.builder_accounts))} builder accounts...")
         accounts_to_check = self.builder_accounts[:max_accounts]
 
-        for handle in accounts_to_check:
+        print(f"    Checking {len(accounts_to_check)} verified accounts...")
+        success = 0
+        failed = 0
+
+        for handle, category in accounts_to_check:
             try:
-                feed = self.get_author_feed(handle, limit=5)
+                feed = self.get_author_feed(handle, limit=10)
+                if not feed:
+                    failed += 1
+                    continue
+
+                success += 1
                 for item in feed:
                     parsed = self._parse_post(item)
 
@@ -223,7 +171,9 @@ class BlueskySanner:
 
                     score, keywords = self.score_post(parsed['text'])
 
-                    if score >= 1 and parsed['engagement'] >= 3:
+                    # Accept posts from verified accounts with any engagement
+                    # or keyword match (these are curated accounts, lower threshold)
+                    if score >= 1 or parsed['engagement'] >= 5:
                         all_builds.append({
                             'username': parsed['handle'],
                             'display_name': parsed['author'],
@@ -234,31 +184,34 @@ class BlueskySanner:
                             'replies': parsed['replies'],
                             'score': score + parsed['engagement'],
                             'keywords': keywords[:5],
+                            'category': category,
                             'source': 'account'
                         })
 
                 time.sleep(0.3)
             except Exception:
+                failed += 1
                 continue
 
         # Deduplicate by URL
         seen_urls = set()
         unique_builds = []
         for build in all_builds:
-            if build['url'] not in seen_urls:
+            if build['url'] and build['url'] not in seen_urls:
                 seen_urls.add(build['url'])
                 unique_builds.append(build)
 
         # Sort by score
         unique_builds.sort(key=lambda x: x['score'], reverse=True)
 
-        print(f"    Found {len(unique_builds)} builder updates")
+        print(f"    Accounts: {success} OK, {failed} failed")
+        print(f"    Found {len(unique_builds)} builder updates (last 7 days)")
         return unique_builds[:30]
 
 
 if __name__ == "__main__":
-    scanner = BlueskySanner()
-    builds = scanner.scan_builders(max_accounts=15)
+    scanner = BlueskyScanner()
+    builds = scanner.scan_builders(max_accounts=20)
 
     print(f"\nTop Builder Updates ({len(builds)}):\n")
     for i, build in enumerate(builds[:15], 1):

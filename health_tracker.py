@@ -38,7 +38,7 @@ class HealthTracker:
             'ScientificNutrition', 'mediterraneandiet'
         ]
 
-        # RSS feeds specifically for health content
+        # RSS feeds specifically for health content (verified working March 2026)
         self.health_feeds = [
             {
                 'name': 'NutritionFacts.org',
@@ -51,29 +51,24 @@ class HealthTracker:
                 'category': 'Plant-Based Health'
             },
             {
-                'name': 'PCRM News',
-                'url': 'https://www.pcrm.org/news/feed',
-                'category': 'Nutrition Research'
-            },
-            {
-                'name': 'Cleveland Clinic Heart',
-                'url': 'https://health.clevelandclinic.org/category/heart/feed/',
-                'category': 'Heart Health'
-            },
-            {
-                'name': 'American Heart Association',
-                'url': 'https://newsroom.heart.org/feeds/news_releases.rss',
-                'category': 'Heart Health'
-            },
-            {
-                'name': 'Pritikin Blog',
-                'url': 'https://www.pritikin.com/blog/feed/',
+                'name': 'Pritikin',
+                'url': 'https://www.pritikin.com/feed/',
                 'category': 'Pritikin'
             },
             {
-                'name': 'Medical News Today - Nutrition',
-                'url': 'https://www.medicalnewstoday.com/nutrition/rss',
-                'category': 'Nutrition'
+                'name': 'AHA Circulation',
+                'url': 'https://www.ahajournals.org/action/showFeed?type=etoc&feed=rss&jc=circ',
+                'category': 'Heart Health'
+            },
+            {
+                'name': 'ScienceDaily Heart',
+                'url': 'https://www.sciencedaily.com/rss/health_medicine/heart_disease.xml',
+                'category': 'Heart Health'
+            },
+            {
+                'name': 'ScienceDaily Nutrition',
+                'url': 'https://www.sciencedaily.com/rss/health_medicine/nutrition.xml',
+                'category': 'Nutrition Research'
             }
         ]
 
@@ -104,8 +99,8 @@ class HealthTracker:
         all_posts.sort(key=lambda x: x.get('score', 0), reverse=True)
         return all_posts
 
-    def scan_rss_health(self, hours_back=72):
-        """Scan health RSS feeds - 72h lookback for less frequent publishers"""
+    def scan_rss_health(self, hours_back=168):
+        """Scan health RSS feeds - 7 day lookback for less frequent publishers"""
         print(f"  Scanning {len(self.health_feeds)} health RSS feeds...")
 
         cutoff_time = datetime.now() - timedelta(hours=hours_back)

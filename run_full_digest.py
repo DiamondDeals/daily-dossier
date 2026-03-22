@@ -28,7 +28,7 @@ load_dotenv(Path(__file__).parent / '.env')
 
 # Import all scanners
 from reddit_json_client import RedditJSONClient
-from bluesky_scanner import BlueskySanner
+from bluesky_scanner import BlueskyScanner
 from youtube_ai_monitor import YouTubeAIMonitor
 from health_tracker import HealthTracker
 from moltbook_scanner import MoltbookScanner
@@ -86,7 +86,7 @@ def run_full_digest():
     # 2. Bluesky - Building in Public (replaces dead Twitter/Nitter)
     print("🦋 BLUESKY - Building in Public")
     try:
-        bluesky = BlueskySanner()
+        bluesky = BlueskyScanner()
         bluesky_updates = bluesky.scan_builders(max_accounts=20)
         results['twitter'] = {'count': len(bluesky_updates), 'posts': bluesky_updates}
         print(f"✅ Found {len(bluesky_updates)} Bluesky builder updates\n")
