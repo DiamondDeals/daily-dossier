@@ -111,10 +111,17 @@
         <h2>Saved Items</h2>
         <p style="color:#a1a1a6;font-size:12px;margin:0 0 8px 0;">Bookmarks persist across visits.</p>
         <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;">
-            <button class="sv-filter active" onclick="svF('all',this)">All</button>
+            <button class="sv-filter" onclick="svF('day',this)">This Day</button>
+            <button class="sv-filter active" onclick="svF('all',this)">All Saved</button>
             <button class="sv-filter" onclick="svF('date',this)">By Date</button>
             <button class="sv-filter" onclick="svF('platform',this)">By Platform</button>
         </div>
+        <input id="svQ" type="text" placeholder="Search saved..." oninput="rList()"
+               style="width:100%;padding:7px 10px;border-radius:8px;border:1px solid #424245;
+               background:#1d1d1f;color:#f5f5f7;font-size:12px;margin-bottom:10px;box-sizing:border-box;">
+        <div id="sl"></div>
+    </div>
+
         <input id="svQ" type="text" placeholder="Search saved..." oninput="rList()"
                style="width:100%;padding:7px 10px;border-radius:8px;border:1px solid #424245;
                background:#1d1d1f;color:#f5f5f7;font-size:12px;margin-bottom:10px;box-sizing:border-box;">
@@ -441,6 +448,8 @@
 <div class="item" data-platform="rss"><button class="bm" data-title="The New Off-Page SEO Playbook: Links, Mentions & AI Visibility via @sejournal, @lorenbaker" data-url="https://www.searchenginejournal.com/why-off-page-seo-still-shapes-visibility/565916/" data-section="📰 RSS" onclick="tbm(this)">&#9734;</button><div class="item-content"><span class="platform rss">📰 RSS</span><strong>The New Off-Page SEO Playbook: Links, Mentions & AI Visibility via @sejournal, @lorenbaker</strong><br><a href="https://www.searchenginejournal.com/why-off-page-seo-still-shapes-visibility/565916/" target="_blank">https://www.searchenginejournal.com/why-off-page-seo-still-shapes-visibility/565916/</a></div></div>
 <div class="item" data-platform="rss"><button class="bm" data-title="Inbound Marketing Strategy: How to Grow Your Brand" data-url="https://neilpatel.com/blog/inbound-marketing-strategies-startup-needs-start-using-today/" data-section="📰 RSS" onclick="tbm(this)">&#9734;</button><div class="item-content"><span class="platform rss">📰 RSS</span><strong>Inbound Marketing Strategy: How to Grow Your Brand</strong><br><a href="https://neilpatel.com/blog/inbound-marketing-strategies-startup-needs-start-using-today/" target="_blank">https://neilpatel.com/blog/inbound-marketing-strategies-startup-needs-start-using-today/</a></div></div>
 
+    
+
     </div><!-- end main-content -->
     <div class="archive-sidebar">
         <h3>Prior Days</h3>
@@ -479,33 +488,40 @@
     </div><!-- end page-layout -->
 
 <script>
+var PAGE_DATE='2026-02-25';
+var DAY_KEY='dossier_bm_'+PAGE_DATE;
 function gBm(){try{return JSON.parse(localStorage.getItem('dossier_bookmarks')||'[]')}catch{return[]}}
+function gDay(){try{return JSON.parse(localStorage.getItem(DAY_KEY)||'[]')}catch{return[]}}
 function sBm(b){localStorage.setItem('dossier_bookmarks',JSON.stringify(b));uBadge()}
-function uBadge(){document.querySelector('.saved-toggle').textContent='Saved ('+gBm().length+')'}
+function sDay(b){localStorage.setItem(DAY_KEY,JSON.stringify(b))}
+function uBadge(){var d=gDay().length,a=gBm().length;document.querySelector('.saved-toggle').textContent='Saved ('+d+' today / '+a+' total)'}
 function togglePanel(){var p=document.getElementById('sp');p.classList.toggle('open');if(p.classList.contains('open'))rList()}
 var _svM='all';
 function svF(mode,btn){_svM=mode;document.querySelectorAll('.sv-filter').forEach(b=>b.classList.remove('active'));btn.classList.add('active');rList()}
-function siHtml(m,i){return'<div class="si"><a href="'+m.url+'" target="_blank">'+m.title+'</a><span class="meta">'+(m.section||'')+' &middot; '+(m.date||'')+'</span><br><button class="rm" onclick="rbm('+i+')">&times; Remove</button></div>'}
-function rList(){var l=document.getElementById('sl'),b=gBm(),q=(document.getElementById('svQ')||{}).value||'';
+function siHtml(m,i,src){return'<div class="si"><a href="'+m.url+'" target="_blank">'+m.title+'</a><span class="meta">'+(m.section||'')+' &middot; '+(m.pageDate||m.date||'')+' &middot; Saved '+(m.date||'')+'</span><br><button class="rm" onclick="rbm('+i+',''+src+'')">&times; Remove</button></div>'}
+function rList(){var l=document.getElementById('sl'),q=(document.getElementById('svQ')||{}).value||'';
+var b=(_svM==='day')?gDay():gBm();
+var src=(_svM==='day')?'day':'master';
 if(q)b=b.filter(m=>(m.title+' '+(m.section||'')).toLowerCase().includes(q.toLowerCase()));
-if(!b.length){l.innerHTML='<p style="color:#a1a1a6;font-style:italic">'+(q?'No matches.':'No saved items yet.')+'</p>';return}
+if(!b.length){l.innerHTML='<p style="color:#a1a1a6;font-style:italic">'+(q?'No matches.':(_svM==='day'?'No items saved from this day yet.':'No saved items yet.'))+'</p>';return}
 var h='<div style="margin-bottom:10px;display:flex;gap:6px;flex-wrap:wrap;">';
-h+='<button onclick="exportBm()" style="padding:4px 8px;border-radius:8px;border:1px solid #424245;background:none;color:#0a84ff;cursor:pointer;font-size:11px;">Export</button>';
+h+='<button onclick="exportBm()" style="padding:4px 8px;border-radius:8px;border:1px solid #424245;background:none;color:#0a84ff;cursor:pointer;font-size:11px;">Export All</button>';
 h+='<label style="padding:4px 8px;border-radius:8px;border:1px solid #424245;color:#0a84ff;cursor:pointer;font-size:11px;">Import<input type="file" accept=".json" onchange="importBm(event)" style="display:none;"></label>';
-h+='<button onclick="if(confirm('Clear all?')){sBm([]);rList();syncBtns()}" style="padding:4px 8px;border-radius:8px;border:1px solid #ff453a;background:none;color:#ff453a;cursor:pointer;font-size:11px;">Clear</button>';
+h+='<button onclick="if(confirm('Clear all saved items?')){sBm([]);sDay([]);rList();syncBtns()}" style="padding:4px 8px;border-radius:8px;border:1px solid #ff453a;background:none;color:#ff453a;cursor:pointer;font-size:11px;">Clear All</button>';
 h+='</div>';
-if(_svM==='date'){var g={};b.forEach(function(m,i){var d=m.date||'Unknown';if(!g[d])g[d]=[];g[d].push({m:m,i:i})});Object.keys(g).sort().reverse().forEach(function(d){h+='<div class="sv-gh">'+d+' ('+g[d].length+')</div>';g[d].forEach(function(o){h+=siHtml(o.m,o.i)})})}
-else if(_svM==='platform'){var g={};b.forEach(function(m,i){var s=m.section||'Other';if(!g[s])g[s]=[];g[s].push({m:m,i:i})});Object.keys(g).sort().forEach(function(s){h+='<div class="sv-gh">'+s+' ('+g[s].length+')</div>';g[s].forEach(function(o){h+=siHtml(o.m,o.i)})})}
-else{b.forEach(function(m,i){h+=siHtml(m,i)})}
+if(_svM==='date'){var g={};b.forEach(function(m,i){var d=m.pageDate||m.date||'Unknown';if(!g[d])g[d]=[];g[d].push({m:m,i:i})});Object.keys(g).sort().reverse().forEach(function(d){h+='<div class="sv-gh">'+d+' ('+g[d].length+')</div>';g[d].forEach(function(o){h+=siHtml(o.m,o.i,src)})})}
+else if(_svM==='platform'){var g={};b.forEach(function(m,i){var s=m.section||'Other';if(!g[s])g[s]=[];g[s].push({m:m,i:i})});Object.keys(g).sort().forEach(function(s){h+='<div class="sv-gh">'+s+' ('+g[s].length+')</div>';g[s].forEach(function(o){h+=siHtml(o.m,o.i,src)})})}
+else{b.forEach(function(m,i){h+=siHtml(m,i,src)})}
 l.innerHTML=h}
 function exportBm(){var b=gBm(),bl=new Blob([JSON.stringify(b,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download='dossier_saved.json';a.click()}
 function importBm(evt){var f=evt.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(e){try{var imp=JSON.parse(e.target.result);if(!Array.isArray(imp))return;var b=gBm(),ex=new Set(b.map(x=>x.title)),n=0;imp.forEach(function(x){if(!ex.has(x.title)){b.push(x);n++}});sBm(b);rList();syncBtns();alert('Imported '+n+' new items')}catch{}};r.readAsText(f)}
-function rbm(i){var b=gBm();b.splice(i,1);sBm(b);rList();syncBtns()}
+function rbm(i,src){if(src==='day'){var b=gDay();var removed=b[i];b.splice(i,1);sDay(b);var m=gBm(),mx=m.findIndex(x=>x.title===removed.title);if(mx>=0){m.splice(mx,1);sBm(m)}}else{var b=gBm();var removed=b[i];b.splice(i,1);sBm(b);var d=gDay(),dx=d.findIndex(x=>x.title===removed.title);if(dx>=0){d.splice(dx,1);sDay(d)}}rList();syncBtns()}
 function tbm(btn){var t=btn.getAttribute('data-title'),u=btn.getAttribute('data-url'),
-s=btn.getAttribute('data-section'),b=gBm(),x=b.findIndex(m=>m.title===t);
-if(x>=0){b.splice(x,1);btn.classList.remove('saved');btn.innerHTML='&#9734;'}
-else{b.push({title:t,url:u,section:s,date:new Date().toLocaleDateString()});btn.classList.add('saved');btn.innerHTML='&#9733;'}
-sBm(b)}
+s=btn.getAttribute('data-section'),b=gBm(),d=gDay(),x=b.findIndex(m=>m.title===t);
+var entry={title:t,url:u,section:s,date:new Date().toLocaleDateString(),pageDate:PAGE_DATE};
+if(x>=0){b.splice(x,1);btn.classList.remove('saved');btn.innerHTML='&#9734;';var dx=d.findIndex(m=>m.title===t);if(dx>=0)d.splice(dx,1)}
+else{b.push(entry);d.push(entry);btn.classList.add('saved');btn.innerHTML='&#9733;'}
+sBm(b);sDay(d)}
 function syncBtns(){var b=gBm();document.querySelectorAll('.bm').forEach(btn=>{
 var t=btn.getAttribute('data-title'),s=b.some(m=>m.title===t);
 btn.classList.toggle('saved',s);btn.innerHTML=s?'&#9733;':'&#9734;'})}

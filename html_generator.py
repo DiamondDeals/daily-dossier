@@ -547,7 +547,7 @@ class DigestHTMLGenerator:
             let html = '<div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap;">';
             html += '<button onclick="exportBookmarks()" style="padding:5px 10px;border-radius:8px;border:1px solid #424245;background:none;color:#0a84ff;cursor:pointer;font-size:12px;">Export</button>';
             html += '<label style="padding:5px 10px;border-radius:8px;border:1px solid #424245;color:#0a84ff;cursor:pointer;font-size:12px;">Import<input type="file" accept=".json" onchange="importBookmarks(event)" style="display:none;"></label>';
-            html += '<button onclick="if(confirm(\'Clear all saved items?\')){{saveBookmarks([]);renderSavedList();document.querySelectorAll(\'.bookmark-btn\').forEach(b=>{{b.classList.remove(\'saved\');b.textContent=\'\\u2606\'}})}}" style="padding:5px 10px;border-radius:8px;border:1px solid #ff453a;background:none;color:#ff453a;cursor:pointer;font-size:12px;">Clear All</button>';
+            html += '<button onclick="clearAllBookmarks()" style="padding:5px 10px;border-radius:8px;border:1px solid #ff453a;background:none;color:#ff453a;cursor:pointer;font-size:12px;">Clear All</button>';
             html += '</div>';
             if (_svMode === 'date') {{
                 const groups = {{}};
@@ -572,6 +572,15 @@ class DigestHTMLGenerator:
             return '<div class="saved-item"><a href="' + item.url + '" target="_blank">' + item.title + '</a>' +
                 '<span class="saved-meta">' + (item.section || '') + ' &middot; Saved ' + (item.date || '') + '</span>' +
                 '<br><button class="remove-btn" onclick="removeBookmark(' + i + ')">&times; Remove</button></div>';
+        }}
+        function clearAllBookmarks() {{
+            if (!confirm('Clear all saved items?')) return;
+            saveBookmarks([]);
+            renderSavedList();
+            document.querySelectorAll('.bookmark-btn').forEach(b => {{
+                b.classList.remove('saved');
+                b.textContent = '\u2606';
+            }});
         }}
         function exportBookmarks() {{
             const bm = getBookmarks();
