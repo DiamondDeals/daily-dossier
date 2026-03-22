@@ -128,6 +128,12 @@
         <div id="sl"></div>
     </div>
 
+        <input id="svQ" type="text" placeholder="Search saved..." oninput="rList()"
+               style="width:100%;padding:7px 10px;border-radius:8px;border:1px solid #424245;
+               background:#1d1d1f;color:#f5f5f7;font-size:12px;margin-bottom:10px;box-sizing:border-box;">
+        <div id="sl"></div>
+    </div>
+
 <h2>🟠 Reddit (166 items)</h2>
 <div class="item" data-platform="reddit"><button class="bm" data-title="New Business - What could AI do for me?" data-url="https://www.reddit.com/r/Entrepreneur/comments/1r5q4kr/new_business_what_could_ai_do_for_me/" data-section="🟠 Reddit" onclick="tbm(this)">&#9734;</button><div class="item-content"><span class="platform reddit">🟠 Reddit</span><strong>New Business - What could AI do for me?</strong><br><a href="https://www.reddit.com/r/Entrepreneur/comments/1r5q4kr/new_business_what_could_ai_do_for_me/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1r5q4kr/new_business_what_could_ai_do_for_me/</a></div></div>
 <div class="item" data-platform="reddit"><button class="bm" data-title="I learned my lesson the hard way with my business of 7 years" data-url="https://www.reddit.com/r/Entrepreneur/comments/1r5s349/i_learned_my_lesson_the_hard_way_with_my_business/" data-section="🟠 Reddit" onclick="tbm(this)">&#9734;</button><div class="item-content"><span class="platform reddit">🟠 Reddit</span><strong>I learned my lesson the hard way with my business of 7 years</strong><br><a href="https://www.reddit.com/r/Entrepreneur/comments/1r5s349/i_learned_my_lesson_the_hard_way_with_my_business/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1r5s349/i_learned_my_lesson_the_hard_way_with_my_business/</a></div></div>
@@ -412,6 +418,8 @@
 
     
 
+    
+
     </div><!-- end main-content -->
     <div class="archive-sidebar">
         <h3>Prior Days</h3>
@@ -469,12 +477,13 @@ if(!b.length){l.innerHTML='<p style="color:#a1a1a6;font-style:italic">'+(q?'No m
 var h='<div style="margin-bottom:10px;display:flex;gap:6px;flex-wrap:wrap;">';
 h+='<button onclick="exportBm()" style="padding:4px 8px;border-radius:8px;border:1px solid #424245;background:none;color:#0a84ff;cursor:pointer;font-size:11px;">Export All</button>';
 h+='<label style="padding:4px 8px;border-radius:8px;border:1px solid #424245;color:#0a84ff;cursor:pointer;font-size:11px;">Import<input type="file" accept=".json" onchange="importBm(event)" style="display:none;"></label>';
-h+='<button onclick="if(confirm('Clear all saved items?')){sBm([]);sDay([]);rList();syncBtns()}" style="padding:4px 8px;border-radius:8px;border:1px solid #ff453a;background:none;color:#ff453a;cursor:pointer;font-size:11px;">Clear All</button>';
+h+='<button onclick="clearAll()" style="padding:4px 8px;border-radius:8px;border:1px solid #ff453a;background:none;color:#ff453a;cursor:pointer;font-size:11px;">Clear All</button>';
 h+='</div>';
 if(_svM==='date'){var g={};b.forEach(function(m,i){var d=m.pageDate||m.date||'Unknown';if(!g[d])g[d]=[];g[d].push({m:m,i:i})});Object.keys(g).sort().reverse().forEach(function(d){h+='<div class="sv-gh">'+d+' ('+g[d].length+')</div>';g[d].forEach(function(o){h+=siHtml(o.m,o.i,src)})})}
 else if(_svM==='platform'){var g={};b.forEach(function(m,i){var s=m.section||'Other';if(!g[s])g[s]=[];g[s].push({m:m,i:i})});Object.keys(g).sort().forEach(function(s){h+='<div class="sv-gh">'+s+' ('+g[s].length+')</div>';g[s].forEach(function(o){h+=siHtml(o.m,o.i,src)})})}
 else{b.forEach(function(m,i){h+=siHtml(m,i,src)})}
 l.innerHTML=h}
+function clearAll(){if(!confirm('Clear all saved items?'))return;sBm([]);sDay([]);rList();syncBtns()}
 function exportBm(){var b=gBm(),bl=new Blob([JSON.stringify(b,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download='dossier_saved.json';a.click()}
 function importBm(evt){var f=evt.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(e){try{var imp=JSON.parse(e.target.result);if(!Array.isArray(imp))return;var b=gBm(),ex=new Set(b.map(x=>x.title)),n=0;imp.forEach(function(x){if(!ex.has(x.title)){b.push(x);n++}});sBm(b);rList();syncBtns();alert('Imported '+n+' new items')}catch{}};r.readAsText(f)}
 function rbm(i,src){if(src==='day'){var b=gDay();var removed=b[i];b.splice(i,1);sDay(b);var m=gBm(),mx=m.findIndex(x=>x.title===removed.title);if(mx>=0){m.splice(mx,1);sBm(m)}}else{var b=gBm();var removed=b[i];b.splice(i,1);sBm(b);var d=gDay(),dx=d.findIndex(x=>x.title===removed.title);if(dx>=0){d.splice(dx,1);sDay(d)}}rList();syncBtns()}
