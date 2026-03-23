@@ -185,8 +185,10 @@ def run_full_digest():
     db_dir = Path('Database')
     archive_files = sorted(db_dir.glob('all_items_*.html'), reverse=True)
     archive_links_html = ""
-    for af in archive_files[:30]:  # Last 30 days
+    for af in archive_files:
         af_date = af.stem.replace('all_items_', '')
+        if af_date == 'latest':
+            continue
         if af_date == date_str:
             archive_links_html += f'<div class="arc-link current">{af_date} (today)</div>\n'
         else:
@@ -359,7 +361,7 @@ function uBadge(){{var d=gDay().length,a=gBm().length;document.querySelector('.s
 function togglePanel(){{var p=document.getElementById('sp');p.classList.toggle('open');if(p.classList.contains('open'))rList()}}
 var _svM='all';
 function svF(mode,btn){{_svM=mode;document.querySelectorAll('.sv-filter').forEach(b=>b.classList.remove('active'));btn.classList.add('active');rList()}}
-function siHtml(m,i,src){{return'<div class="si"><a href="'+m.url+'" target="_blank">'+m.title+'</a><span class="meta">'+(m.section||'')+' &middot; '+(m.pageDate||m.date||'')+' &middot; Saved '+(m.date||'')+'</span><br><button class="rm" onclick="rbm('+i+',\''+src+'\')">&times; Remove</button></div>'}}
+function siHtml(m,i,src){{return'<div class="si"><a href="'+m.url+'" target="_blank">'+m.title+'</a><span class="meta">'+(m.section||'')+' &middot; '+(m.pageDate||m.date||'')+' &middot; Saved '+(m.date||'')+'</span><br><button class="rm" onclick="rbm('+i+',\\''+src+'\\')">&times; Remove</button></div>'}}
 function rList(){{var l=document.getElementById('sl'),q=(document.getElementById('svQ')||{{}}).value||'';
 var b=(_svM==='day')?gDay():gBm();
 var src=(_svM==='day')?'day':'master';
@@ -367,6 +369,7 @@ if(q)b=b.filter(m=>(m.title+' '+(m.section||'')).toLowerCase().includes(q.toLowe
 if(!b.length){{l.innerHTML='<p style="color:#a1a1a6;font-style:italic">'+(q?'No matches.':(_svM==='day'?'No items saved from this day yet.':'No saved items yet.'))+'</p>';return}}
 var h='<div style="margin-bottom:10px;display:flex;gap:6px;flex-wrap:wrap;">';
 h+='<button onclick="exportBm()" style="padding:4px 8px;border-radius:8px;border:1px solid #424245;background:none;color:#0a84ff;cursor:pointer;font-size:11px;">Export All</button>';
+h+='<button onclick="exportDay()" style="padding:4px 8px;border-radius:8px;border:1px solid #424245;background:none;color:#30d158;cursor:pointer;font-size:11px;">Export Day</button>';
 h+='<label style="padding:4px 8px;border-radius:8px;border:1px solid #424245;color:#0a84ff;cursor:pointer;font-size:11px;">Import<input type="file" accept=".json" onchange="importBm(event)" style="display:none;"></label>';
 h+='<button onclick="clearAll()" style="padding:4px 8px;border-radius:8px;border:1px solid #ff453a;background:none;color:#ff453a;cursor:pointer;font-size:11px;">Clear All</button>';
 h+='</div>';
@@ -376,6 +379,7 @@ else{{b.forEach(function(m,i){{h+=siHtml(m,i,src)}})}}
 l.innerHTML=h}}
 function clearAll(){{if(!confirm('Clear all saved items?'))return;sBm([]);sDay([]);rList();syncBtns()}}
 function exportBm(){{var b=gBm(),bl=new Blob([JSON.stringify(b,null,2)],{{type:'application/json'}}),a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download='dossier_saved.json';a.click()}}
+function exportDay(){{var b=gDay(),bl=new Blob([JSON.stringify(b,null,2)],{{type:'application/json'}}),a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download='dossier_saved_'+PAGE_DATE+'.json';a.click()}}
 function importBm(evt){{var f=evt.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(e){{try{{var imp=JSON.parse(e.target.result);if(!Array.isArray(imp))return;var b=gBm(),ex=new Set(b.map(x=>x.title)),n=0;imp.forEach(function(x){{if(!ex.has(x.title)){{b.push(x);n++}}}});sBm(b);rList();syncBtns();alert('Imported '+n+' new items')}}catch{{}}}};r.readAsText(f)}}
 function rbm(i,src){{if(src==='day'){{var b=gDay();var removed=b[i];b.splice(i,1);sDay(b);var m=gBm(),mx=m.findIndex(x=>x.title===removed.title);if(mx>=0){{m.splice(mx,1);sBm(m)}}}}else{{var b=gBm();var removed=b[i];b.splice(i,1);sBm(b);var d=gDay(),dx=d.findIndex(x=>x.title===removed.title);if(dx>=0){{d.splice(dx,1);sDay(d)}}}}rList();syncBtns()}}
 function tbm(btn){{var t=btn.getAttribute('data-title'),u=btn.getAttribute('data-url'),
