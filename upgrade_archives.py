@@ -22,7 +22,7 @@ for f in archive_files:
     archive_dates.append(d)
 
 def build_sidebar_links(current_date):
-    html = ""
+    html = '<a class="arc-link" href="all_items_latest.html">latest</a>\n'
     for d in sorted(archive_dates, reverse=True)[:30]:
         if d == current_date:
             html += f'<div class="arc-link current">{d} (today)</div>\n'
@@ -147,7 +147,8 @@ def build_new_html(date_str, items_html, total):
         <h2>Saved Items</h2>
         <p style="color:#a1a1a6;font-size:12px;margin:0 0 8px 0;">Bookmarks persist across visits.</p>
         <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;">
-            <button class="sv-filter active" onclick="svF('all',this)">All</button>
+            <button class="sv-filter" onclick="svF('day',this)">This Day</button>
+            <button class="sv-filter active" onclick="svF('all',this)">All Saved</button>
             <button class="sv-filter" onclick="svF('date',this)">By Date</button>
             <button class="sv-filter" onclick="svF('platform',this)">By Platform</button>
         </div>
@@ -167,33 +168,41 @@ def build_new_html(date_str, items_html, total):
     </div><!-- end page-layout -->
 
 <script>
+var PAGE_DATE='{date_str}';
+var DAY_KEY='dossier_bm_'+PAGE_DATE;
 function gBm(){{try{{return JSON.parse(localStorage.getItem('dossier_bookmarks')||'[]')}}catch{{return[]}}}}
+function gDay(){{try{{return JSON.parse(localStorage.getItem(DAY_KEY)||'[]')}}catch{{return[]}}}}
 function sBm(b){{localStorage.setItem('dossier_bookmarks',JSON.stringify(b));uBadge()}}
-function uBadge(){{document.querySelector('.saved-toggle').textContent='Saved ('+gBm().length+')'}}
+function sDay(b){{localStorage.setItem(DAY_KEY,JSON.stringify(b))}}
+function uBadge(){{var d=gDay().length,a=gBm().length;document.querySelector('.saved-toggle').textContent='Saved ('+d+' today / '+a+' total)'}}
 function togglePanel(){{var p=document.getElementById('sp');p.classList.toggle('open');if(p.classList.contains('open'))rList()}}
 var _svM='all';
 function svF(mode,btn){{_svM=mode;document.querySelectorAll('.sv-filter').forEach(b=>b.classList.remove('active'));btn.classList.add('active');rList()}}
-function siHtml(m,i){{return'<div class="si"><a href="'+m.url+'" target="_blank">'+m.title+'</a><span class="meta">'+(m.section||'')+' &middot; '+(m.date||'')+'</span><br><button class="rm" onclick="rbm('+i+')">&times; Remove</button></div>'}}
-function rList(){{var l=document.getElementById('sl'),b=gBm(),q=(document.getElementById('svQ')||{{}}).value||'';
+function siHtml(m,i,src){{return'<div class="si"><a href="'+m.url+'" target="_blank">'+m.title+'</a><span class="meta">'+(m.section||'')+' &middot; '+(m.pageDate||m.date||'')+' &middot; Saved '+(m.date||'')+'</span><br><button class="rm" onclick="rbm('+i+',\''+src+'\')">&times; Remove</button></div>'}}
+function rList(){{var l=document.getElementById('sl'),q=(document.getElementById('svQ')||{{}}).value||'';
+var b=(_svM==='day')?gDay():gBm();
+var src=(_svM==='day')?'day':'master';
 if(q)b=b.filter(m=>(m.title+' '+(m.section||'')).toLowerCase().includes(q.toLowerCase()));
-if(!b.length){{l.innerHTML='<p style="color:#a1a1a6;font-style:italic">'+(q?'No matches.':'No saved items yet.')+'</p>';return}}
+if(!b.length){{l.innerHTML='<p style="color:#a1a1a6;font-style:italic">'+(q?'No matches.':(_svM==='day'?'No items saved from this day yet.':'No saved items yet.'))+'</p>';return}}
 var h='<div style="margin-bottom:10px;display:flex;gap:6px;flex-wrap:wrap;">';
-h+='<button onclick="exportBm()" style="padding:4px 8px;border-radius:8px;border:1px solid #424245;background:none;color:#0a84ff;cursor:pointer;font-size:11px;">Export</button>';
+h+='<button onclick="exportBm()" style="padding:4px 8px;border-radius:8px;border:1px solid #424245;background:none;color:#0a84ff;cursor:pointer;font-size:11px;">Export All</button>';
 h+='<label style="padding:4px 8px;border-radius:8px;border:1px solid #424245;color:#0a84ff;cursor:pointer;font-size:11px;">Import<input type="file" accept=".json" onchange="importBm(event)" style="display:none;"></label>';
-h+='<button onclick="if(confirm(\'Clear all?\')){{sBm([]);rList();syncBtns()}}" style="padding:4px 8px;border-radius:8px;border:1px solid #ff453a;background:none;color:#ff453a;cursor:pointer;font-size:11px;">Clear</button>';
+h+='<button onclick="clearAll()" style="padding:4px 8px;border-radius:8px;border:1px solid #ff453a;background:none;color:#ff453a;cursor:pointer;font-size:11px;">Clear All</button>';
 h+='</div>';
-if(_svM==='date'){{var g={{}};b.forEach(function(m,i){{var d=m.date||'Unknown';if(!g[d])g[d]=[];g[d].push({{m:m,i:i}})}});Object.keys(g).sort().reverse().forEach(function(d){{h+='<div class="sv-gh">'+d+' ('+g[d].length+')</div>';g[d].forEach(function(o){{h+=siHtml(o.m,o.i)}})}})}}
-else if(_svM==='platform'){{var g={{}};b.forEach(function(m,i){{var s=m.section||'Other';if(!g[s])g[s]=[];g[s].push({{m:m,i:i}})}});Object.keys(g).sort().forEach(function(s){{h+='<div class="sv-gh">'+s+' ('+g[s].length+')</div>';g[s].forEach(function(o){{h+=siHtml(o.m,o.i)}})}})}}
-else{{b.forEach(function(m,i){{h+=siHtml(m,i)}})}}
+if(_svM==='date'){{var g={{}};b.forEach(function(m,i){{var d=m.pageDate||m.date||'Unknown';if(!g[d])g[d]=[];g[d].push({{m:m,i:i}})}});Object.keys(g).sort().reverse().forEach(function(d){{h+='<div class="sv-gh">'+d+' ('+g[d].length+')</div>';g[d].forEach(function(o){{h+=siHtml(o.m,o.i,src)}})}})}}
+else if(_svM==='platform'){{var g={{}};b.forEach(function(m,i){{var s=m.section||'Other';if(!g[s])g[s]=[];g[s].push({{m:m,i:i}})}});Object.keys(g).sort().forEach(function(s){{h+='<div class="sv-gh">'+s+' ('+g[s].length+')</div>';g[s].forEach(function(o){{h+=siHtml(o.m,o.i,src)}})}})}}
+else{{b.forEach(function(m,i){{h+=siHtml(m,i,src)}})}}
 l.innerHTML=h}}
+function clearAll(){{if(!confirm('Clear all saved items?'))return;sBm([]);sDay([]);rList();syncBtns()}}
 function exportBm(){{var b=gBm(),bl=new Blob([JSON.stringify(b,null,2)],{{type:'application/json'}}),a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download='dossier_saved.json';a.click()}}
 function importBm(evt){{var f=evt.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(e){{try{{var imp=JSON.parse(e.target.result);if(!Array.isArray(imp))return;var b=gBm(),ex=new Set(b.map(x=>x.title)),n=0;imp.forEach(function(x){{if(!ex.has(x.title)){{b.push(x);n++}}}});sBm(b);rList();syncBtns();alert('Imported '+n+' new items')}}catch{{}}}};r.readAsText(f)}}
-function rbm(i){{var b=gBm();b.splice(i,1);sBm(b);rList();syncBtns()}}
+function rbm(i,src){{if(src==='day'){{var b=gDay();var removed=b[i];b.splice(i,1);sDay(b);var m=gBm(),mx=m.findIndex(x=>x.title===removed.title);if(mx>=0){{m.splice(mx,1);sBm(m)}}}}else{{var b=gBm();var removed=b[i];b.splice(i,1);sBm(b);var d=gDay(),dx=d.findIndex(x=>x.title===removed.title);if(dx>=0){{d.splice(dx,1);sDay(d)}}}}rList();syncBtns()}}
 function tbm(btn){{var t=btn.getAttribute('data-title'),u=btn.getAttribute('data-url'),
-s=btn.getAttribute('data-section'),b=gBm(),x=b.findIndex(m=>m.title===t);
-if(x>=0){{b.splice(x,1);btn.classList.remove('saved');btn.innerHTML='&#9734;'}}
-else{{b.push({{title:t,url:u,section:s,date:new Date().toLocaleDateString()}});btn.classList.add('saved');btn.innerHTML='&#9733;'}}
-sBm(b)}}
+s=btn.getAttribute('data-section'),b=gBm(),d=gDay(),x=b.findIndex(m=>m.title===t);
+var entry={{title:t,url:u,section:s,date:new Date().toLocaleDateString(),pageDate:PAGE_DATE}};
+if(x>=0){{b.splice(x,1);btn.classList.remove('saved');btn.innerHTML='&#9734;';var dx=d.findIndex(m=>m.title===t);if(dx>=0)d.splice(dx,1)}}
+else{{b.push(entry);d.push(entry);btn.classList.add('saved');btn.innerHTML='&#9733;'}}
+sBm(b);sDay(d)}}
 function syncBtns(){{var b=gBm();document.querySelectorAll('.bm').forEach(btn=>{{
 var t=btn.getAttribute('data-title'),s=b.some(m=>m.title===t);
 btn.classList.toggle('saved',s);btn.innerHTML=s?'&#9733;':'&#9734;'}})}}
@@ -286,23 +295,20 @@ for date_str in archive_dates:
     already_upgraded = 'page-layout' in old_html
 
     if already_upgraded:
-        # Just needs scrollbar CSS and sidebar update
-        # Extract items between main-content div
-        items_match = re.search(r'<div class="filter-bar">.*?</div>\s*\n\s*<div class="saved-panel".*?</div>\s*\n(.*?)</div><!-- end main-content -->', old_html, re.DOTALL)
-        if items_match:
-            items_html = items_match.group(1)
-        else:
-            # Try to get content differently
-            items_html = ""
-            in_items = False
-            for line in old_html.split('\n'):
-                stripped = line.strip()
-                if stripped.startswith('<h2>') and ('items)' in stripped or 'Reddit' in stripped or 'Bluesky' in stripped):
-                    in_items = True
-                if in_items:
-                    if '<!-- end main-content -->' in stripped:
-                        break
-                    items_html += line + '\n'
+        # Extract only h2 section headers and item divs (safe line-by-line approach)
+        items_lines = []
+        for line in old_html.split('\n'):
+            stripped = line.strip()
+            # Keep section headers like <h2>🟠 Reddit (172 items)</h2>
+            if stripped.startswith('<h2>') and 'Saved Items' not in stripped:
+                items_lines.append(stripped)
+            # Keep item divs with data-platform
+            elif 'data-platform=' in stripped and '<div class="item"' in stripped:
+                items_lines.append(stripped)
+            # Keep "No items" paragraphs
+            elif stripped.startswith('<p>') and 'No items' in stripped:
+                items_lines.append(stripped)
+        items_html = '\n'.join(items_lines)
 
         count_match = re.search(r'Total Items?:\s*(\d+)', old_html)
         total = count_match.group(1) if count_match else "0"
