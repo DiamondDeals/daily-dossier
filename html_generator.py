@@ -441,6 +441,25 @@ class DigestHTMLGenerator:
             font-size: 13px; font-weight: 700; color: var(--accent);
             margin: 16px 0 6px 0; padding-bottom: 4px; border-bottom: 1px solid var(--border);
         }}
+
+        @media (max-width: 768px) {{
+            body {{ padding: 8px; font-size: 15px; }}
+            .container {{ padding: 24px 16px; border-radius: 12px; }}
+            h1 {{ font-size: 24px; }}
+            h2 {{ font-size: 22px; padding-left: 12px; border-left-width: 3px; margin-top: 32px; }}
+            h3 {{ font-size: 18px; }}
+            strong {{ font-size: 17px; }}
+            p:has(strong) {{ font-size: 16px; }}
+            p {{ font-size: 14px; word-break: break-word; }}
+            a {{ word-break: break-all; }}
+            .theme-toggle {{ top: 10px; right: 10px; padding: 6px 10px; font-size: 12px; }}
+            .saved-panel-toggle {{ top: 10px; right: 100px; padding: 6px 10px; font-size: 12px; }}
+            .saved-panel {{ width: 100vw; }}
+            .scroll-top {{ bottom: 16px; right: 16px; width: 40px; height: 40px; font-size: 18px; }}
+            ul {{ margin-left: 16px; }}
+            header {{ padding-bottom: 16px; margin-bottom: 24px; }}
+            footer {{ margin-top: 32px; }}
+        }}
     </style>
 </head>
 <body data-theme="dark">
