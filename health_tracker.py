@@ -82,7 +82,7 @@ class HealthTracker:
             print(f"    r/{subreddit}...", end=" ", flush=True)
 
             try:
-                posts = self.reddit_client.fetch_posts(subreddit, limit=25, sort='hot')
+                posts = self.reddit_client.fetch_posts(subreddit, limit=25, sort='new')
 
                 found = 0
                 for post in posts:
@@ -99,8 +99,8 @@ class HealthTracker:
         all_posts.sort(key=lambda x: x.get('score', 0), reverse=True)
         return all_posts
 
-    def scan_rss_health(self, hours_back=168):
-        """Scan health RSS feeds - 7 day lookback for less frequent publishers"""
+    def scan_rss_health(self, hours_back=48):
+        """Scan health RSS feeds - 48h lookback for freshness"""
         print(f"  Scanning {len(self.health_feeds)} health RSS feeds...")
 
         cutoff_time = datetime.now() - timedelta(hours=hours_back)

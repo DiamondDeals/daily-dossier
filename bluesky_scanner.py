@@ -154,7 +154,7 @@ class BlueskyScanner:
         print("  Scanning Bluesky for builder content...")
 
         all_builds = []
-        cutoff = datetime.now(timezone.utc) - timedelta(hours=168)  # 7 days
+        cutoff = datetime.now(timezone.utc) - timedelta(hours=72)  # 3 days
         accounts_to_check = self.builder_accounts[:max_accounts]
 
         print(f"    Checking {len(accounts_to_check)} verified accounts...")
