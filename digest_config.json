@@ -1,0 +1,40 @@
+{
+  "target_subreddits": [
+    "entrepreneur",
+    "smallbusiness",
+    "Accounting",
+    "realestate",
+    "sweatystartup",
+    "ecommerce",
+    "startups",
+    "restaurateur",
+    "freelance",
+    "consulting",
+    "digitalmarketing",
+    "marketing",
+    "sales",
+    "business",
+    "sysadmin",
+    "excel",
+    "productivity",
+    "workflow",
+    "automation",
+    "process",
+    "operations",
+    "passive_income",
+    "sidehustle",
+    "Flipping",
+    "investing",
+    "realestateinvesting",
+    "entrepreneurridealong"
+  ],
+  "min_score": 5,
+  "max_post_age_hours": 48,
+  "categories_quota": {
+    "money_making": 15,
+    "blue_ocean": 10,
+    "scale_ready": 10,
+    "b2b_service": 10,
+    "hidden_gem": 5
+  }
+}
