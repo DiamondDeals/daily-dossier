@@ -1,0 +1,30 @@
+{
+  "date": "2026-03-06T17:03:03.229218",
+  "total_count": 0,
+  "results": {
+    "reddit": {
+      "count": 0,
+      "posts": []
+    },
+    "twitter": {
+      "count": 0,
+      "posts": []
+    },
+    "youtube": {
+      "count": 0,
+      "videos": []
+    },
+    "moltbook": {
+      "count": 0,
+      "posts": []
+    },
+    "health": {
+      "count": 0,
+      "posts": []
+    },
+    "rss": {
+      "count": 0,
+      "articles": []
+    }
+  }
+}

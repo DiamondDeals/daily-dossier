@@ -1,290 +1,256 @@
 #!/usr/bin/env python3
 """
-Health Tracker - Monitor Pritikin Diet & health topics across platforms
-For Drew's health journey (<#C0ACZ9XR9E1>)
+Health Tracker - Monitor Pritikin Diet & health topics via Reddit + RSS
+No Twitter API required - uses free sources only
 """
-import requests
+import sys
+import feedparser
+from datetime import datetime, timedelta
 from reddit_json_client import RedditJSONClient
 
+# Fix emoji output on Windows terminals
+if sys.stdout.encoding and sys.stdout.encoding.lower() not in ('utf-8', 'utf8'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+
+
 class HealthTracker:
-    def __init__(self, bearer_token):
-        self.bearer_token = bearer_token
-        self.base_url = "https://api.twitter.com/2"
-        self.headers = {
-            "Authorization": f"Bearer {bearer_token}",
-            "User-Agent": "BishopDailyDossier/1.0"
-        }
+    def __init__(self):
         self.reddit_client = RedditJSONClient()
-        
+
         # Health topics to track
         self.topics = {
             'pritikin': ['pritikin', 'pritikin diet', 'pritikin program'],
-            'heart_health': ['heart disease', 'atherosclerosis', 'cholesterol', 'cardiac'],
-            'plant_based': ['plant based', 'whole food plant based', 'wfpb'],
-            'diet_success': ['diet success', 'weight loss', 'health transformation']
+            'heart_health': ['heart disease', 'atherosclerosis', 'cholesterol', 'cardiac',
+                             'heart attack', 'stent', 'blood pressure', 'hypertension',
+                             'omega-3', 'omega 3', 'heart recovery', 'cardiac rehab'],
+            'plant_based': ['plant based', 'whole food plant based', 'wfpb',
+                            'oil free', 'no oil', 'vegan nutrition'],
+            'diet_success': ['diet success', 'weight loss', 'health transformation',
+                             'meal prep', 'healthy eating', 'clean eating']
         }
-        
-        # Health subreddits
+
+        # Health subreddits - expanded for better coverage
         self.health_subreddits = [
-            'nutrition', 'diet', 'loseit', 'healthyfood',
-            'EatCheapAndHealthy', 'PlantBasedDiet', 'WholeFoodsPlantBased',
-            'fitness', 'Health', 'HealthyFood'
+            'PlantBasedDiet', 'WholeFoodsPlantBased', 'nutrition',
+            'HeartHealth', 'CardiacRecovery',
+            'EatCheapAndHealthy', 'MealPrepSunday',
+            'loseit', 'HealthyFood', 'veganfitness',
+            'ScientificNutrition', 'mediterraneandiet'
         ]
-    
-    def scan_twitter_health(self, account_list=None):
-        """
-        Monitor specific health/wellness accounts for Pritikin mentions
-        Since search API requires paid tier, we monitor accounts instead
-        """
-        if account_list is None:
-            # Health/wellness accounts to monitor
-            account_list = [
-                'drterrysimpson',  # Mentioned in Pritikin tweet
-                'NutritionFacts',  # Dr. Greger
-                'ColinTCampbell',  # Plant-based nutrition
-                'DrNealBarnard',   # PCRM
-                'DrFuhrman',       # Nutritarian diet
-                'drmcdougall',     # McDougall Program
-                'chrislakin'       # Mentioned in success story tweet
-            ]
-        
-        print(f"🔍 Scanning {len(account_list)} health accounts for Pritikin/diet discussions...")
-        print()
-        
-        all_health_posts = []
-        
-        for username in account_list:
-            print(f"  @{username}...", end=" ", flush=True)
-            
-            try:
-                # Get user ID
-                user_endpoint = f"{self.base_url}/users/by/username/{username}"
-                user_response = requests.get(user_endpoint, headers=self.headers, timeout=10)
-                
-                if user_response.status_code != 200:
-                    print("❌")
-                    continue
-                
-                user_id = user_response.json()['data']['id']
-                
-                # Get tweets
-                tweets_endpoint = f"{self.base_url}/users/{user_id}/tweets"
-                params = {
-                    "max_results": 10,
-                    "tweet.fields": "created_at,public_metrics",
-                    "exclude": "retweets,replies"
-                }
-                
-                tweets_response = requests.get(tweets_endpoint, headers=self.headers, params=params, timeout=10)
-                
-                if tweets_response.status_code != 200:
-                    print("❌")
-                    continue
-                
-                tweets = tweets_response.json().get('data', [])
-                
-                # Check for health keywords
-                found = 0
-                for tweet in tweets:
-                    health_post = self._analyze_health_tweet(tweet, username)
-                    if health_post:
-                        all_health_posts.append(health_post)
-                        found += 1
-                
-                print(f"✅ {found}")
-                
-            except Exception as e:
-                print(f"❌ {e}")
-        
-        # Sort by engagement + relevance
-        all_health_posts.sort(key=lambda x: x['score'], reverse=True)
-        
-        return all_health_posts
-    
+
+        # RSS feeds specifically for health content (verified working March 2026)
+        self.health_feeds = [
+            {
+                'name': 'NutritionFacts.org',
+                'url': 'https://nutritionfacts.org/feed/',
+                'category': 'Plant-Based Health'
+            },
+            {
+                'name': 'Forks Over Knives',
+                'url': 'https://www.forksoverknives.com/feed/',
+                'category': 'Plant-Based Health'
+            },
+            {
+                'name': 'Pritikin',
+                'url': 'https://www.pritikin.com/feed/',
+                'category': 'Pritikin'
+            },
+            {
+                'name': 'AHA Circulation',
+                'url': 'https://www.ahajournals.org/action/showFeed?type=etoc&feed=rss&jc=circ',
+                'category': 'Heart Health'
+            },
+            {
+                'name': 'ScienceDaily Heart',
+                'url': 'https://www.sciencedaily.com/rss/health_medicine/heart_disease.xml',
+                'category': 'Heart Health'
+            },
+            {
+                'name': 'ScienceDaily Nutrition',
+                'url': 'https://www.sciencedaily.com/rss/health_medicine/nutrition.xml',
+                'category': 'Nutrition Research'
+            }
+        ]
+
     def scan_reddit_health(self):
         """Scan health subreddits for relevant discussions"""
-        print(f"\n🔍 Scanning {len(self.health_subreddits)} health subreddits...")
-        print()
-        
+        print(f"  Scanning {len(self.health_subreddits)} health subreddits...")
+
         all_posts = []
-        
+
         for subreddit in self.health_subreddits:
-            print(f"  r/{subreddit}...", end=" ", flush=True)
-            
+            print(f"    r/{subreddit}...", end=" ", flush=True)
+
             try:
                 posts = self.reddit_client.fetch_posts(subreddit, limit=25, sort='hot')
-                
+
                 found = 0
                 for post in posts:
                     health_post = self._analyze_health_reddit(post, subreddit)
                     if health_post:
                         all_posts.append(health_post)
                         found += 1
-                
-                print(f"✅ {found}" if found > 0 else "○")
-                
+
+                print(f"{found}" if found > 0 else "0")
+
             except Exception as e:
-                print("❌")
-        
-        # Sort by engagement
-        all_posts.sort(key=lambda x: x['engagement_score'], reverse=True)
-        
+                print(f"err")
+
+        all_posts.sort(key=lambda x: x.get('score', 0), reverse=True)
         return all_posts
-    
-    def _analyze_health_tweet(self, tweet, username):
-        """Analyze tweet for health topic relevance"""
-        text = tweet.get('text', '').lower()
-        
-        # Check topics
-        matched_topics = []
-        for topic, keywords in self.topics.items():
-            for keyword in keywords:
-                if keyword in text:
-                    matched_topics.append(topic)
-                    break
-        
-        if not matched_topics:
-            return None
-        
-        # Get engagement
-        metrics = tweet.get('public_metrics', {})
-        likes = metrics.get('like_count', 0)
-        retweets = metrics.get('retweet_count', 0)
-        replies = metrics.get('reply_count', 0)
-        
-        engagement = likes + (retweets * 2) + (replies * 3)
-        
-        # Bonus for Pritikin
-        bonus = 20 if 'pritikin' in matched_topics else 0
-        
-        score = engagement + (len(matched_topics) * 10) + bonus
-        
-        return {
-            'platform': 'Twitter',
-            'text': tweet.get('text', ''),
-            'author': username,
-            'url': f"https://twitter.com/{username}/status/{tweet.get('id')}",
-            'likes': likes,
-            'retweets': retweets,
-            'replies': replies,
-            'engagement': engagement,
-            'topics': matched_topics,
-            'score': score
-        }
-    
+
+    def scan_rss_health(self, hours_back=168):
+        """Scan health RSS feeds - 7 day lookback for less frequent publishers"""
+        print(f"  Scanning {len(self.health_feeds)} health RSS feeds...")
+
+        cutoff_time = datetime.now() - timedelta(hours=hours_back)
+        all_articles = []
+
+        for feed_info in self.health_feeds:
+            print(f"    {feed_info['name']}...", end=" ", flush=True)
+
+            try:
+                feed = feedparser.parse(feed_info['url'])
+                found = 0
+
+                for entry in feed.entries[:15]:
+                    try:
+                        if hasattr(entry, 'published_parsed') and entry.published_parsed:
+                            pub_date = datetime(*entry.published_parsed[:6])
+                        elif hasattr(entry, 'updated_parsed') and entry.updated_parsed:
+                            pub_date = datetime(*entry.updated_parsed[:6])
+                        else:
+                            pub_date = datetime.now()
+                    except:
+                        pub_date = datetime.now()
+
+                    if pub_date > cutoff_time:
+                        title = entry.title if hasattr(entry, 'title') else 'Untitled'
+                        url = entry.link if hasattr(entry, 'link') else ''
+                        summary = entry.summary if hasattr(entry, 'summary') else ''
+
+                        # Score based on topic relevance
+                        text = (title + ' ' + summary).lower()
+                        matched_topics = []
+                        for topic, keywords in self.topics.items():
+                            for keyword in keywords:
+                                if keyword in text:
+                                    matched_topics.append(topic)
+                                    break
+
+                        # Pritikin bonus
+                        bonus = 20 if 'pritikin' in matched_topics else 0
+                        score = len(matched_topics) * 10 + bonus + 5  # base score for being from a health feed
+
+                        article = {
+                            'platform': 'RSS',
+                            'title': title,
+                            'url': url,
+                            'source': feed_info['name'],
+                            'category': feed_info['category'],
+                            'published': pub_date.isoformat(),
+                            'topics': matched_topics if matched_topics else [feed_info['category'].lower()],
+                            'score': score
+                        }
+                        all_articles.append(article)
+                        found += 1
+
+                print(f"{found}")
+
+            except Exception as e:
+                print(f"err")
+
+        all_articles.sort(key=lambda x: x.get('score', 0), reverse=True)
+        return all_articles
+
+    def scan_all(self):
+        """Full health scan - Reddit + RSS, no Twitter needed"""
+        print()
+        reddit_posts = self.scan_reddit_health()
+        rss_articles = self.scan_rss_health()
+
+        # Combine and format for the dossier
+        all_health = []
+
+        for post in reddit_posts:
+            all_health.append({
+                'title': post.get('title', 'Untitled'),
+                'url': post.get('url', ''),
+                'source': f"r/{post.get('subreddit', 'unknown')}",
+                'score': post.get('score', 0),
+                'topics': post.get('topics', []),
+                'platform': 'Reddit'
+            })
+
+        for article in rss_articles:
+            all_health.append({
+                'title': article.get('title', 'Untitled'),
+                'url': article.get('url', ''),
+                'source': article.get('source', 'unknown'),
+                'score': article.get('score', 0),
+                'topics': article.get('topics', []),
+                'platform': 'RSS'
+            })
+
+        # Sort by score, prioritize Pritikin and heart health
+        all_health.sort(key=lambda x: x.get('score', 0), reverse=True)
+
+        return all_health
+
     def _analyze_health_reddit(self, post, subreddit):
         """Analyze Reddit post for health topic relevance"""
-        text = (post['title'] + ' ' + post['text']).lower()
-        
-        # Check topics
+        text = (post.get('title', '') + ' ' + post.get('text', '')).lower()
+
         matched_topics = []
         for topic, keywords in self.topics.items():
             for keyword in keywords:
                 if keyword in text:
                     matched_topics.append(topic)
                     break
-        
-        if not matched_topics:
+
+        # For health subreddits, include high-engagement posts even without keyword match
+        engagement = post.get('engagement_score', post.get('score', 0))
+        if not matched_topics and engagement < 50:
             return None
-        
-        # Bonus for Pritikin
+
+        # If no keyword match but high engagement in a health sub, tag with subreddit name
+        if not matched_topics:
+            matched_topics = [subreddit.lower()]
+
         bonus = 20 if 'pritikin' in matched_topics else 0
-        
-        score = post['engagement_score'] + (len(matched_topics) * 10) + bonus
-        
+        bonus += 10 if 'heart_health' in matched_topics else 0
+        score = engagement + (len(matched_topics) * 10) + bonus
+
         return {
             'platform': 'Reddit',
-            'title': post['title'],
-            'text': post['text'][:150],
-            'author': post['author'],
+            'title': post.get('title', 'Untitled'),
+            'text': post.get('text', '')[:150],
+            'author': post.get('author', 'unknown'),
             'subreddit': subreddit,
-            'url': post['url'],
-            'score': post['score'],
-            'comments': post['num_comments'],
-            'engagement_score': post['engagement_score'],
+            'url': post.get('url', ''),
+            'comments': post.get('num_comments', 0),
+            'engagement_score': engagement,
             'topics': matched_topics,
             'score': score
         }
-    
-    def generate_report(self, twitter_posts, reddit_posts, top_n=10):
-        """Generate health tracking report"""
-        report = []
-        report.append("## 🏥 Health & Wellness Tracker\n")
-        
-        # Pritikin-specific findings
-        pritikin_twitter = [p for p in twitter_posts if 'pritikin' in p['topics']]
-        pritikin_reddit = [p for p in reddit_posts if 'pritikin' in p['topics']]
-        
-        if pritikin_twitter or pritikin_reddit:
-            report.append("### 🎯 Pritikin Diet Discussions\n")
-            
-            for post in pritikin_twitter[:3]:
-                report.append(f"**Twitter: @{post['author']}**")
-                report.append(f"- \"{post['text'][:120]}...\"")
-                report.append(f"- {post['url']}\n")
-            
-            for post in pritikin_reddit[:3]:
-                report.append(f"**Reddit: r/{post['subreddit']}**")
-                report.append(f"- {post['title']}")
-                report.append(f"- {post['url']}\n")
-        
-        # Top general health discussions
-        all_posts = twitter_posts + reddit_posts
-        all_posts.sort(key=lambda x: x['score'], reverse=True)
-        
-        if all_posts:
-            report.append("### 📊 Top Health Discussions\n")
-            
-            for i, post in enumerate(all_posts[:top_n], 1):
-                platform_emoji = "🐦" if post['platform'] == 'Twitter' else "📊"
-                topics_str = ', '.join([f"#{t}" for t in post['topics']])
-                
-                report.append(f"**{i}. {platform_emoji} {post.get('title', post.get('text', '')[:60])}...**")
-                
-                if post['platform'] == 'Twitter':
-                    report.append(f"- @{post['author']} • {topics_str}")
-                    report.append(f"- ❤️{post['likes']} 🔁{post['retweets']} 💬{post['replies']}")
-                else:
-                    report.append(f"- r/{post['subreddit']} • {topics_str}")
-                    report.append(f"- ↑{post['score']} 💬{post['comments']}")
-                
-                report.append(f"- {post['url']}\n")
-        else:
-            report.append("*No health discussions found today*\n")
-        
-        # Stats
-        report.append(f"\n**Stats:** {len(twitter_posts)} Twitter + {len(reddit_posts)} Reddit")
-        
-        return '\n'.join(report)
+
 
 if __name__ == '__main__':
     print("=" * 70)
     print("HEALTH TRACKER - PRITIKIN DIET & WELLNESS MONITORING")
     print("=" * 70)
-    
-    # Load bearer token
-    with open('/home/drew/.openclaw/workspace/shared/credentials/twitter-api.txt', 'r') as f:
-        for line in f:
-            if line.startswith('BEARER_TOKEN='):
-                bearer_token = line.split('=', 1)[1].strip()
-                break
-    
-    tracker = HealthTracker(bearer_token)
-    
-    print("\n🏥 Daily Health & Wellness Scan")
-    print("   Topics: Pritikin, heart health, plant-based, diet success")
-    print()
-    
-    # Scan Twitter
-    twitter_posts = tracker.scan_twitter_health()
-    
-    # Scan Reddit
-    reddit_posts = tracker.scan_reddit_health()
-    
-    # Generate report
-    print("\n" + "=" * 70)
-    print(tracker.generate_report(twitter_posts, reddit_posts))
-    print("=" * 70)
-    
-    print(f"\n✅ Health tracking complete!")
-    print(f"   Found: {len(twitter_posts)} Twitter + {len(reddit_posts)} Reddit posts")
+
+    tracker = HealthTracker()
+
+    print("\nDaily Health & Wellness Scan")
+    print("  Topics: Pritikin, heart health, plant-based, diet success")
+
+    all_posts = tracker.scan_all()
+
+    print(f"\nFound {len(all_posts)} health items total")
+
+    if all_posts:
+        print("\nTop 10:")
+        for i, post in enumerate(all_posts[:10], 1):
+            print(f"  {i}. [{post['source']}] {post['title'][:80]}")
+            print(f"     Topics: {', '.join(post.get('topics', []))}")

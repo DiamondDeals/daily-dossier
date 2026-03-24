@@ -4,6 +4,7 @@ HTML Generator for Daily Digest - Apple Style with Dark Mode
 """
 
 import os
+import shutil
 import subprocess
 from datetime import datetime
 
@@ -143,6 +144,11 @@ class DigestHTMLGenerator:
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
     <style>
+        * {{ scrollbar-width: thin; scrollbar-color: #424245 #1d1d1f; }}
+        ::-webkit-scrollbar {{ width: 8px; }}
+        ::-webkit-scrollbar-track {{ background: var(--bg-primary, #1d1d1f); }}
+        ::-webkit-scrollbar-thumb {{ background: #424245; border-radius: 4px; }}
+        ::-webkit-scrollbar-thumb:hover {{ background: #636366; }}
         :root {{
             --bg-primary: #1d1d1f;
             --bg-secondary: #2d2d2f;
@@ -200,6 +206,32 @@ class DigestHTMLGenerator:
             background: var(--accent);
             color: white;
             transform: scale(1.05);
+        }}
+
+        .scroll-top {{
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+        }}
+        .scroll-top.visible {{
+            opacity: 1;
+            pointer-events: auto;
+        }}
+        .scroll-top:hover {{
+            transform: scale(1.1);
         }}
         
         .container {{
@@ -301,11 +333,138 @@ class DigestHTMLGenerator:
             color: var(--text-secondary);
             font-size: 14px;
         }}
+
+        /* Bookmark system */
+        .bookmark-btn {{
+            cursor: pointer;
+            font-size: 18px;
+            margin-left: 10px;
+            color: #ffd60a;
+            opacity: 0.5;
+            transition: all 0.15s ease;
+            border: none;
+            background: none;
+            padding: 2px 4px;
+            vertical-align: middle;
+        }}
+        .bookmark-btn:hover {{ opacity: 1; }}
+        .bookmark-btn.saved {{ opacity: 1; color: #ffd60a; }}
+
+        .saved-panel-toggle {{
+            position: fixed;
+            top: 20px;
+            right: 140px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }}
+        .saved-panel-toggle:hover {{
+            background: var(--accent);
+            color: white;
+        }}
+
+        .saved-panel {{
+            display: none;
+            position: fixed;
+            top: 0; right: 0;
+            width: 420px;
+            height: 100vh;
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--border);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 24px;
+            box-shadow: -4px 0 20px var(--shadow);
+        }}
+        .saved-panel.open {{ display: block; }}
+
+        .saved-panel h2 {{
+            font-size: 22px;
+            margin: 0 0 8px 0;
+            padding: 0;
+            border: none;
+            text-transform: none;
+        }}
+        .saved-panel .close-btn {{
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+        }}
+        .saved-item {{
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }}
+        .saved-item a {{
+            font-weight: 600;
+            font-size: 15px;
+            display: block;
+            margin-bottom: 4px;
+        }}
+        .saved-item .saved-meta {{
+            font-size: 12px;
+            color: var(--text-secondary);
+        }}
+        .saved-item .remove-btn {{
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 12px;
+            border: none;
+            background: none;
+            padding: 2px 6px;
+            margin-top: 4px;
+        }}
+        .saved-item .remove-btn:hover {{ color: #ff453a; }}
+        .saved-empty {{
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-top: 20px;
+        }}
+        .sv-filter {{
+            padding: 4px 10px; border-radius: 12px; border: 1px solid var(--border);
+            background: none; color: var(--text-secondary); cursor: pointer; font-size: 12px;
+        }}
+        .sv-filter:hover, .sv-filter.active {{
+            background: var(--accent); color: white; border-color: var(--accent);
+        }}
+        .sv-group-header {{
+            font-size: 13px; font-weight: 700; color: var(--accent);
+            margin: 16px 0 6px 0; padding-bottom: 4px; border-bottom: 1px solid var(--border);
+        }}
     </style>
 </head>
 <body data-theme="dark">
     <button class="theme-toggle" onclick="toggleTheme()">☀️ Light Mode</button>
-    
+    <button class="saved-panel-toggle" onclick="toggleSavedPanel()">Saved (0)</button>
+    <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({{top:0,behavior:'smooth'}})" title="Back to top">&uarr;</button>
+
+    <div class="saved-panel" id="savedPanel">
+        <button class="close-btn" onclick="toggleSavedPanel()">&times;</button>
+        <h2>Saved Items</h2>
+        <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 8px;">
+            Bookmarks persist in your browser across visits.
+        </p>
+        <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;">
+            <button class="sv-filter active" onclick="svFilter('all',this)">All</button>
+            <button class="sv-filter" onclick="svFilter('date',this)">By Date</button>
+            <button class="sv-filter" onclick="svFilter('platform',this)">By Platform</button>
+        </div>
+        <input id="svSearch" type="text" placeholder="Search saved..." oninput="renderSavedList()"
+               style="width:100%;padding:8px 12px;border-radius:8px;border:1px solid #424245;
+               background:#1d1d1f;color:#f5f5f7;font-size:13px;margin-bottom:12px;box-sizing:border-box;">
+        <div id="savedList"></div>
+    </div>
+
     <div class="container">
         <header>
             <h1>📊 {title}</h1>
@@ -341,10 +500,198 @@ class DigestHTMLGenerator:
             }}
         }}
         
+        // Scroll-to-top button visibility
+        window.addEventListener('scroll', function() {{
+            document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 400);
+        }});
+
         // Load saved theme (default to dark)
         const savedTheme = localStorage.getItem('theme') || 'dark';
         document.body.setAttribute('data-theme', savedTheme);
         document.querySelector('.theme-toggle').textContent = savedTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+
+        // ---- Bookmark / Read Later System ----
+        function getBookmarks() {{
+            try {{ return JSON.parse(localStorage.getItem('dossier_bookmarks') || '[]'); }}
+            catch {{ return []; }}
+        }}
+        function saveBookmarks(bm) {{
+            localStorage.setItem('dossier_bookmarks', JSON.stringify(bm));
+            updateBadge();
+        }}
+        function updateBadge() {{
+            const count = getBookmarks().length;
+            document.querySelector('.saved-panel-toggle').textContent = 'Saved (' + count + ')';
+        }}
+        function toggleSavedPanel() {{
+            const panel = document.getElementById('savedPanel');
+            panel.classList.toggle('open');
+            if (panel.classList.contains('open')) renderSavedList();
+        }}
+        var _svMode = 'all';
+        function svFilter(mode, btn) {{
+            _svMode = mode;
+            document.querySelectorAll('.sv-filter').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderSavedList();
+        }}
+        function renderSavedList() {{
+            const list = document.getElementById('savedList');
+            let bm = getBookmarks();
+            const q = (document.getElementById('svSearch') || {{}}).value || '';
+            if (q) bm = bm.filter(b => (b.title + ' ' + (b.section||'')).toLowerCase().includes(q.toLowerCase()));
+            if (bm.length === 0) {{
+                list.innerHTML = '<p class="saved-empty">' + (q ? 'No matches.' : 'No saved items yet. Click the star next to any item to save it.') + '</p>';
+                return;
+            }}
+            let html = '<div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap;">';
+            html += '<button onclick="exportBookmarks()" style="padding:5px 10px;border-radius:8px;border:1px solid #424245;background:none;color:#0a84ff;cursor:pointer;font-size:12px;">Export</button>';
+            html += '<label style="padding:5px 10px;border-radius:8px;border:1px solid #424245;color:#0a84ff;cursor:pointer;font-size:12px;">Import<input type="file" accept=".json" onchange="importBookmarks(event)" style="display:none;"></label>';
+            html += '<button onclick="clearAllBookmarks()" style="padding:5px 10px;border-radius:8px;border:1px solid #ff453a;background:none;color:#ff453a;cursor:pointer;font-size:12px;">Clear All</button>';
+            html += '</div>';
+            if (_svMode === 'date') {{
+                const groups = {{}};
+                bm.forEach((item, i) => {{ const d = item.date || 'Unknown'; if (!groups[d]) groups[d] = []; groups[d].push({{item, i}}); }});
+                Object.keys(groups).sort().reverse().forEach(d => {{
+                    html += '<div class="sv-group-header">' + d + ' (' + groups[d].length + ')</div>';
+                    groups[d].forEach(({{item, i}}) => {{ html += svItemHtml(item, i); }});
+                }});
+            }} else if (_svMode === 'platform') {{
+                const groups = {{}};
+                bm.forEach((item, i) => {{ const s = item.section || 'Other'; if (!groups[s]) groups[s] = []; groups[s].push({{item, i}}); }});
+                Object.keys(groups).sort().forEach(s => {{
+                    html += '<div class="sv-group-header">' + s + ' (' + groups[s].length + ')</div>';
+                    groups[s].forEach(({{item, i}}) => {{ html += svItemHtml(item, i); }});
+                }});
+            }} else {{
+                bm.forEach((item, i) => {{ html += svItemHtml(item, i); }});
+            }}
+            list.innerHTML = html;
+        }}
+        function svItemHtml(item, i) {{
+            return '<div class="saved-item"><a href="' + item.url + '" target="_blank">' + item.title + '</a>' +
+                '<span class="saved-meta">' + (item.section || '') + ' &middot; Saved ' + (item.date || '') + '</span>' +
+                '<br><button class="remove-btn" onclick="removeBookmark(' + i + ')">&times; Remove</button></div>';
+        }}
+        function clearAllBookmarks() {{
+            if (!confirm('Clear all saved items?')) return;
+            saveBookmarks([]);
+            renderSavedList();
+            document.querySelectorAll('.bookmark-btn').forEach(b => {{
+                b.classList.remove('saved');
+                b.textContent = '\u2606';
+            }});
+        }}
+        function exportBookmarks() {{
+            const bm = getBookmarks();
+            const blob = new Blob([JSON.stringify(bm, null, 2)], {{type: 'application/json'}});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'dossier_saved_items.json';
+            a.click();
+        }}
+        function importBookmarks(evt) {{
+            const file = evt.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {{
+                try {{
+                    const imported = JSON.parse(e.target.result);
+                    if (!Array.isArray(imported)) {{ alert('Invalid file'); return; }}
+                    const bm = getBookmarks();
+                    // Merge without duplicates
+                    const existing = new Set(bm.map(b => b.title));
+                    let added = 0;
+                    imported.forEach(item => {{
+                        if (!existing.has(item.title)) {{
+                            bm.push(item);
+                            added++;
+                        }}
+                    }});
+                    saveBookmarks(bm);
+                    renderSavedList();
+                    // Sync star buttons
+                    document.querySelectorAll('.bookmark-btn').forEach(btn => {{
+                        const t = btn.getAttribute('data-title');
+                        const s = bm.some(b => b.title === t);
+                        btn.classList.toggle('saved', s);
+                        btn.textContent = s ? '\u2605' : '\u2606';
+                    }});
+                    alert('Imported ' + added + ' new items (' + imported.length + ' total in file)');
+                }} catch {{ alert('Error reading file'); }}
+            }};
+            reader.readAsText(file);
+        }}
+        function removeBookmark(idx) {{
+            const bm = getBookmarks();
+            bm.splice(idx, 1);
+            saveBookmarks(bm);
+            renderSavedList();
+            // Update all bookmark button states
+            document.querySelectorAll('.bookmark-btn').forEach(btn => {{
+                const title = btn.getAttribute('data-title');
+                btn.classList.toggle('saved', bm.some(b => b.title === title));
+                btn.textContent = bm.some(b => b.title === title) ? '\u2605' : '\u2606';
+            }});
+        }}
+        function toggleBookmark(btn) {{
+            const title = btn.getAttribute('data-title');
+            const url = btn.getAttribute('data-url');
+            const section = btn.getAttribute('data-section');
+            const bm = getBookmarks();
+            const exists = bm.findIndex(b => b.title === title);
+            if (exists >= 0) {{
+                bm.splice(exists, 1);
+                btn.classList.remove('saved');
+                btn.textContent = '\u2606';
+            }} else {{
+                bm.push({{ title, url, section, date: new Date().toLocaleDateString() }});
+                btn.classList.add('saved');
+                btn.textContent = '\u2605';
+            }}
+            saveBookmarks(bm);
+        }}
+
+        // Inject bookmark buttons into every numbered item
+        document.addEventListener('DOMContentLoaded', function() {{
+            const bm = getBookmarks();
+            updateBadge();
+
+            // Find all strong elements that look like numbered titles
+            document.querySelectorAll('p > strong').forEach(el => {{
+                const text = el.textContent;
+                const match = text.match(/^\d+\.\s+(.+)/);
+                if (!match) return;
+
+                const title = match[1];
+                // Find the URL in the next sibling list
+                let url = '';
+                let section = '';
+                let sibling = el.parentElement.nextElementSibling;
+                while (sibling) {{
+                    if (sibling.tagName === 'UL') {{
+                        const links = sibling.querySelectorAll('a');
+                        if (links.length > 0) url = links[links.length - 1].href;
+                        break;
+                    }}
+                    sibling = sibling.nextElementSibling;
+                }}
+                // Get section from nearest h2
+                let h2 = el.parentElement.previousElementSibling;
+                while (h2 && h2.tagName !== 'H2') h2 = h2.previousElementSibling;
+                if (h2) section = h2.textContent;
+
+                const isSaved = bm.some(b => b.title === title);
+                const btn = document.createElement('button');
+                btn.className = 'bookmark-btn' + (isSaved ? ' saved' : '');
+                btn.textContent = isSaved ? '\u2605' : '\u2606';
+                btn.setAttribute('data-title', title);
+                btn.setAttribute('data-url', url);
+                btn.setAttribute('data-section', section);
+                btn.onclick = function() {{ toggleBookmark(this); }};
+                el.appendChild(btn);
+            }});
+        }});
     </script>
 </body>
 </html>'''
@@ -359,7 +706,7 @@ class DigestHTMLGenerator:
         os.makedirs(self.archive_dir, exist_ok=True)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         archive_path = os.path.join(self.archive_dir, f"dossier_{timestamp}.html")
-        subprocess.run(['cp', self.current_html, archive_path], check=True)
+        shutil.copy2(self.current_html, archive_path)
         print(f"📦 Archived to: {archive_path}")
         return archive_path
     
@@ -370,9 +717,13 @@ class DigestHTMLGenerator:
         print(f"✅ Saved: {self.current_html}")
     
     def deploy_to_github(self):
-        """Deploy to GitHub"""
+        """Deploy to GitHub - includes dossier, database, and daily archives"""
         try:
-            subprocess.run(['git', 'add', 'dossier.html', 'Archive', 'html_generator.py'], check=True)
+            subprocess.run(['git', 'add', 'dossier.html', 'Archive', 'Database', 'Daily',
+                            'html_generator.py', 'youtube_ai_channels.json',
+                            'rss_news_feeds.json', 'bluesky_scanner.py',
+                            'health_tracker.py', 'youtube_ai_monitor.py',
+                            'run_full_digest.py', 'add_footer_links.py'], check=True)
             subprocess.run(['git', 'commit', '-m', f'Update: {datetime.now().strftime("%Y-%m-%d %I:%M %p PST")}'], check=True)
             subprocess.run(['git', 'push'], check=True)
             print(f"✅ Deployed to GitHub Pages")

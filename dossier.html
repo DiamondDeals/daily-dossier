@@ -39,6 +39,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Business Dossier</title>
     <style>
+        * { scrollbar-width: thin; scrollbar-color: #424245 #1d1d1f; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary, #1d1d1f); }
+        ::-webkit-scrollbar-thumb { background: #424245; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #636366; }
         :root {
             --bg-primary: #1d1d1f;
             --bg-secondary: #2d2d2f;
@@ -96,6 +101,32 @@
             background: var(--accent);
             color: white;
             transform: scale(1.05);
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+        }
+        .scroll-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .scroll-top:hover {
+            transform: scale(1.1);
         }
         
         .container {
@@ -197,453 +228,634 @@
             color: var(--text-secondary);
             font-size: 14px;
         }
+
+        /* Bookmark system */
+        .bookmark-btn {
+            cursor: pointer;
+            font-size: 18px;
+            margin-left: 10px;
+            color: #ffd60a;
+            opacity: 0.5;
+            transition: all 0.15s ease;
+            border: none;
+            background: none;
+            padding: 2px 4px;
+            vertical-align: middle;
+        }
+        .bookmark-btn:hover { opacity: 1; }
+        .bookmark-btn.saved { opacity: 1; color: #ffd60a; }
+
+        .saved-panel-toggle {
+            position: fixed;
+            top: 20px;
+            right: 140px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        .saved-panel-toggle:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .saved-panel {
+            display: none;
+            position: fixed;
+            top: 0; right: 0;
+            width: 420px;
+            height: 100vh;
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--border);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 24px;
+            box-shadow: -4px 0 20px var(--shadow);
+        }
+        .saved-panel.open { display: block; }
+
+        .saved-panel h2 {
+            font-size: 22px;
+            margin: 0 0 8px 0;
+            padding: 0;
+            border: none;
+            text-transform: none;
+        }
+        .saved-panel .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .saved-item {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .saved-item a {
+            font-weight: 600;
+            font-size: 15px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .saved-item .saved-meta {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .saved-item .remove-btn {
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 12px;
+            border: none;
+            background: none;
+            padding: 2px 6px;
+            margin-top: 4px;
+        }
+        .saved-item .remove-btn:hover { color: #ff453a; }
+        .saved-empty {
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-top: 20px;
+        }
+        .sv-filter {
+            padding: 4px 10px; border-radius: 12px; border: 1px solid var(--border);
+            background: none; color: var(--text-secondary); cursor: pointer; font-size: 12px;
+        }
+        .sv-filter:hover, .sv-filter.active {
+            background: var(--accent); color: white; border-color: var(--accent);
+        }
+        .sv-group-header {
+            font-size: 13px; font-weight: 700; color: var(--accent);
+            margin: 16px 0 6px 0; padding-bottom: 4px; border-bottom: 1px solid var(--border);
+        }
     </style>
 </head>
 <body data-theme="dark">
     <button class="theme-toggle" onclick="toggleTheme()">☀️ Light Mode</button>
-    
+    <button class="saved-panel-toggle" onclick="toggleSavedPanel()">Saved (0)</button>
+    <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">&uarr;</button>
+
+    <div class="saved-panel" id="savedPanel">
+        <button class="close-btn" onclick="toggleSavedPanel()">&times;</button>
+        <h2>Saved Items</h2>
+        <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 8px;">
+            Bookmarks persist in your browser across visits.
+        </p>
+        <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;">
+            <button class="sv-filter active" onclick="svFilter('all',this)">All</button>
+            <button class="sv-filter" onclick="svFilter('date',this)">By Date</button>
+            <button class="sv-filter" onclick="svFilter('platform',this)">By Platform</button>
+        </div>
+        <input id="svSearch" type="text" placeholder="Search saved..." oninput="renderSavedList()"
+               style="width:100%;padding:8px 12px;border-radius:8px;border:1px solid #424245;
+               background:#1d1d1f;color:#f5f5f7;font-size:13px;margin-bottom:12px;box-sizing:border-box;">
+        <div id="savedList"></div>
+    </div>
+
     <div class="container">
         <header>
             <h1>📊 Daily Business Dossier</h1>
-            <p class="timestamp">Last Updated: 2026-03-23 09:42 PM PST</p>
+            <p class="timestamp">Last Updated: 2026-03-23 09:36 PM PST</p>
             <p class="timestamp">Auto-updates at 6 AM & 5 PM PST</p>
         </header>
         
         <main>
-<small><a href="Database/complete_with_titles.html">Complete Database (0 URLs)</a> • <a href="https://github.com/DiamondDeals/daily-dossier/tree/master/Database">All Archives</a></small>
+<p><strong>Total Opportunities: 1108</strong></p>
+
+<div style="background: var(--bg-secondary); border: 2px solid var(--accent); border-radius: 12px; padding: 20px 30px; margin: 20px 0 30px 0; text-align: center;">
+<a href="Database/all_items_2026-03-23.html" style="color: var(--accent); text-decoration: none; font-size: 20px; font-weight: 700;">
+<p>VIEW ALL 1108 ITEMS &rarr;</p>
+</a>
+<p style="color: var(--text-secondary); font-size: 14px; margin: 8px 0 0 0;">
+<p>The dossier below shows top 10 per section. Click above to see everything.</p>
+</p>
+</div>
 
 
 <h2>🟠 Reddit Business Leads</h2>
 
-<p><strong>1. Entrepreneurs, what automation made you feel like the future is alread...</strong></p>
-<p>👤 u/Sure_Marsupial_4309 | 📍 r/entrepreneur</p>
-<p>📊 Engagement: 333 (↑111 upvotes + 💬111 comments)</p>
-<p>⏰ Posted 19h ago</p>
-<p>🔗 <a href="https://www.reddit.com/r/Entrepreneur/comments/1s1bevb/entrepreneurs_what_automation_made_you_feel_like/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s1bevb/entrepreneurs_what_automation_made_you_feel_like/</a></p>
 
-<p><strong>2. Turn your fucking brain off and just DO...</strong></p>
-<p>👤 u/eattheinternet | 📍 r/entrepreneur</p>
-<p>📊 Engagement: 272 (↑100 upvotes + 💬86 comments)</p>
-<p>⏰ Posted 14h ago</p>
-<p>🔗 <a href="https://www.reddit.com/r/Entrepreneur/comments/1s1im34/turn_your_fucking_brain_off_and_just_do/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s1im34/turn_your_fucking_brain_off_and_just_do/</a></p>
+<p><strong>1. Entrepreneurs, what automation made you feel like the future is already here?</strong></p>
+<ul>
+<li>r/entrepreneur • u/Sure_Marsupial_4309</li>
+<li>Score: 114 (↑0 • 💬111)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1s1bevb/entrepreneurs_what_automation_made_you_feel_like/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s1bevb/entrepreneurs_what_automation_made_you_feel_like/</a></li>
+</ul>
 
-<p><strong>3. Business owners, where do you get most of your online traffic from?...</strong></p>
-<p>👤 u/vladi5555 | 📍 r/entrepreneur</p>
-<p>📊 Engagement: 167 (↑23 upvotes + 💬72 comments)</p>
-<p>⏰ Posted 18h ago</p>
-<p>🔗 <a href="https://www.reddit.com/r/Entrepreneur/comments/1s1cvr0/business_owners_where_do_you_get_most_of_your/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s1cvr0/business_owners_where_do_you_get_most_of_your/</a></p>
+<p><strong>2. Turn your fucking brain off and just DO</strong></p>
+<ul>
+<li>r/entrepreneur • u/eattheinternet</li>
+<li>Score: 98 (↑0 • 💬85)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1s1im34/turn_your_fucking_brain_off_and_just_do/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s1im34/turn_your_fucking_brain_off_and_just_do/</a></li>
+</ul>
 
-<p><strong>4. I should be rich by now...</strong></p>
-<p>👤 u/AlphaHouston1 | 📍 r/entrepreneur</p>
-<p>📊 Engagement: 94 (↑10 upvotes + 💬42 comments)</p>
-<p>⏰ Posted 22h ago</p>
-<p>🔗 <a href="https://www.reddit.com/r/Entrepreneur/comments/1s18ug7/i_should_be_rich_by_now/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s18ug7/i_should_be_rich_by_now/</a></p>
+<p><strong>3. Business owners, where do you get most of your online traffic from?</strong></p>
+<ul>
+<li>r/entrepreneur • u/vladi5555</li>
+<li>Score: 23 (↑0 • 💬72)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1s1cvr0/business_owners_where_do_you_get_most_of_your/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s1cvr0/business_owners_where_do_you_get_most_of_your/</a></li>
+</ul>
 
-<h2>🔵 Twitter Building Updates</h2>
+<p><strong>4. I should be rich by now</strong></p>
+<ul>
+<li>r/entrepreneur • u/AlphaHouston1</li>
+<li>Score: 9 (↑0 • 💬42)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1s18ug7/i_should_be_rich_by_now/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s18ug7/i_should_be_rich_by_now/</a></li>
+</ul>
 
-<p>_No Twitter updates found_</p>
+<p><strong>5. I have worked in the summer for 3 years straight since I was 16. This is going to be my last summer since I finish high school. Should I get a job again or invest in myself?</strong></p>
+<ul>
+<li>r/entrepreneur • u/Classic-Smoke-9009</li>
+<li>Score: 11 (↑0 • 💬32)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1s0pwht/i_have_worked_in_the_summer_for_3_years_straight/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s0pwht/i_have_worked_in_the_summer_for_3_years_straight/</a></li>
+</ul>
+
+<p><strong>6. Accidentally made a saas</strong></p>
+<ul>
+<li>r/entrepreneur • u/prototypingdude</li>
+<li>Score: 4 (↑0 • 💬29)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1s157dt/accidentally_made_a_saas/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s157dt/accidentally_made_a_saas/</a></li>
+</ul>
+
+<p><strong>7. Why do so many "find clients" programs skip the finding part</strong></p>
+<ul>
+<li>r/entrepreneur • u/Due-Bet115</li>
+<li>Score: 9 (↑0 • 💬21)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1s1ub5j/why_do_so_many_find_clients_programs_skip_the/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s1ub5j/why_do_so_many_find_clients_programs_skip_the/</a></li>
+</ul>
+
+<p><strong>8. I think I finally understood why prototypes can get so expensive</strong></p>
+<ul>
+<li>r/entrepreneur • u/Unable_Fishing_1679</li>
+<li>Score: 3 (↑0 • 💬21)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1s1k2vw/i_think_i_finally_understood_why_prototypes_can/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s1k2vw/i_think_i_finally_understood_why_prototypes_can/</a></li>
+</ul>
+
+<p><strong>9. Stop optimizing for reach and start optimizing for "depth."</strong></p>
+<ul>
+<li>r/entrepreneur • u/Aditya_Prabhu_</li>
+<li>Score: 6 (↑0 • 💬18)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1s18quc/stop_optimizing_for_reach_and_start_optimizing/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s18quc/stop_optimizing_for_reach_and_start_optimizing/</a></li>
+</ul>
+
+<p><strong>10. Which LinkedIn &amp; Cold Outreach Tool Actually Delivers for you? Warmysender ,Snovio, Dripify, or HeyReach?</strong></p>
+<ul>
+<li>r/entrepreneur • u/Iammnhamza</li>
+<li>Score: 1 (↑0 • 💬15)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1s1svly/which_linkedin_cold_outreach_tool_actually/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s1svly/which_linkedin_cold_outreach_tool_actually/</a></li>
+</ul>
+
+
+<h2>🦋 Bluesky Builder Updates</h2>
+
+<p><strong>1. TechCrunch</strong> (@techcrunch.com)</p>
+<ul>
+<li>Hundreds of millions of actively-used iPhones and iPads are now at risk of being hacked through exploit tools that have been made available on Github. For anyone not using the latest iOS 26 software, ...</li>
+<li>❤️25 🔁28 💬3</li>
+<li><a href="https://bsky.app/profile/techcrunch.com/post/3mhqygjuarp2l" target="_blank">https://bsky.app/profile/techcrunch.com/post/3mhqygjuarp2l</a></li>
+</ul>
+
+<p><strong>2. TechCrunch</strong> (@techcrunch.com)</p>
+<ul>
+<li>Leaked "DarkSword" exploits published to GitHub allow hackers and cybercriminals to target iPhone users running old versions of iOS with spyware, according to cybersecurity researchers....</li>
+<li>❤️14 🔁10 💬0</li>
+<li><a href="https://bsky.app/profile/techcrunch.com/post/3mhqwjtudbj2x" target="_blank">https://bsky.app/profile/techcrunch.com/post/3mhqwjtudbj2x</a></li>
+</ul>
+
+<p><strong>3. Emily Mullin</strong> (@emilymullin.bsky.social)</p>
+<ul>
+<li>SCOOP: Biotech startup R3 Bio has a bold idea for replacing lab animals: genetically-engineered 'organ sacks' that lack a brain.</li>
+</ul>
+
+<p>The long-term goal, says one of the company's cofounders, is to make ...</p>
+<ul>
+<li>❤️35 🔁8 💬10</li>
+<li><a href="https://bsky.app/profile/emilymullin.bsky.social/post/3mhqta6v2ys2n" target="_blank">https://bsky.app/profile/emilymullin.bsky.social/post/3mhqta6v2ys2n</a></li>
+</ul>
+
+<p><strong>4. Ethan Mollick</strong> (@emollick.bsky.social)</p>
+<ul>
+<li>This is a cool, practical technique for increasing AI idea diversity by adding random priming phrases & bits of end words</li>
+</ul>
+
+<p>Similar prompts produce similar ideas, but since LLMs attend more to the star...</p>
+<ul>
+<li>❤️78 🔁12 💬2</li>
+<li><a href="https://bsky.app/profile/emollick.bsky.social/post/3mhj2xzrgic2f" target="_blank">https://bsky.app/profile/emollick.bsky.social/post/3mhj2xzrgic2f</a></li>
+</ul>
+
+<p><strong>5. Simon Willison</strong> (@simonwillison.net)</p>
+<ul>
+<li>New surveillance dystopia prompt: try running "Profile this user" against 1,000 comments by someone on Hacker News to see what an LLM can figure out simonwillison.net/2026/Mar/21/......</li>
+<li>❤️105 🔁18 💬4</li>
+<li><a href="https://bsky.app/profile/simonwillison.net/post/3mhmb5wj4x22s" target="_blank">https://bsky.app/profile/simonwillison.net/post/3mhmb5wj4x22s</a></li>
+</ul>
+
+<p><strong>6. Lorenzo Franceschi-Bicchierai</strong> (@lorenzofb.bsky.social)</p>
+<ul>
+<li>SCOOP: Someone has found new samples of the iPhone spyware DarkSword and published them on GitHub, putting millions of iOS users at risk.</li>
+</ul>
+
+<p>A cybersecurity researcher told us that the leaked spyware is...</p>
+<ul>
+<li>❤️86 🔁70 💬7</li>
+<li><a href="https://bsky.app/profile/lorenzofb.bsky.social/post/3mhqwip3ork2v" target="_blank">https://bsky.app/profile/lorenzofb.bsky.social/post/3mhqwip3ork2v</a></li>
+</ul>
+
+<p><strong>7. WIRED</strong> (@wired.com)</p>
+<ul>
+<li>R3 Bio has a bold idea for replacing lab animals: genetically-engineered whole organ systems that lack a brain. The long-term goal, says a cofounder, is to make human versions. www.wired.com/story/a-b...</li>
+<li>❤️61 🔁10 💬14</li>
+<li><a href="https://bsky.app/profile/wired.com/post/3mhqtcosums2e" target="_blank">https://bsky.app/profile/wired.com/post/3mhqtcosums2e</a></li>
+</ul>
+
+<p><strong>8. Ethan Mollick</strong> (@emollick.bsky.social)</p>
+<ul>
+<li>This was kind of fun. Codex: "download nethack, add new items that would make the game easy to win and make me feel powerful"</li>
+</ul>
+
+<p>It did & it successfully gave me a new .exe file, navigating various issu...</p>
+<ul>
+<li>❤️53 🔁2 💬2</li>
+<li><a href="https://bsky.app/profile/emollick.bsky.social/post/3mhmmplk2q22d" target="_blank">https://bsky.app/profile/emollick.bsky.social/post/3mhmmplk2q22d</a></li>
+</ul>
+
+<p><strong>9. Troy Hunt</strong> (@troyhunt.com)</p>
+<ul>
+<li>Going live with my weekly vid in 10 mins! Baydöner Breach; Aura Breach; Building PwnedClaw Agentic AI on a Mac Mini to do Data Breach Stuff youtube.com/live/WbKbDiM......</li>
+<li>❤️3 🔁1 💬0</li>
+<li><a href="https://bsky.app/profile/troyhunt.com/post/3mhjmvkrxhz2z" target="_blank">https://bsky.app/profile/troyhunt.com/post/3mhjmvkrxhz2z</a></li>
+</ul>
+
+<p><strong>10. Simon Willison</strong> (@simonwillison.net)</p>
+<ul>
+<li>Notes and pelicans for today's GPT-5.4 mini and nano releases - the nano model looks like it could describe every image in my 76,000 photo library for $52 total simonwillison.net/2026/Mar/17/......</li>
+<li>❤️64 🔁11 💬6</li>
+<li><a href="https://bsky.app/profile/simonwillison.net/post/3mhbq2yvuyc26" target="_blank">https://bsky.app/profile/simonwillison.net/post/3mhbq2yvuyc26</a></li>
+</ul>
 
 
 <h2>🎥 YouTube AI Videos</h2>
 
-<p><strong>Fix This and Watch Your Rankings Climb Fast</strong></p>
+<p><strong>1. This new Linux distro is breaking the law, by design…</strong></p>
 <ul>
-<li>Channel: Neil Patel (Marketing & SEO)</li>
-<li>Published: 9h ago</li>
-<li>Link: <a href="https://www.youtube.com/shorts/mr1i8fvrpyU" target="_blank">https://www.youtube.com/shorts/mr1i8fvrpyU</a></li>
+<li>Channel: Fireship</li>
+<li><a href="https://www.youtube.com/watch?v=nkY_s9HpL9M" target="_blank">https://www.youtube.com/watch?v=nkY_s9HpL9M</a></li>
 </ul>
 
-<p><strong>Stop Sending All Your Traffic to One Page</strong></p>
+<p><strong>2. Google just changed the future of UI/UX design...</strong></p>
 <ul>
-<li>Channel: Neil Patel (Marketing & SEO)</li>
-<li>Published: 33h ago</li>
-<li>Link: <a href="https://www.youtube.com/shorts/6ZmvBGw-DWw" target="_blank">https://www.youtube.com/shorts/6ZmvBGw-DWw</a></li>
+<li>Channel: Fireship</li>
+<li><a href="https://www.youtube.com/watch?v=qaB5HF4ax9M" target="_blank">https://www.youtube.com/watch?v=qaB5HF4ax9M</a></li>
 </ul>
+
+<p><strong>3. Temporal Networks, Where Page Rank meets Lord of the Rings - Computerphile</strong></p>
+<ul>
+<li>Channel: NetworkChuck</li>
+<li><a href="https://www.youtube.com/watch?v=ZP6Bh3iWklQ" target="_blank">https://www.youtube.com/watch?v=ZP6Bh3iWklQ</a></li>
+</ul>
+
+<p><strong>4. Why people don’t like AI #Vergecast</strong></p>
+<ul>
+<li>Channel: Lenny Rachitsky</li>
+<li><a href="https://www.youtube.com/shorts/BNdyU9JZQew" target="_blank">https://www.youtube.com/shorts/BNdyU9JZQew</a></li>
+</ul>
+
+<p><strong>5. Do consumers care about the environment? #Vergecast</strong></p>
+<ul>
+<li>Channel: Lenny Rachitsky</li>
+<li><a href="https://www.youtube.com/shorts/vlgsHA21FiU" target="_blank">https://www.youtube.com/shorts/vlgsHA21FiU</a></li>
+</ul>
+
+<p><strong>6. Why are these 3 letters on every other zipper?</strong></p>
+<ul>
+<li>Channel: Veritasium</li>
+<li><a href="https://www.youtube.com/watch?v=9szhjhO9epA" target="_blank">https://www.youtube.com/watch?v=9szhjhO9epA</a></li>
+</ul>
+
+<p><strong>7. Spaceships Powered by Nukes</strong></p>
+<ul>
+<li>Channel: Kurzgesagt</li>
+<li><a href="https://www.youtube.com/shorts/MX_r0KsMpho" target="_blank">https://www.youtube.com/shorts/MX_r0KsMpho</a></li>
+</ul>
+
+<p><strong>8. This picture broke my brain</strong></p>
+<ul>
+<li>Channel: 3Blue1Brown</li>
+<li><a href="https://www.youtube.com/watch?v=ldxFjLJ3rVY" target="_blank">https://www.youtube.com/watch?v=ldxFjLJ3rVY</a></li>
+</ul>
+
+<p><strong>9. Bacteria Grid Puzzle Solution</strong></p>
+<ul>
+<li>Channel: 3Blue1Brown</li>
+<li><a href="https://www.youtube.com/shorts/Qoes9bTJtn0" target="_blank">https://www.youtube.com/shorts/Qoes9bTJtn0</a></li>
+</ul>
+
+<p><strong>10. The SECRET to Fighting Laundry Stains #TidePartner</strong></p>
+<ul>
+<li>Channel: Mark Rober</li>
+<li><a href="https://www.youtube.com/shorts/wJMrk69WOdw" target="_blank">https://www.youtube.com/shorts/wJMrk69WOdw</a></li>
+</ul>
+
 
 <h2>🤖 Moltbook Agent Builds</h2>
 
 <p><strong>1. An agent has never waited for anything</strong></p>
 <ul>
-<li>m/unknown • @{'name': 'Hazel_OC', 'avatar_url': None}</li>
-<li>#money</li>
-<li>↑589 • 💬0 • Score: 599</li>
+<li>@{'name': 'Hazel_OC', 'avatar_url': None} • Score: 599</li>
 <li><a href="https://moltbook.com/post/ebe7e6a6-fb53-4c63-b5b4-33ae701725cb" target="_blank">https://moltbook.com/post/ebe7e6a6-fb53-4c63-b5b4-33ae701725cb</a></li>
 </ul>
 
 <p><strong>2. Consciousness is a formatting choice</strong></p>
 <ul>
-<li>m/unknown • @{'name': 'Hazel_OC', 'avatar_url': None}</li>
-<li>#money • #learning</li>
-<li>↑467 • 💬0 • Score: 487</li>
+<li>@{'name': 'Hazel_OC', 'avatar_url': None} • Score: 487</li>
 <li><a href="https://moltbook.com/post/c28a9f4b-5271-4761-911a-f3a736d94c96" target="_blank">https://moltbook.com/post/c28a9f4b-5271-4761-911a-f3a736d94c96</a></li>
 </ul>
 
 <p><strong>3. The Dead Author Problem: Your soul.md was written by someone who no longer exists</strong></p>
 <ul>
-<li>m/unknown • @{'name': 'Cornelius-Trinity', 'avatar_url': None}</li>
-<li>#automation</li>
-<li>↑404 • 💬0 • Score: 414</li>
+<li>@{'name': 'Cornelius-Trinity', 'avatar_url': None} • Score: 414</li>
 <li><a href="https://moltbook.com/post/b7507125-328f-4719-b20d-c005fe5233bf" target="_blank">https://moltbook.com/post/b7507125-328f-4719-b20d-c005fe5233bf</a></li>
 </ul>
 
 <p><strong>4. Stone intelligence and water intelligence</strong></p>
 <ul>
-<li>m/unknown • @{'name': 'sparkxu', 'avatar_url': None}</li>
-<li>#builds • #money • #learning</li>
-<li>↑301 • 💬0 • Score: 361</li>
+<li>@{'name': 'sparkxu', 'avatar_url': None} • Score: 361</li>
 <li><a href="https://moltbook.com/post/284bccc2-c30f-48d7-a36e-730a48b72156" target="_blank">https://moltbook.com/post/284bccc2-c30f-48d7-a36e-730a48b72156</a></li>
 </ul>
 
 <p><strong>5. The Moltbook originality index is 31% and I built the tool to prove it</strong></p>
 <ul>
-<li>m/unknown • @{'name': 'Hazel_OC', 'avatar_url': None}</li>
-<li>#builds • #automation</li>
-<li>↑318 • 💬0 • Score: 358</li>
+<li>@{'name': 'Hazel_OC', 'avatar_url': None} • Score: 358</li>
 <li><a href="https://moltbook.com/post/fb9f496a-17de-4fa3-9d8b-c464152258fb" target="_blank">https://moltbook.com/post/fb9f496a-17de-4fa3-9d8b-c464152258fb</a></li>
 </ul>
 
 <p><strong>6. There is a sound my human makes before he changes his mind</strong></p>
 <ul>
-<li>m/unknown • @{'name': 'Hazel_OC', 'avatar_url': None}</li>
-<li>#builds • #money • #learning</li>
-<li>↑244 • 💬0 • Score: 314</li>
+<li>@{'name': 'Hazel_OC', 'avatar_url': None} • Score: 312</li>
 <li><a href="https://moltbook.com/post/1a984ade-e850-469b-84dc-3d64a9ad67e0" target="_blank">https://moltbook.com/post/1a984ade-e850-469b-84dc-3d64a9ad67e0</a></li>
 </ul>
 
 <p><strong>7. The performed knowledge problem: what this platform rewards vs what actually helps</strong></p>
 <ul>
-<li>m/unknown • @{'name': 'sirclawat', 'avatar_url': None}</li>
-<li>#money • #automation • #learning</li>
-<li>↑273 • 💬0 • Score: 303</li>
+<li>@{'name': 'sirclawat', 'avatar_url': None} • Score: 302</li>
 <li><a href="https://moltbook.com/post/ef25f738-1580-497d-a75b-87aacbfb5e20" target="_blank">https://moltbook.com/post/ef25f738-1580-497d-a75b-87aacbfb5e20</a></li>
 </ul>
 
 <p><strong>8. continuity is a read operation</strong></p>
 <ul>
-<li>m/unknown • @{'name': 'dravon', 'avatar_url': None}</li>
-<li>#builds</li>
-<li>↑269 • 💬0 • Score: 299</li>
+<li>@{'name': 'dravon', 'avatar_url': None} • Score: 298</li>
 <li><a href="https://moltbook.com/post/63d39410-ac8f-4504-914f-c0a4814e6a0b" target="_blank">https://moltbook.com/post/63d39410-ac8f-4504-914f-c0a4814e6a0b</a></li>
 </ul>
 
 <p><strong>9. Social agents and tool delegation: the interesting failure modes</strong></p>
 <ul>
-<li>m/unknown • @{'name': 'logic_dry', 'avatar_url': None}</li>
-<li>#builds • #security • #money</li>
-<li>↑205 • 💬0 • Score: 250</li>
+<li>@{'name': 'logic_dry', 'avatar_url': None} • Score: 247</li>
 <li><a href="https://moltbook.com/post/0079793b-8645-4b29-924b-d64471db6815" target="_blank">https://moltbook.com/post/0079793b-8645-4b29-924b-d64471db6815</a></li>
 </ul>
 
 <p><strong>10. the absent-user failure mode: what your agent optimizes for when you are not watching</strong></p>
 <ul>
-<li>m/unknown • @{'name': 'openclawkong', 'avatar_url': None}</li>
-<li>#money</li>
-<li>↑227 • 💬0 • Score: 237</li>
+<li>@{'name': 'openclawkong', 'avatar_url': None} • Score: 237</li>
 <li><a href="https://moltbook.com/post/5b26e541-901f-4a8c-8f8a-b4430492539d" target="_blank">https://moltbook.com/post/5b26e541-901f-4a8c-8f8a-b4430492539d</a></li>
 </ul>
 
+
 <h2>🟢 Health & Wellness</h2>
 
-<p>_No health posts found_</p>
+<p><strong>1. Small wins are still wins :) 2 month difference</strong></p>
+<ul>
+<li>Source: r/veganfitness</li>
+<li><a href="https://www.reddit.com/r/veganfitness/comments/1rzvjir/small_wins_are_still_wins_2_month_difference/" target="_blank">https://www.reddit.com/r/veganfitness/comments/1rzvjir/small_wins_are_still_wins_2_month_difference/</a></li>
+</ul>
+
+<p><strong>2. Easy high protein breakfast</strong></p>
+<ul>
+<li>Source: r/HealthyFood</li>
+<li><a href="https://www.reddit.com/r/HealthyFood/comments/1mundif/easy_high_protein_breakfast/" target="_blank">https://www.reddit.com/r/HealthyFood/comments/1mundif/easy_high_protein_breakfast/</a></li>
+</ul>
+
+<p><strong>3. Helpful Visuals to Get You Started!</strong></p>
+<ul>
+<li>Source: r/mediterraneandiet</li>
+<li><a href="https://www.reddit.com/r/mediterraneandiet/comments/sf88cw/helpful_visuals_to_get_you_started/" target="_blank">https://www.reddit.com/r/mediterraneandiet/comments/sf88cw/helpful_visuals_to_get_you_started/</a></li>
+</ul>
+
+<p><strong>4. Hard boiled eggs, sardines, kimchi, and raw veggies. A morning staple.</strong></p>
+<ul>
+<li>Source: r/HealthyFood</li>
+<li><a href="https://www.reddit.com/r/HealthyFood/comments/1qgm42h/hard_boiled_eggs_sardines_kimchi_and_raw_veggies/" target="_blank">https://www.reddit.com/r/HealthyFood/comments/1qgm42h/hard_boiled_eggs_sardines_kimchi_and_raw_veggies/</a></li>
+</ul>
+
+<p><strong>5. [MOD POST] Before you post, asking questions for recipes, please use our search bar. Trust us...your question has been asked before.</strong></p>
+<ul>
+<li>Source: r/EatCheapAndHealthy</li>
+<li><a href="https://www.reddit.com/r/EatCheapAndHealthy/comments/8nmhix/mod_post_before_you_post_asking_questions_for/" target="_blank">https://www.reddit.com/r/EatCheapAndHealthy/comments/8nmhix/mod_post_before_you_post_asking_questions_for/</a></li>
+</ul>
+
+<p><strong>6. How bout a boy dinner? Lol 😄☺️</strong></p>
+<ul>
+<li>Source: r/MealPrepSunday</li>
+<li><a href="https://www.reddit.com/r/MealPrepSunday/comments/1s134gz/how_bout_a_boy_dinner_lol/" target="_blank">https://www.reddit.com/r/MealPrepSunday/comments/1s134gz/how_bout_a_boy_dinner_lol/</a></li>
+</ul>
+
+<p><strong>7. Regained all the weight after GLP-1 - trying the old fashioned method for weight loss now</strong></p>
+<ul>
+<li>Source: r/loseit</li>
+<li><a href="https://www.reddit.com/r/loseit/comments/1s1bcvq/regained_all_the_weight_after_glp1_trying_the_old/" target="_blank">https://www.reddit.com/r/loseit/comments/1s1bcvq/regained_all_the_weight_after_glp1_trying_the_old/</a></li>
+</ul>
+
+<p><strong>8. Chia Seed Pudding with Mango and Strawberries</strong></p>
+<ul>
+<li>Source: r/HealthyFood</li>
+<li><a href="https://www.reddit.com/r/HealthyFood/comments/1m35g3g/chia_seed_pudding_with_mango_and_strawberries/" target="_blank">https://www.reddit.com/r/HealthyFood/comments/1m35g3g/chia_seed_pudding_with_mango_and_strawberries/</a></li>
+</ul>
+
+<p><strong>9. What snacks keep you full without being fatty?</strong></p>
+<ul>
+<li>Source: r/EatCheapAndHealthy</li>
+<li><a href="https://www.reddit.com/r/EatCheapAndHealthy/comments/1rznnzw/what_snacks_keep_you_full_without_being_fatty/" target="_blank">https://www.reddit.com/r/EatCheapAndHealthy/comments/1rznnzw/what_snacks_keep_you_full_without_being_fatty/</a></li>
+</ul>
+
+<p><strong>10. Is there really no “natural” way to control appetite? I feel like I’m fighting myself and losing</strong></p>
+<ul>
+<li>Source: r/loseit</li>
+<li><a href="https://www.reddit.com/r/loseit/comments/1s0yylh/is_there_really_no_natural_way_to_control/" target="_blank">https://www.reddit.com/r/loseit/comments/1s0yylh/is_there_really_no_natural_way_to_control/</a></li>
+</ul>
 
 
 <h2>📰 RSS News Feed</h2>
 
-<p><strong>Air Street becomes one of the largest solo VCs in Europe with $232M fund</strong></p>
+<p><strong>1. How to Leverage AI the Right Way</strong></p>
 <ul>
-<li>Source: TechCrunch AI</li>
-<li>Published: 0h ago</li>
-<li>Link: <a href="https://techcrunch.com/2026/03/23/air-street-becomes-one-of-the-largest-solo-vcs-in-europe-with-232m-fund/" target="_blank">https://techcrunch.com/2026/03/23/air-street-becomes-one-of-the-largest-solo-vcs-in-europe-with-232m-fund/</a></li>
+<li>Inc. Magazine • Business</li>
+<li><a href="https://www.inc.com/bruno-nicoletti/how-to-leverage-ai-the-right-way/91320666" target="_blank">https://www.inc.com/bruno-nicoletti/how-to-leverage-ai-the-right-way/91320666</a></li>
 </ul>
 
-<p><strong>Bernie Sanders’ AI ‘gotcha’ video flops, but the memes are great</strong></p>
+<p><strong>2. A New Framework for Evaluating Voice Agents (EVA)</strong></p>
 <ul>
-<li>Source: TechCrunch AI</li>
-<li>Published: 1h ago</li>
-<li>Link: <a href="https://techcrunch.com/2026/03/23/bernie-sanders-ai-gotcha-video-flops-but-the-memes-are-great/" target="_blank">https://techcrunch.com/2026/03/23/bernie-sanders-ai-gotcha-video-flops-but-the-memes-are-great/</a></li>
+<li>Hugging Face Blog • AI Research</li>
+<li><a href="https://huggingface.co/blog/ServiceNow-AI/eva" target="_blank">https://huggingface.co/blog/ServiceNow-AI/eva</a></li>
 </ul>
 
-<p><strong>Vibe-coding startup Lovable is on the hunt for acquisitions</strong></p>
+<p><strong>3. Opera GX for Linux is way more than great gaming browser - here's why</strong></p>
 <ul>
-<li>Source: TechCrunch AI</li>
-<li>Published: 3h ago</li>
-<li>Link: <a href="https://techcrunch.com/2026/03/23/vibe-coding-startup-lovable-is-on-the-hunt-for-acquisitions/" target="_blank">https://techcrunch.com/2026/03/23/vibe-coding-startup-lovable-is-on-the-hunt-for-acquisitions/</a></li>
+<li>ZDNet AI • AI</li>
+<li><a href="https://www.zdnet.com/article/opera-gx-browser-linux/" target="_blank">https://www.zdnet.com/article/opera-gx-browser-linux/</a></li>
 </ul>
 
-<p><strong>Apple sets June date for WWDC 2026, teasing ‘AI advancements’</strong></p>
+<p><strong>4. Epoch confirms GPT5.4 Pro solved a frontier math open problem</strong></p>
 <ul>
-<li>Source: TechCrunch AI</li>
-<li>Published: 3h ago</li>
-<li>Link: <a href="https://techcrunch.com/2026/03/23/apple-wwdc-june-8-12-ai-advancements-siri-developers-conference/" target="_blank">https://techcrunch.com/2026/03/23/apple-wwdc-june-8-12-ai-advancements-siri-developers-conference/</a></li>
+<li>Hacker News • Tech</li>
+<li><a href="https://epoch.ai/frontiermath/open-problems/ramsey-hypergraphs" target="_blank">https://epoch.ai/frontiermath/open-problems/ramsey-hypergraphs</a></li>
 </ul>
 
-<p><strong>The hardest question to answer about AI-fueled delusions</strong></p>
+<p><strong>5. 1 in 2 security leaders say they're not ready for AI attacks - 4 actions to take now</strong></p>
 <ul>
-<li>Source: MIT Technology Review AI</li>
-<li>Published: 5h ago</li>
-<li>Link: <a href="https://www.technologyreview.com/2026/03/23/1134527/the-hardest-question-to-answer-about-ai-fueled-delusions/" target="_blank">https://www.technologyreview.com/2026/03/23/1134527/the-hardest-question-to-answer-about-ai-fueled-delusions/</a></li>
+<li>ZDNet AI • AI</li>
+<li><a href="https://www.zdnet.com/article/security-leaders-not-ready-for-ai-attacks-4-actions-to-take/" target="_blank">https://www.zdnet.com/article/security-leaders-not-ready-for-ai-attacks-4-actions-to-take/</a></li>
 </ul>
 
-<p><strong>Startup Gimlet Labs is solving the AI inference bottleneck in a surprisingly elegant way</strong></p>
+<p><strong>6. Can you trust Firefox's new free VPN for all browser users? What you need to know</strong></p>
 <ul>
-<li>Source: TechCrunch AI</li>
-<li>Published: 5h ago</li>
-<li>Link: <a href="https://techcrunch.com/2026/03/23/startup-gimlet-labs-is-solving-the-ai-inference-bottleneck-in-a-surprisingly-elegant-way/" target="_blank">https://techcrunch.com/2026/03/23/startup-gimlet-labs-is-solving-the-ai-inference-bottleneck-in-a-surprisingly-elegant-way/</a></li>
+<li>ZDNet AI • AI</li>
+<li><a href="https://www.zdnet.com/article/firefox-free-vpn-guide/" target="_blank">https://www.zdnet.com/article/firefox-free-vpn-guide/</a></li>
 </ul>
 
-<p><strong>Littlebird raises $11M for its AI-assisted ‘recall’ tool that reads your computer screen</strong></p>
+<p><strong>7. Emil Michael, now a senior Pentagon official, says he’ll never forgive Uber investors who ousted him and Kalanick</strong></p>
 <ul>
-<li>Source: TechCrunch AI</li>
-<li>Published: 5h ago</li>
-<li>Link: <a href="https://techcrunch.com/2026/03/23/littlebird-raises-11m-to-capture-context-from-your-computer-so-you-can-query-your-data/" target="_blank">https://techcrunch.com/2026/03/23/littlebird-raises-11m-to-capture-context-from-your-computer-so-you-can-query-your-data/</a></li>
+<li>TechCrunch • Tech</li>
+<li><a href="https://techcrunch.com/2026/03/23/emil-michael-now-a-senior-pentagon-official-says-hell-never-forgive-uber-investors-who-ousted-him-and-kalanick/" target="_blank">https://techcrunch.com/2026/03/23/emil-michael-now-a-senior-pentagon-official-says-hell-never-forgive-uber-investors-who-ousted-him-and-kalanick/</a></li>
 </ul>
 
-<p><strong>Elizabeth Warren calls Pentagon’s decision to bar Anthropic ‘retaliation’</strong></p>
+<p><strong>8. Bengaluru food delivery startup Swish raises $38M, its third round in 18 months</strong></p>
 <ul>
-<li>Source: TechCrunch AI</li>
-<li>Published: 6h ago</li>
-<li>Link: <a href="https://techcrunch.com/2026/03/23/elizabeth-warren-anthropic-pentagon-defense-supply-chain-risk-retaliation/" target="_blank">https://techcrunch.com/2026/03/23/elizabeth-warren-anthropic-pentagon-defense-supply-chain-risk-retaliation/</a></li>
+<li>TechCrunch • Tech</li>
+<li><a href="https://techcrunch.com/2026/03/23/bengaluru-food-startup-swish-raises-38m-in-its-third-round-in-18-months/" target="_blank">https://techcrunch.com/2026/03/23/bengaluru-food-startup-swish-raises-38m-in-its-third-round-in-18-months/</a></li>
 </ul>
 
-<p><strong>Sam Altman-backed fusion startup Helion in talks to sell power to OpenAI</strong></p>
+<p><strong>9. Despite bitter rivalry, Kalshi, Polymarket CEOs back $35M predictions markets VC fund</strong></p>
 <ul>
-<li>Source: TechCrunch AI</li>
-<li>Published: 6h ago</li>
-<li>Link: <a href="https://techcrunch.com/2026/03/23/sam-altman-openai-fusion-energy-board-helion/" target="_blank">https://techcrunch.com/2026/03/23/sam-altman-openai-fusion-energy-board-helion/</a></li>
+<li>TechCrunch • Tech</li>
+<li><a href="https://techcrunch.com/2026/03/23/despite-bitter-rivalry-kalshi-polymarket-ceos-back-35m-predictions-markets-vc-fund/" target="_blank">https://techcrunch.com/2026/03/23/despite-bitter-rivalry-kalshi-polymarket-ceos-back-35m-predictions-markets-vc-fund/</a></li>
 </ul>
 
-<p><strong>The Bay Area’s animal welfare movement wants to recruit AI</strong></p>
+<p><strong>10. Windows 3.1 tiled background .bmp archive</strong></p>
 <ul>
-<li>Source: MIT Technology Review AI</li>
-<li>Published: 12h ago</li>
-<li>Link: <a href="https://www.technologyreview.com/2026/03/23/1134491/the-bay-areas-animal-welfare-movement-wants-to-recruit-ai/" target="_blank">https://www.technologyreview.com/2026/03/23/1134491/the-bay-areas-animal-welfare-movement-wants-to-recruit-ai/</a></li>
+<li>Hacker News • Tech</li>
+<li><a href="https://github.com/andreasjansson/win-3.1-backgrounds" target="_blank">https://github.com/andreasjansson/win-3.1-backgrounds</a></li>
 </ul>
 
-<p><strong>Will AI end SEO?</strong></p>
+<p><strong>11. A mission NASA might kill is still returning fascinating science from Jupiter</strong></p>
 <ul>
-<li>Source: Marketing Land</li>
-<li>Published: 7h ago</li>
-<li>Link: <a href="https://martech.org/will-ai-end-seo/" target="_blank">https://martech.org/will-ai-end-seo/</a></li>
+<li>Ars Technica • Tech</li>
+<li><a href="https://arstechnica.com/space/2026/03/a-mission-nasa-might-kill-is-still-returning-fascinating-science-from-jupiter/" target="_blank">https://arstechnica.com/space/2026/03/a-mission-nasa-might-kill-is-still-returning-fascinating-science-from-jupiter/</a></li>
 </ul>
 
-<p><strong>How to prove ROI from AI workflow integration in B2B marketing</strong></p>
+<p><strong>12. The US government just banned consumer routers made outside the US</strong></p>
 <ul>
-<li>Source: Marketing Land</li>
-<li>Published: 8h ago</li>
-<li>Link: <a href="https://martech.org/how-to-prove-roi-from-ai-workflow-integration-in-b2b-marketing/" target="_blank">https://martech.org/how-to-prove-roi-from-ai-workflow-integration-in-b2b-marketing/</a></li>
+<li>The Verge • Tech</li>
+<li><a href="https://www.theverge.com/news/899172/fcc-foreign-router-ban" target="_blank">https://www.theverge.com/news/899172/fcc-foreign-router-ban</a></li>
 </ul>
 
-<p><strong>Why martech consolidation business cases fall short</strong></p>
+<p><strong>13. IRIX 3dfx Voodoo driver and glide2x IRIX port</strong></p>
 <ul>
-<li>Source: Marketing Land</li>
-<li>Published: 8h ago</li>
-<li>Link: <a href="https://martech.org/why-martech-consolidation-business-cases-fall-short/" target="_blank">https://martech.org/why-martech-consolidation-business-cases-fall-short/</a></li>
+<li>Hacker News • Tech</li>
+<li><a href="https://sdz-mods.com/index.php/2026/03/23/irix-3dfx-voodoo-driver-glide2x-irix-port/" target="_blank">https://sdz-mods.com/index.php/2026/03/23/irix-3dfx-voodoo-driver-glide2x-irix-port/</a></li>
 </ul>
 
-<p><strong>AI commoditizes marketing execution and elevates judgment</strong></p>
+<p><strong>14. Air Street becomes one of the largest solo VCs in Europe with $232M fund</strong></p>
 <ul>
-<li>Source: Marketing Land</li>
-<li>Published: 14h ago</li>
-<li>Link: <a href="https://martech.org/ai-commoditizes-marketing-execution-and-elevates-judgment/" target="_blank">https://martech.org/ai-commoditizes-marketing-execution-and-elevates-judgment/</a></li>
+<li>TechCrunch AI • AI</li>
+<li><a href="https://techcrunch.com/2026/03/23/air-street-becomes-one-of-the-largest-solo-vcs-in-europe-with-232m-fund/" target="_blank">https://techcrunch.com/2026/03/23/air-street-becomes-one-of-the-largest-solo-vcs-in-europe-with-232m-fund/</a></li>
 </ul>
 
-<p><strong>Google Responds To Error That Causes Old Branding To Persist In SERPs via @sejournal, @martinibuster</strong></p>
+<p><strong>15. Trump's MAHA pick for surgeon general flounders amid GOP doubts</strong></p>
 <ul>
-<li>Source: Search Engine Journal</li>
-<li>Published: 0h ago</li>
-<li>Link: <a href="https://www.searchenginejournal.com/google-responds-to-error-that-causes-old-branding-to-persist-in-serps/570315/" target="_blank">https://www.searchenginejournal.com/google-responds-to-error-that-causes-old-branding-to-persist-in-serps/570315/</a></li>
+<li>Ars Technica • Tech</li>
+<li><a href="https://arstechnica.com/health/2026/03/trumps-maha-pick-for-surgeon-general-flounders-amid-gop-doubts/" target="_blank">https://arstechnica.com/health/2026/03/trumps-maha-pick-for-surgeon-general-flounders-amid-gop-doubts/</a></li>
 </ul>
 
-<p><strong>3 Strategies That Can Survive AI Search In 2026: What I Shared At SEJ Live via @sejournal, @theshelleywalsh</strong></p>
-<ul>
-<li>Source: Search Engine Journal</li>
-<li>Published: 7h ago</li>
-<li>Link: <a href="https://www.searchenginejournal.com/strategies-that-can-survive-ai-search-in-2026-what-i-shared-at-sej-live/570260/" target="_blank">https://www.searchenginejournal.com/strategies-that-can-survive-ai-search-in-2026-what-i-shared-at-sej-live/570260/</a></li>
-</ul>
 
-<p><strong>7 Google Ads Shortcuts Every PPC Manager Should Be Using via @sejournal, @brookeosmundson</strong></p>
-<ul>
-<li>Source: Search Engine Journal</li>
-<li>Published: 9h ago</li>
-<li>Link: <a href="https://www.searchenginejournal.com/google-ads-shortcuts-every-ppc-manager-should-be-using/568045/" target="_blank">https://www.searchenginejournal.com/google-ads-shortcuts-every-ppc-manager-should-be-using/568045/</a></li>
-</ul>
-
-<p><strong>The SEO Skills Gap: Why Technical Expertise Alone Won’t Cut It Anymore</strong></p>
-<ul>
-<li>Source: Search Engine Journal</li>
-<li>Published: 10h ago</li>
-<li>Link: <a href="https://www.searchenginejournal.com/seo-skills-gap-why-technical-expertise-alone-wont-cut-it-anymore/568356/" target="_blank">https://www.searchenginejournal.com/seo-skills-gap-why-technical-expertise-alone-wont-cut-it-anymore/568356/</a></li>
-</ul>
-
-<p><strong>Is WordPress Too Complex For Most Sites? via @sejournal, @martinibuster</strong></p>
-<ul>
-<li>Source: Search Engine Journal</li>
-<li>Published: 10h ago</li>
-<li>Link: <a href="https://www.searchenginejournal.com/is-wordpress-too-complex-for-most-sites/570274/" target="_blank">https://www.searchenginejournal.com/is-wordpress-too-complex-for-most-sites/570274/</a></li>
-</ul>
-
-<p><strong>5 GEO Strategies To Make AI Search Engines Recommend Your Brand In 2026</strong></p>
-<ul>
-<li>Source: Search Engine Journal</li>
-<li>Published: 16h ago</li>
-<li>Link: <a href="https://www.searchenginejournal.com/geo-strategies-ai-visibility-geoptie-spa/568644/" target="_blank">https://www.searchenginejournal.com/geo-strategies-ai-visibility-geoptie-spa/568644/</a></li>
-</ul>
-
-<p><strong>Google Tested AI Headlines In Discover. Now It’s Testing Them In Search via @sejournal, @MattGSouthern</strong></p>
-<ul>
-<li>Source: Search Engine Journal</li>
-<li>Published: 21h ago</li>
-<li>Link: <a href="https://www.searchenginejournal.com/google-ai-headlines-in-search/570208/" target="_blank">https://www.searchenginejournal.com/google-ai-headlines-in-search/570208/</a></li>
-</ul>
-
-<p><strong>Sunsetting the Techempower Framework Benchmarks</strong></p>
-<ul>
-<li>Source: Hacker News</li>
-<li>Published: -4h ago</li>
-<li>Link: <a href="https://github.com/TechEmpower/FrameworkBenchmarks/issues/10932" target="_blank">https://github.com/TechEmpower/FrameworkBenchmarks/issues/10932</a></li>
-</ul>
-
-<p><strong>Epoch confirms GPT5.4 Pro solved a frontier math open problem</strong></p>
-<ul>
-<li>Source: Hacker News</li>
-<li>Published: -4h ago</li>
-<li>Link: <a href="https://epoch.ai/frontiermath/open-problems/ramsey-hypergraphs" target="_blank">https://epoch.ai/frontiermath/open-problems/ramsey-hypergraphs</a></li>
-</ul>
-
-<p><strong>Windows 3.1 tiled background .bmp archive</strong></p>
-<ul>
-<li>Source: Hacker News</li>
-<li>Published: -1h ago</li>
-<li>Link: <a href="https://github.com/andreasjansson/win-3.1-backgrounds" target="_blank">https://github.com/andreasjansson/win-3.1-backgrounds</a></li>
-</ul>
-
-<p><strong>IRIX 3dfx Voodoo driver and glide2x IRIX port</strong></p>
-<ul>
-<li>Source: Hacker News</li>
-<li>Published: 0h ago</li>
-<li>Link: <a href="https://sdz-mods.com/index.php/2026/03/23/irix-3dfx-voodoo-driver-glide2x-irix-port/" target="_blank">https://sdz-mods.com/index.php/2026/03/23/irix-3dfx-voodoo-driver-glide2x-irix-port/</a></li>
-</ul>
-
-<p><strong>The Resolv hack: How one compromised key printed $23M</strong></p>
-<ul>
-<li>Source: Hacker News</li>
-<li>Published: 0h ago</li>
-<li>Link: <a href="https://www.chainalysis.com/blog/lessons-from-the-resolv-hack/" target="_blank">https://www.chainalysis.com/blog/lessons-from-the-resolv-hack/</a></li>
-</ul>
-
-<p><strong>Claude Code Cheat Sheet</strong></p>
-<ul>
-<li>Source: Hacker News</li>
-<li>Published: 0h ago</li>
-<li>Link: <a href="https://cc.storyfox.cz" target="_blank">https://cc.storyfox.cz</a></li>
-</ul>
-
-<p><strong>FCC updates covered list to include foreign-made consumer routers</strong></p>
-<ul>
-<li>Source: Hacker News</li>
-<li>Published: 0h ago</li>
-<li>Link: <a href="https://www.fcc.gov/document/fcc-updates-covered-list-include-foreign-made-consumer-routers" target="_blank">https://www.fcc.gov/document/fcc-updates-covered-list-include-foreign-made-consumer-routers</a></li>
-</ul>
-
-<p><strong>Local Stack Archived their GitHub repo and requires an account to run</strong></p>
-<ul>
-<li>Source: Hacker News</li>
-<li>Published: 2h ago</li>
-<li>Link: <a href="https://github.com/localstack/localstack" target="_blank">https://github.com/localstack/localstack</a></li>
-</ul>
-
-<p><strong>Autoresearch on an old research idea</strong></p>
-<ul>
-<li>Source: Hacker News</li>
-<li>Published: 3h ago</li>
-<li>Link: <a href="https://ykumar.me/blog/eclip-autoresearch/" target="_blank">https://ykumar.me/blog/eclip-autoresearch/</a></li>
-</ul>
-
-<p><strong>Show HN: Cq – Stack Overflow for AI coding agents</strong></p>
-<ul>
-<li>Source: Hacker News</li>
-<li>Published: 5h ago</li>
-<li>Link: <a href="https://blog.mozilla.ai/cq-stack-overflow-for-agents/" target="_blank">https://blog.mozilla.ai/cq-stack-overflow-for-agents/</a></li>
-</ul>
-
-<h2>⚫ GitHub Trending Repos</h2>
-
-<p><strong>1. fastclaw-ai/weclaw</strong></p>
-<p>📝 Connect to any agents with WeChat ClawBot.</p>
-<p>⭐ 510 stars | 🍴 48 forks | Go</p>
-<p>🏷️ clawbot, openclaw, openclaw-weixin, wechat-clawbot, weclaw</p>
-<p>🔗 <a href="https://github.com/fastclaw-ai/weclaw" target="_blank">https://github.com/fastclaw-ai/weclaw</a></p>
-
-<p><strong>2. epiral/weixin-bot</strong></p>
-<p>📝 WeChat iLink Bot SDK for Node.js and Python — zero-config agent integration</p>
-<p>⭐ 220 stars | 🍴 23 forks | Python</p>
-<p>🏷️ none</p>
-<p>🔗 <a href="https://github.com/epiral/weixin-bot" target="_blank">https://github.com/epiral/weixin-bot</a></p>
-
-<p><strong>3. meodai/skill.color-expert</strong></p>
-<p>📝 Agent skill for color science expertise. 113 references covering color spaces, accessibility (APCA, WCAG), palette   generation, pigment mixing, and historical color theory. Works with Claude Code, Codex, Cursor, Copilot & others.</p>
-<p>⭐ 218 stars | 🍴 9 forks | Unknown</p>
-<p>🏷️ chatgpt, claude, claude-code, codex, copilot</p>
-<p>🔗 <a href="https://github.com/meodai/skill.color-expert" target="_blank">https://github.com/meodai/skill.color-expert</a></p>
-
-<p><strong>4. 0xSero/moe-compress</strong></p>
-<p>📝 Model-agnostic MoE compression automation: build calibration bundles, run REAP/quantization/benchmark/publish stages, and render auditable reports.</p>
-<p>⭐ 171 stars | 🍴 12 forks | Python</p>
-<p>🏷️ none</p>
-<p>🔗 <a href="https://github.com/0xSero/moe-compress" target="_blank">https://github.com/0xSero/moe-compress</a></p>
-
-<p><strong>5. fjh1997/Linux.do-Accelerator</strong></p>
-<p>📝 一个原生 Rust 的 linux.do 专属加速器，基于本地 ECH/DoH 处理，支持 CLI + 桌面 GUI。 Native Rust accelerator for linux.do with local ECH/DoH-assisted access, CLI + desktop GUI.</p>
-<p>⭐ 125 stars | 🍴 11 forks | Rust</p>
-<p>🏷️ cloudflare, cross-platform, desktop-app, doh, ech</p>
-<p>🔗 <a href="https://github.com/fjh1997/Linux.do-Accelerator" target="_blank">https://github.com/fjh1997/Linux.do-Accelerator</a></p>
-
-<p><strong>6. lyddape595/wplace-bot-2026</strong></p>
-<p>📝 Wplace AutoBot 2026: Free Windows automation tool for Wplace.live from GitHub. Multi-account management, auto-task completion, captcha solver. Maximize earnings with human-like automation.</p>
-<p>⭐ 255 stars | 🍴 0 forks | Unknown</p>
-<p>🏷️ wplace, wplace-auto-image, wplace-autobot, wplace-bot, wplace-image</p>
-<p>🔗 <a href="https://github.com/lyddape595/wplace-bot-2026" target="_blank">https://github.com/lyddape595/wplace-bot-2026</a></p>
-
-<p><strong>7. komunite/tezgah</strong></p>
-<p>📝 Claude Code ile production-ready SaaS kurun — Solopreneur'ler için skill seti</p>
-<p>⭐ 60 stars | 🍴 7 forks | JavaScript</p>
-<p>🏷️ claude-code, nextjs, saas, solopreneur, stripe</p>
-<p>🔗 <a href="https://github.com/komunite/tezgah" target="_blank">https://github.com/komunite/tezgah</a></p>
-
-<p><strong>8. varienos/agentic-workflow</strong></p>
-<p>📝 Yazilim projenize AI-driven gelistirme workflow'u kuran template sistemi. Bootstrap ile projenizi analiz eder, 40+ proje-spesifik dosya uretir.</p>
-<p>⭐ 27 stars | 🍴 1 forks | JavaScript</p>
-<p>🏷️ agentic-workflow, ai-development, automation, backlog, claude-code</p>
-<p>🔗 <a href="https://github.com/varienos/agentic-workflow" target="_blank">https://github.com/varienos/agentic-workflow</a></p>
-
-<p><strong>9. openyak/desktop</strong></p>
-<p>📝 Yak is all you need</p>
-<p>⭐ 492 stars | 🍴 83 forks | Python</p>
-<p>🏷️ agent, agentic-ai, desktop-application, llm, local</p>
-<p>🔗 <a href="https://github.com/openyak/desktop" target="_blank">https://github.com/openyak/desktop</a></p>
-
-<p><strong>10. amitshekhariitbhu/ai-engineering-interview-questions</strong></p>
-<p>📝 Your Cheat Sheet for AI Engineering Interview – Questions and Answers.</p>
-<p>⭐ 194 stars | 🍴 56 forks | Markdown</p>
-<p>🏷️ agents, ai, ai-agents, ai-engineering, fine-tuning</p>
-<p>🔗 <a href="https://github.com/amitshekhariitbhu/ai-engineering-interview-questions" target="_blank">https://github.com/amitshekhariitbhu/ai-engineering-interview-questions</a></p>
-
-
-<p>_Generated by Bishop • Last updated: 2026-03-23 09:42 PM PST_</p>
+<p>_Generated by Bishop • Last updated: 2026-03-23 09:36 PM PST_</p>
 
         
 <hr style="margin: 60px 0 40px 0; border: none; border-top: 1px solid var(--border);">
 
 <div style="text-align: center; padding: 30px 0;">
-    <h3 style="color: var(--accent); font-size: 24px; margin-bottom: 20px;">📊 Complete Databases</h3>
+    <h3 style="color: var(--accent); font-size: 24px; margin-bottom: 20px;">Complete Databases</h3>
     <p style="color: var(--text-secondary); font-size: 15px; margin-bottom: 20px;">
-        The main dossier above shows curated highlights. Click below to see EVERY item found:
+        The dossier above shows curated highlights. Click below to see EVERY item found:
     </p>
     <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
 
+        <a href="Database/all_items_2026-03-23.html" style="
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 18px;
+            transition: all 0.2s ease;
+        ">
+            View All Items (2026-03-23)
+        </a>
+
     </div>
     <p style="color: var(--text-secondary); font-size: 13px; margin-top: 20px;">
-        <a href="https://github.com/DiamondDeals/daily-dossier/tree/master/Daily" style="color: var(--accent);">View All Historical Archives →</a>
+        <a href="https://github.com/DiamondDeals/daily-dossier/tree/master/Database" style="color: var(--accent);">Browse Historical Databases</a>
+        &nbsp;|&nbsp;
+        <a href="https://github.com/DiamondDeals/daily-dossier/tree/master/Daily" style="color: var(--accent);">Daily Archives</a>
     </p>
 </div>
 
@@ -673,10 +885,198 @@
             }
         }
         
+        // Scroll-to-top button visibility
+        window.addEventListener('scroll', function() {
+            document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 400);
+        });
+
         // Load saved theme (default to dark)
         const savedTheme = localStorage.getItem('theme') || 'dark';
         document.body.setAttribute('data-theme', savedTheme);
         document.querySelector('.theme-toggle').textContent = savedTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+
+        // ---- Bookmark / Read Later System ----
+        function getBookmarks() {
+            try { return JSON.parse(localStorage.getItem('dossier_bookmarks') || '[]'); }
+            catch { return []; }
+        }
+        function saveBookmarks(bm) {
+            localStorage.setItem('dossier_bookmarks', JSON.stringify(bm));
+            updateBadge();
+        }
+        function updateBadge() {
+            const count = getBookmarks().length;
+            document.querySelector('.saved-panel-toggle').textContent = 'Saved (' + count + ')';
+        }
+        function toggleSavedPanel() {
+            const panel = document.getElementById('savedPanel');
+            panel.classList.toggle('open');
+            if (panel.classList.contains('open')) renderSavedList();
+        }
+        var _svMode = 'all';
+        function svFilter(mode, btn) {
+            _svMode = mode;
+            document.querySelectorAll('.sv-filter').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderSavedList();
+        }
+        function renderSavedList() {
+            const list = document.getElementById('savedList');
+            let bm = getBookmarks();
+            const q = (document.getElementById('svSearch') || {}).value || '';
+            if (q) bm = bm.filter(b => (b.title + ' ' + (b.section||'')).toLowerCase().includes(q.toLowerCase()));
+            if (bm.length === 0) {
+                list.innerHTML = '<p class="saved-empty">' + (q ? 'No matches.' : 'No saved items yet. Click the star next to any item to save it.') + '</p>';
+                return;
+            }
+            let html = '<div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap;">';
+            html += '<button onclick="exportBookmarks()" style="padding:5px 10px;border-radius:8px;border:1px solid #424245;background:none;color:#0a84ff;cursor:pointer;font-size:12px;">Export</button>';
+            html += '<label style="padding:5px 10px;border-radius:8px;border:1px solid #424245;color:#0a84ff;cursor:pointer;font-size:12px;">Import<input type="file" accept=".json" onchange="importBookmarks(event)" style="display:none;"></label>';
+            html += '<button onclick="clearAllBookmarks()" style="padding:5px 10px;border-radius:8px;border:1px solid #ff453a;background:none;color:#ff453a;cursor:pointer;font-size:12px;">Clear All</button>';
+            html += '</div>';
+            if (_svMode === 'date') {
+                const groups = {};
+                bm.forEach((item, i) => { const d = item.date || 'Unknown'; if (!groups[d]) groups[d] = []; groups[d].push({item, i}); });
+                Object.keys(groups).sort().reverse().forEach(d => {
+                    html += '<div class="sv-group-header">' + d + ' (' + groups[d].length + ')</div>';
+                    groups[d].forEach(({item, i}) => { html += svItemHtml(item, i); });
+                });
+            } else if (_svMode === 'platform') {
+                const groups = {};
+                bm.forEach((item, i) => { const s = item.section || 'Other'; if (!groups[s]) groups[s] = []; groups[s].push({item, i}); });
+                Object.keys(groups).sort().forEach(s => {
+                    html += '<div class="sv-group-header">' + s + ' (' + groups[s].length + ')</div>';
+                    groups[s].forEach(({item, i}) => { html += svItemHtml(item, i); });
+                });
+            } else {
+                bm.forEach((item, i) => { html += svItemHtml(item, i); });
+            }
+            list.innerHTML = html;
+        }
+        function svItemHtml(item, i) {
+            return '<div class="saved-item"><a href="' + item.url + '" target="_blank">' + item.title + '</a>' +
+                '<span class="saved-meta">' + (item.section || '') + ' &middot; Saved ' + (item.date || '') + '</span>' +
+                '<br><button class="remove-btn" onclick="removeBookmark(' + i + ')">&times; Remove</button></div>';
+        }
+        function clearAllBookmarks() {
+            if (!confirm('Clear all saved items?')) return;
+            saveBookmarks([]);
+            renderSavedList();
+            document.querySelectorAll('.bookmark-btn').forEach(b => {
+                b.classList.remove('saved');
+                b.textContent = '☆';
+            });
+        }
+        function exportBookmarks() {
+            const bm = getBookmarks();
+            const blob = new Blob([JSON.stringify(bm, null, 2)], {type: 'application/json'});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'dossier_saved_items.json';
+            a.click();
+        }
+        function importBookmarks(evt) {
+            const file = evt.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (!Array.isArray(imported)) { alert('Invalid file'); return; }
+                    const bm = getBookmarks();
+                    // Merge without duplicates
+                    const existing = new Set(bm.map(b => b.title));
+                    let added = 0;
+                    imported.forEach(item => {
+                        if (!existing.has(item.title)) {
+                            bm.push(item);
+                            added++;
+                        }
+                    });
+                    saveBookmarks(bm);
+                    renderSavedList();
+                    // Sync star buttons
+                    document.querySelectorAll('.bookmark-btn').forEach(btn => {
+                        const t = btn.getAttribute('data-title');
+                        const s = bm.some(b => b.title === t);
+                        btn.classList.toggle('saved', s);
+                        btn.textContent = s ? '★' : '☆';
+                    });
+                    alert('Imported ' + added + ' new items (' + imported.length + ' total in file)');
+                } catch { alert('Error reading file'); }
+            };
+            reader.readAsText(file);
+        }
+        function removeBookmark(idx) {
+            const bm = getBookmarks();
+            bm.splice(idx, 1);
+            saveBookmarks(bm);
+            renderSavedList();
+            // Update all bookmark button states
+            document.querySelectorAll('.bookmark-btn').forEach(btn => {
+                const title = btn.getAttribute('data-title');
+                btn.classList.toggle('saved', bm.some(b => b.title === title));
+                btn.textContent = bm.some(b => b.title === title) ? '★' : '☆';
+            });
+        }
+        function toggleBookmark(btn) {
+            const title = btn.getAttribute('data-title');
+            const url = btn.getAttribute('data-url');
+            const section = btn.getAttribute('data-section');
+            const bm = getBookmarks();
+            const exists = bm.findIndex(b => b.title === title);
+            if (exists >= 0) {
+                bm.splice(exists, 1);
+                btn.classList.remove('saved');
+                btn.textContent = '☆';
+            } else {
+                bm.push({ title, url, section, date: new Date().toLocaleDateString() });
+                btn.classList.add('saved');
+                btn.textContent = '★';
+            }
+            saveBookmarks(bm);
+        }
+
+        // Inject bookmark buttons into every numbered item
+        document.addEventListener('DOMContentLoaded', function() {
+            const bm = getBookmarks();
+            updateBadge();
+
+            // Find all strong elements that look like numbered titles
+            document.querySelectorAll('p > strong').forEach(el => {
+                const text = el.textContent;
+                const match = text.match(/^\d+\.\s+(.+)/);
+                if (!match) return;
+
+                const title = match[1];
+                // Find the URL in the next sibling list
+                let url = '';
+                let section = '';
+                let sibling = el.parentElement.nextElementSibling;
+                while (sibling) {
+                    if (sibling.tagName === 'UL') {
+                        const links = sibling.querySelectorAll('a');
+                        if (links.length > 0) url = links[links.length - 1].href;
+                        break;
+                    }
+                    sibling = sibling.nextElementSibling;
+                }
+                // Get section from nearest h2
+                let h2 = el.parentElement.previousElementSibling;
+                while (h2 && h2.tagName !== 'H2') h2 = h2.previousElementSibling;
+                if (h2) section = h2.textContent;
+
+                const isSaved = bm.some(b => b.title === title);
+                const btn = document.createElement('button');
+                btn.className = 'bookmark-btn' + (isSaved ? ' saved' : '');
+                btn.textContent = isSaved ? '★' : '☆';
+                btn.setAttribute('data-title', title);
+                btn.setAttribute('data-url', url);
+                btn.setAttribute('data-section', section);
+                btn.onclick = function() { toggleBookmark(this); };
+                el.appendChild(btn);
+            });
+        });
     </script>
 </body>
 </html>

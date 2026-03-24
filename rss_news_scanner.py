@@ -7,6 +7,7 @@ Monitors news feeds for AI, Marketing, Health content
 import feedparser
 import json
 import os
+import urllib.request
 from datetime import datetime, timedelta
 from typing import List, Dict
 
@@ -24,9 +25,11 @@ class RSSNewsScanner:
             self.feeds = {"ai_news": [], "marketing": [], "health": []}
     
     def fetch_feed(self, feed_url: str, hours_back: int = 24) -> List[Dict]:
-        """Fetch articles from an RSS feed"""
+        """Fetch articles from an RSS feed (with 15s timeout per feed)"""
         try:
-            feed = feedparser.parse(feed_url)
+            response = urllib.request.urlopen(feed_url, timeout=15)
+            feed_data = response.read()
+            feed = feedparser.parse(feed_data)
             cutoff_time = datetime.now() - timedelta(hours=hours_back)
             
             articles = []
@@ -57,7 +60,7 @@ class RSSNewsScanner:
             print(f"Error fetching {feed_url}: {str(e)}")
             return []
     
-    def scan_all_feeds(self, hours_back: int = 24) -> Dict[str, List[Dict]]:
+    def scan_all_feeds(self, hours_back: int = 48) -> Dict[str, List[Dict]]:
         """Scan all configured feeds"""
         results = {}
         
@@ -82,12 +85,27 @@ class RSSNewsScanner:
         
         return results
     
-    def format_digest(self, results: Dict[str, List[Dict]]) -> str:
-        """Format results into digest format"""
+    def cap_per_source(self, results: Dict[str, List[Dict]], max_per_source: int = 3) -> List[Dict]:
+        """Flatten results with a cap per source so no one dominates"""
         all_articles = []
         for articles in results.values():
             all_articles.extend(articles)
-        
+        # Sort newest first
+        all_articles.sort(key=lambda x: x.get('published', ''), reverse=True)
+        # Cap per source
+        source_counts = {}
+        diverse = []
+        for article in all_articles:
+            src = article.get('source', 'unknown')
+            source_counts[src] = source_counts.get(src, 0) + 1
+            if source_counts[src] <= max_per_source:
+                diverse.append(article)
+        return diverse
+
+    def format_digest(self, results: Dict[str, List[Dict]]) -> str:
+        """Format results into digest format"""
+        all_articles = self.cap_per_source(results, max_per_source=3)
+
         if not all_articles:
             return "No new articles found in the last 24 hours."
         

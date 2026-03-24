@@ -1,0 +1,180 @@
+[
+  {
+    "name": "Matt Wolfe",
+    "channel_id": "UCbX3Ud3T0czfS7FTu90EbJg",
+    "category": "AI News & Tools",
+    "priority": "high"
+  },
+  {
+    "name": "AI Jason",
+    "channel_id": "UC1-Hdic6V7Jc7M8hBOKK-Mg",
+    "category": "AI Business",
+    "priority": "high"
+  },
+  {
+    "name": "Alex Finn",
+    "channel_id": "UCYMnLwPa_VPt-VtP8lS_pAA",
+    "category": "AI & Marketing",
+    "priority": "medium"
+  },
+  {
+    "name": "Wes Roth",
+    "channel_id": "UCnFEGGGu5w_z1AEDCRmqYBw",
+    "category": "AI News",
+    "priority": "high"
+  },
+  {
+    "name": "Matt Berman",
+    "channel_id": "UCbhJVU6SzQQ4cLhJXhG8Ywg",
+    "category": "AI Coding",
+    "priority": "medium"
+  },
+  {
+    "name": "AI Explained",
+    "channel_id": "UCNJ1Ymd5yFuUPtn21xtRbbw",
+    "category": "Technical Deep Dives",
+    "priority": "medium"
+  },
+  {
+    "name": "Fireship",
+    "channel_id": "UCsBjURrPoezykLs9EqgamOA",
+    "category": "Tech & AI",
+    "priority": "high"
+  },
+  {
+    "name": "Theo - t3.gg",
+    "channel_id": "UCF1hKZhGVl8xsJpWlIvJkjQ",
+    "category": "Coding & AI",
+    "priority": "medium"
+  },
+  {
+    "name": "David Ondrej",
+    "channel_id": "UCCGPPOh6xI7Yq8BEIefDODQ",
+    "category": "AI Business",
+    "priority": "medium"
+  },
+  {
+    "name": "Cole Medin",
+    "channel_id": "UCchvKtRjL2HVWDfFD5_3FnA",
+    "category": "AI Tools",
+    "priority": "medium"
+  },
+  {
+    "name": "AI Advantage",
+    "channel_id": "UCx6nQDILk9bEn8jH4Z-K9Xg",
+    "category": "AI Tools",
+    "priority": "medium"
+  },
+  {
+    "name": "Marcus Jones Marketing",
+    "channel_id": "UC3EjN8YjOp6N5LYkpRmXNjg",
+    "category": "Marketing",
+    "priority": "low"
+  },
+  {
+    "name": "Neil Patel",
+    "channel_id": "UCl-Zrl0QhF66lu1aGXaTbfw",
+    "category": "Marketing & SEO",
+    "priority": "medium"
+  },
+  {
+    "name": "Nathan Latka",
+    "channel_id": "UC7i4AKwOjdDjwUxPu5zBq7Q",
+    "category": "SaaS & Business",
+    "priority": "medium"
+  },
+  {
+    "name": "Nutrition Facts",
+    "channel_id": "UCddn8dUxYdgJz3Qr5mjADtA",
+    "category": "Plant-Based Health",
+    "priority": "high"
+  },
+  {
+    "name": "Forks Over Knives",
+    "channel_id": "UCw7n0i8qPa8BZ_L1CLPj7-A",
+    "category": "Plant-Based Health",
+    "priority": "medium"
+  },
+  {
+    "name": "WFPB.ORG",
+    "channel_id": "UCxfuS7sLqNfldwN1lKvjBTA",
+    "category": "Whole Food Plant-Based",
+    "priority": "low"
+  },
+  {
+    "name": "Dr. McDougall",
+    "channel_id": "UC2TfTHuuL39Dm5Hc3W6pztg",
+    "category": "Plant-Based Health",
+    "priority": "medium"
+  },
+  {
+    "name": "Alex Hormozi",
+    "channel_id": "UCyjw26uB9AZGsJZ20xdMNVw",
+    "category": "Business Scaling",
+    "priority": "high",
+    "note": "Sales psychology, scaling businesses - CRITICAL for entrepreneur pain points"
+  },
+  {
+    "name": "Justin Welsh",
+    "channel_id": "UCGgNEJVLGS8sA3JZXnHCUvw",
+    "category": "Solo Business",
+    "priority": "high",
+    "note": "Solo entrepreneurship, LinkedIn growth, building in public"
+  },
+  {
+    "name": "Dan Koe",
+    "channel_id": "UC9ZyxQMUTsLz8Y4QOvNJc1Q",
+    "category": "Digital Business",
+    "priority": "high",
+    "note": "Writing, personal brand, philosophical approach to business"
+  },
+  {
+    "name": "Codie Sanchez",
+    "channel_id": "UCqLRxKQKTj6P2LkNmO_Q4Qw",
+    "category": "Acquisitions",
+    "priority": "high",
+    "note": "Main Street acquisitions, buying boring businesses"
+  },
+  {
+    "name": "My First Million",
+    "channel_id": "UCdjC8EnFXKCJw7s7FIiJN9g",
+    "category": "Business Podcast",
+    "priority": "high",
+    "note": "Sam Parr & Shaan Puri - business ideas, trends, founder interviews"
+  },
+  {
+    "name": "Dr. Caldwell Esselstyn Jr",
+    "channel_id": "UCt9xmcj8KA2-4PJ0vLXN7fA",
+    "category": "Heart Health",
+    "priority": "critical",
+    "note": "Prevent & Reverse Heart Disease author - CRITICAL for post-heart attack recovery"
+  },
+  {
+    "name": "Starter Story",
+    "channel_id": "UCZLfr8cVnQn2OymXZ5zy_Hw",
+    "category": "Ecommerce",
+    "priority": "medium",
+    "note": "Ecommerce founder interviews, revenue transparency"
+  },
+  {
+    "name": "All About AI",
+    "channel_id": "UCqcCthAhIFtzx66D9zj-fxQ",
+    "category": "AI News",
+    "priority": "medium",
+    "note": "Daily AI news aggregation"
+  },
+  {
+    "name": "Anthropic",
+    "channel_id": "UCr8qxwgRO9rLqGwOF9zx4Sw",
+    "category": "AI Research",
+    "priority": "high",
+    "note": "Official Claude updates, AI safety research"
+  },
+  {
+    "name": "Mic the Vegan",
+    "channel_id": "UCGEGfLJJ3Hl8BXXt6F-8LsA",
+    "category": "Plant-Based Health",
+    "priority": "medium",
+    "note": "Evidence-based vegan nutrition, debunks myths"
+  }
+]

@@ -15,12 +15,12 @@ Updates automatically at **6 AM** and **5 PM PST** daily.
 - Engagement scoring (comments weighted 2x upvotes)
 
 ### 2. 🔵 Twitter - Building in Public
-- 112 successful founder accounts
+- 112 successful founder accounts (via Nitter scraping - no API token needed)
 - $73K/mo Marc Lou, $146K/mo Levelsio, etc.
 - Focuses on #buildinginpublic content
 - Revenue sharing, product launches, lessons learned
 
-### 3. 🎥 YouTube - AI, Marketing, Health (18 Channels)
+### 3. 🎥 YouTube - AI, Marketing, Health (28 Channels)
 **AI:**
 - Matt Wolfe, AI Jason, Alex Finn, Wes Roth, Matt Berman
 - AI Explained, Fireship, Theo, David Ondrej, Cole Medin, AI Advantage
@@ -84,8 +84,8 @@ Archive/
 
 ### Core Scripts
 - `reddit_json_client.py` - Reddit JSON API (no auth needed)
-- `twitter_builders_monitor.py` - Twitter API with 112 accounts
-- `youtube_ai_monitor.py` - YouTube RSS feeds (18 channels)
+- `twitter_nitter_scraper.py` - Twitter monitoring via Nitter (free, no API token)
+- `youtube_ai_monitor.py` - YouTube RSS feeds (28 channels)
 - `moltbook_scanner.py` - Moltbook API (authenticated, READ ONLY)
 - `health_tracker.py` - Combined Twitter + Reddit health tracking
 - `rss_news_scanner.py` - RSS feed parser for news sites
@@ -93,7 +93,7 @@ Archive/
 - `run_full_digest.py` - Master orchestrator (no subprocess issues)
 
 ### Configuration Files
-- `youtube_ai_channels.json` - 18 YouTube channels
+- `youtube_ai_channels.json` - 28 YouTube channels
 - `twitter_monitoring_accounts.json` - 112 builder accounts
 - `rss_news_feeds.json` - News/blog RSS feeds
 - `~/.config/moltbook/credentials.json` - Moltbook API key

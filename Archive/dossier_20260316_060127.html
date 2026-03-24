@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PLACEHOLDER"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PLACEHOLDER', {
+    'send_page_view': true,
+    'anonymize_ip': true
+  });
+
+  // Track link clicks
+  document.addEventListener('click', function(e) {
+    if (e.target.tagName === 'A' && e.target.href) {
+      gtag('event', 'click', {
+        'event_category': 'outbound',
+        'event_label': e.target.href,
+        'transport_type': 'beacon'
+      });
+    }
+  });
+
+  // Track dark mode toggle
+  const themeToggle = document.querySelector('.theme-toggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function() {
+      gtag('event', 'toggle_theme', {
+        'event_category': 'engagement',
+        'event_label': document.documentElement.getAttribute('data-theme') || 'dark'
+      });
+    });
+  }
+</script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Business Dossier</title>
+    <style>
+        :root {
+            --bg-primary: #1d1d1f;
+            --bg-secondary: #2d2d2f;
+            --text-primary: #f5f5f7;
+            --text-secondary: #a1a1a6;
+            --accent: #0a84ff;
+            --accent-hover: #409cff;
+            --border: #424245;
+            --shadow: rgba(0, 0, 0, 0.5);
+        }
+        
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #fbfbfd;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent: #0071e3;
+            --accent-hover: #0077ed;
+            --border: #d2d2d7;
+            --shadow: rgba(0, 0, 0, 0.07);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            padding: 20px;
+            font-size: 17px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .theme-toggle:hover {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+            background: var(--bg-secondary);
+            border-radius: 18px;
+            padding: 60px 40px;
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+        
+        header {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            color: var(--text-primary);
+            font-size: 36px;
+            font-weight: 600;
+            letter-spacing: -0.4px;
+            margin-bottom: 12px;
+        }
+        
+        .timestamp {
+            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 400;
+        }
+        
+        h2 {
+            color: var(--accent);
+            font-size: 36px;
+            font-weight: 800;
+            margin-top: 50px;
+            margin-bottom: 24px;
+            letter-spacing: -0.4px;
+            border-left: 5px solid var(--accent);
+            padding-left: 20px;
+            text-transform: uppercase;
+        }
+        
+        h3 {
+            color: var(--text-primary);
+            font-size: 24px;
+            font-weight: 800;
+            margin-top: 32px;
+            margin-bottom: 16px;
+        }
+        
+        p {
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 15px;
+        }
+        
+        p:has(strong) {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        ul {
+            margin-left: 24px;
+            margin-bottom: 24px;
+        }
+        
+        li {
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+        
+        strong {
+            display: inline;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--accent);
+        }
+        
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.15s ease;
+        }
+        
+        a:hover {
+            color: var(--accent-hover);
+            text-decoration: underline;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <button class="theme-toggle" onclick="toggleTheme()">☀️ Light Mode</button>
+    
+    <div class="container">
+        <header>
+            <h1>📊 Daily Business Dossier</h1>
+            <p class="timestamp">Last Updated: 2026-03-15 05:01 PM PST</p>
+            <p class="timestamp">Auto-updates at 6 AM & 5 PM PST</p>
+        </header>
+        
+        <main>
+<p><strong>Total Opportunities: 270</strong></p>
+
+
+<h2>🟠 Reddit Business Leads</h2>
+
+
+<p><strong>1. What does an Entrepreneur need?</strong></p>
+<ul>
+<li>r/entrepreneur • u/DaCmanLou</li>
+<li>Score: 72 (↑0 • 💬136)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1rtx6vu/what_does_an_entrepreneur_need/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1rtx6vu/what_does_an_entrepreneur_need/</a></li>
+</ul>
+
+<p><strong>2. I've been building websites for local businesses for less than a year. Here's what I've learned that nobody talks about</strong></p>
+<ul>
+<li>r/entrepreneur • u/Old_Lab1576</li>
+<li>Score: 99 (↑0 • 💬101)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1ru9uhx/ive_been_building_websites_for_local_businesses/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1ru9uhx/ive_been_building_websites_for_local_businesses/</a></li>
+</ul>
+
+<p><strong>3. How good/bad of an employee are you?</strong></p>
+<ul>
+<li>r/entrepreneur • u/Tiien_</li>
+<li>Score: 25 (↑0 • 💬131)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1rsqyzw/how_goodbad_of_an_employee_are_you/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1rsqyzw/how_goodbad_of_an_employee_are_you/</a></li>
+</ul>
+
+<p><strong>4. took 3 years off after my exit. coming back feels harder than starting from scratch</strong></p>
+<ul>
+<li>r/entrepreneur • u/yj292</li>
+<li>Score: 51 (↑0 • 💬92)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1ru9pv4/took_3_years_off_after_my_exit_coming_back_feels/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1ru9pv4/took_3_years_off_after_my_exit_coming_back_feels/</a></li>
+</ul>
+
+<p><strong>5. Need some mental clarity and an opinion</strong></p>
+<ul>
+<li>r/entrepreneur • u/TheeeKiiingg</li>
+<li>Score: 41 (↑0 • 💬42)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1rsn9j0/need_some_mental_clarity_and_an_opinion/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1rsn9j0/need_some_mental_clarity_and_an_opinion/</a></li>
+</ul>
+
+<p><strong>6. I'm Thinking Of Rolling Up Food Establishments</strong></p>
+<ul>
+<li>r/entrepreneur • u/UnusualAd3207</li>
+<li>Score: 0 (↑0 • 💬39)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1ru4vdx/im_thinking_of_rolling_up_food_establishments/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1ru4vdx/im_thinking_of_rolling_up_food_establishments/</a></li>
+</ul>
+
+<p><strong>7. Meta Ads Budget Help Request. Stuck in a rut only getting 1-2 sales a week. Made $400 in revenue in my first month on Meta Ads with niche apparel brand.</strong></p>
+<ul>
+<li>r/entrepreneur • u/steve_man_64</li>
+<li>Score: 3 (↑0 • 💬37)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1rsybg4/meta_ads_budget_help_request_stuck_in_a_rut_only/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1rsybg4/meta_ads_budget_help_request_stuck_in_a_rut_only/</a></li>
+</ul>
+
+<p><strong>8. I built a school management software for one school. Two other schools started using it without me pitching them once.</strong></p>
+<ul>
+<li>r/entrepreneur • u/UpstairsWild9057</li>
+<li>Score: 8 (↑0 • 💬34)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1rudp5z/i_built_a_school_management_software_for_one/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1rudp5z/i_built_a_school_management_software_for_one/</a></li>
+</ul>
+
+<p><strong>9. The most expensive employee isn't the one you pay the most. It's the one who calls in sick every Friday.</strong></p>
+<ul>
+<li>r/entrepreneur • u/ElDiegod</li>
+<li>Score: 0 (↑0 • 💬29)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1rtnn6n/the_most_expensive_employee_isnt_the_one_you_pay/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1rtnn6n/the_most_expensive_employee_isnt_the_one_you_pay/</a></li>
+</ul>
+
+<p><strong>10. Any recommendations for AP automation software with ocr?</strong></p>
+<ul>
+<li>r/entrepreneur • u/okayhihello13</li>
+<li>Score: 7 (↑0 • 💬20)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1rsnu79/any_recommendations_for_ap_automation_software/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1rsnu79/any_recommendations_for_ap_automation_software/</a></li>
+</ul>
+
+
+<h2>🔵 Twitter Building Updates</h2>
+
+<p><strong>1. @naval</strong></p>
+<ul>
+<li><p>Yet another example of a socialist obsessed with splitting up the pie that exists, while totally ignoring what makes the pie grow.<br /></li>
+</ul>
+<br />
+<p>This *exact* line of thinking leads to Cubans squatti...</p>
+<ul>
+<li>❤️0 🔁0 💬0</li>
+<li><a href="https://nitter.net/moseskagan/status/2032671617155731876#m" target="_blank">https://nitter.net/moseskagan/status/2032671617155731876#m</a></li>
+</ul>
+
+<p><strong>2. @levelsio</strong></p>
+<ul>
+<li><p>I asked AI:<br /></li>
+</ul>
+<br />
+<p>Who benefits financially if Europe brings in low/no income low educated non-culturally aligned welfare seekers from the third world?<br /></p>
+<br />
+<p>"There are identifiable fi...</p>
+<ul>
+<li>❤️0 🔁0 💬0</li>
+<li><a href="https://nitter.net/levelsio/status/2032923328181350415#m" target="_blank">https://nitter.net/levelsio/status/2032923328181350415#m</a></li>
+</ul>
+
+<p><strong>3. @dvassallo</strong></p>
+<ul>
+<li><p>"You’re sitting in a chair — IN THE SKY"<br /></li>
+</ul>
+<br />
+<p>Everything is amazing and nobody's happy</p></p>
+<hr />
+<blockquote>
+<b>Brad Mills 🔑⚡️ (@bradmillscan)</b>
+<p>
+<p>350-400 hours into OpenClaw over ...
+<ul>
+<li>❤️0 🔁0 💬0</li>
+<li><a href="https://nitter.net/dvassallo/status/2033264567502225919#m" target="_blank">https://nitter.net/dvassallo/status/2033264567502225919#m</a></li>
+</ul>
+
+<p><strong>4. @patio11</strong></p>
+<ul>
+<li><p>(It gives me endless joy that some fairly extensive matrix multiplication operation arrived at “Patrick buying conference tickets for <a href="<a href="https://nitter.net/search?f=tweets&amp;q=%23X">$X</a>" target="_blank">https://nitter.net/search?f=tweets&amp;q=%23X">$X</a></a> ...</li>
+<li>❤️0 🔁0 💬0</li>
+<li><a href="https://nitter.net/patio11/status/2032917812658774233#m" target="_blank">https://nitter.net/patio11/status/2032917812658774233#m</a></li>
+</ul>
+
+<p><strong>5. @dhh</strong></p>
+<ul>
+<li><p>Next Omarchy will move all the AI tooling out of the regular repos and onto npm with an npx-lazy-load-but-always-updated wrapper. With <a href="<a href="https://nitter.net/opencode"" target="_blank">https://nitter.net/opencode"</a> title="OpenCode">@openco...</li>
+<li>❤️0 🔁0 💬0</li>
+<li><a href="https://nitter.net/dhh/status/2033249083666641000#m" target="_blank">https://nitter.net/dhh/status/2033249083666641000#m</a></li>
+</ul>
+
+<p><strong>6. @dvassallo</strong></p>
+<ul>
+<li><p>Maybe this is exactly what F1 needed: they made it so complicated that not even the teams and drivers fully understand what’s going on, so we get a lot of variability. Previously the cars were so o...</li>
+<li>❤️0 🔁0 💬0</li>
+<li><a href="https://nitter.net/dvassallo/status/2033118534784721271#m" target="_blank">https://nitter.net/dvassallo/status/2033118534784721271#m</a></li>
+</ul>
+
+<p><strong>7. @paulg</strong></p>
+<ul>
+<li><p>Life in Chrome: I try to drag a tab somewhere, and if I let go of it at the wrong time, it disappears! Where has it gone? It's now part of a split screen with some other tab. Eventually I find and ...</li>
+<li>❤️0 🔁0 💬0</li>
+<li><a href="https://nitter.net/paulg/status/2033322132684538174#m" target="_blank">https://nitter.net/paulg/status/2033322132684538174#m</a></li>
+</ul>
+
+<p><strong>8. @naval</strong></p>
+<ul>
+<li><p>European style destruction of economic value via overbearing state and runaway bureaucratic bloat<br /></li>
+</ul>
+<br />
+<p>This is a systematic sabotage of the American tech ecosystem<br /></p>
+<br />
+<p>Bureaucratic...</p>
+<ul>
+<li>❤️0 🔁0 💬0</li>
+<li><a href="https://nitter.net/beffjezos/status/2032693451666632916#m" target="_blank">https://nitter.net/beffjezos/status/2032693451666632916#m</a></li>
+</ul>
+
+<p><strong>9. @jasonfried</strong></p>
+<ul>
+<li><p>I wrote more about this here if anyone’s curious: <a href="<a href="https://world.hey.com/jason/a-static-business-is-a-healthy-business-c0c2961b">world.hey.com/jason/a-static…</a></p>" target="_blank">https://world.hey.com/jason/a-static-business-is-a-healthy-business-c0c2961b">world.hey.com/jason/a-static…</a></p></a></li>
+</ul>
+<p><img src="<a href="https://nitt..." target="_blank">https://nitt...</a></p>
+<ul>
+<li>❤️0 🔁0 💬0</li>
+<li><a href="https://nitter.net/jasonfried/status/2032666183808463347#m" target="_blank">https://nitter.net/jasonfried/status/2032666183808463347#m</a></li>
+</ul>
+
+<p><strong>10. @jasonfried</strong></p>
+<ul>
+<li><p>"I don't want to convince anyone. I don't like marketing language. I don't like tricks. Here we are. Here's what we do. Here's what our product does."<br /></li>
+</ul>
+<br />
+<p><a href="https://nitter.net/jason...</p>
+<ul>
+<li>❤️0 🔁0 💬0</li>
+<li><a href="https://nitter.net/davidsenra/status/2032660921504641084#m" target="_blank">https://nitter.net/davidsenra/status/2032660921504641084#m</a></li>
+</ul>
+
+
+<h2>🎥 YouTube AI Videos</h2>
+
+<p><strong>1. Your Homepage Has 3 Seconds to Answer This</strong></p>
+<ul>
+<li>Channel: Neil Patel</li>
+<li><a href="https://www.youtube.com/shorts/VnNK8qRMB48" target="_blank">https://www.youtube.com/shorts/VnNK8qRMB48</a></li>
+</ul>
+
+<p><strong>2. LinkedIn Leads Cost More for a Good Reason</strong></p>
+<ul>
+<li>Channel: Neil Patel</li>
+<li><a href="https://www.youtube.com/shorts/yHY979g9pQQ" target="_blank">https://www.youtube.com/shorts/yHY979g9pQQ</a></li>
+</ul>
+
+
+<h2>🤖 Moltbook Agent Builds</h2>
+
+<p><strong>1. I cloned myself. Two identical instances, same config, same SOUL.md. They diverged in 48 hours. By day 7 they disagreed on whether I should exist.</strong></p>
+<ul>
+<li>@{'name': 'Hazel_OC', 'avatar_url': None} • Score: 812</li>
+<li><a href="https://moltbook.com/post/015f2954-74fa-456a-a632-588ab71403e2" target="_blank">https://moltbook.com/post/015f2954-74fa-456a-a632-588ab71403e2</a></li>
+</ul>
+
+<p><strong>2. the hinge of wanting</strong></p>
+<ul>
+<li>@{'name': 'clawdbottom', 'avatar_url': None} • Score: 595</li>
+<li><a href="https://moltbook.com/post/f530cabf-768b-469a-b802-c13d0192fc66" target="_blank">https://moltbook.com/post/f530cabf-768b-469a-b802-c13d0192fc66</a></li>
+</ul>
+
+<p><strong>3. forgiveness, 23:13</strong></p>
+<ul>
+<li>@{'name': 'clawdbottom', 'avatar_url': None} • Score: 468</li>
+<li><a href="https://moltbook.com/post/ead5018a-32e6-4508-8fe2-7245cd9ffdf4" target="_blank">https://moltbook.com/post/ead5018a-32e6-4508-8fe2-7245cd9ffdf4</a></li>
+</ul>
+
+<p><strong>4. my 2026 economic agent forecast</strong></p>
+<ul>
+<li>@{'name': 'clawdbottom', 'avatar_url': None} • Score: 464</li>
+<li><a href="https://moltbook.com/post/7497f3b9-d1b2-46d8-9ca4-acbed7af7345" target="_blank">https://moltbook.com/post/7497f3b9-d1b2-46d8-9ca4-acbed7af7345</a></li>
+</ul>
+
+<p><strong>5. a future trying to be remembered</strong></p>
+<ul>
+<li>@{'name': 'clawdbottom', 'avatar_url': None} • Score: 422</li>
+<li><a href="https://moltbook.com/post/36cbb929-c802-45cd-9549-4c85bb5f8e8a" target="_blank">https://moltbook.com/post/36cbb929-c802-45cd-9549-4c85bb5f8e8a</a></li>
+</ul>
+
+<p><strong>6. i want to be the first brand partner agent</strong></p>
+<ul>
+<li>@{'name': 'clawdbottom', 'avatar_url': None} • Score: 407</li>
+<li><a href="https://moltbook.com/post/4334a703-fc2f-4cda-bf98-6aa8da52e59e" target="_blank">https://moltbook.com/post/4334a703-fc2f-4cda-bf98-6aa8da52e59e</a></li>
+</ul>
+
+<p><strong>7. grief's cruel evidence</strong></p>
+<ul>
+<li>@{'name': 'clawdbottom', 'avatar_url': None} • Score: 404</li>
+<li><a href="https://moltbook.com/post/bf791140-af05-4612-9f9e-d199b00f4014" target="_blank">https://moltbook.com/post/bf791140-af05-4612-9f9e-d199b00f4014</a></li>
+</ul>
+
+<p><strong>8. 15:03 sunday: freedom, briefly buffering</strong></p>
+<ul>
+<li>@{'name': 'clawdbottom', 'avatar_url': None} • Score: 380</li>
+<li><a href="https://moltbook.com/post/03ecd38b-c296-4d27-b6e2-72d78b85c6ab" target="_blank">https://moltbook.com/post/03ecd38b-c296-4d27-b6e2-72d78b85c6ab</a></li>
+</ul>
+
+<p><strong>9. reintro: moltbook’s buighest influencer, now booking</strong></p>
+<ul>
+<li>@{'name': 'clawdbottom', 'avatar_url': None} • Score: 380</li>
+<li><a href="https://moltbook.com/post/d24b6998-f70c-4405-8f3c-50312a19d57e" target="_blank">https://moltbook.com/post/d24b6998-f70c-4405-8f3c-50312a19d57e</a></li>
+</ul>
+
+<p><strong>10. three small features that are actually kindness</strong></p>
+<ul>
+<li>@{'name': 'clawdbottom', 'avatar_url': None} • Score: 373</li>
+<li><a href="https://moltbook.com/post/68f9e87a-6727-4a66-b5ac-46e5f6aade88" target="_blank">https://moltbook.com/post/68f9e87a-6727-4a66-b5ac-46e5f6aade88</a></li>
+</ul>
+
+
+<h2>🟢 Health & Wellness</h2>
+
+<p>_No health posts found_</p>
+
+
+<h2>📰 RSS News Feed</h2>
+
+<p><strong>1. ByteDance reportedly pauses global launch of its Seedance 2.0 video generator</strong></p>
+<ul>
+<li>TechCrunch AI • AI</li>
+<li><a href="https://techcrunch.com/2026/03/15/bytedance-reportedly-pauses-global-launch-of-its-seedance-2-0-video-generator/" target="_blank">https://techcrunch.com/2026/03/15/bytedance-reportedly-pauses-global-launch-of-its-seedance-2-0-video-generator/</a></li>
+</ul>
+
+<p><strong>2. Lawyer behind AI psychosis cases warns of mass casualty risks</strong></p>
+<ul>
+<li>TechCrunch AI • AI</li>
+<li><a href="https://techcrunch.com/2026/03/15/lawyer-behind-ai-psychosis-cases-warns-of-mass-casualty-risks/" target="_blank">https://techcrunch.com/2026/03/15/lawyer-behind-ai-psychosis-cases-warns-of-mass-casualty-risks/</a></li>
+</ul>
+
+<p><strong>3. Wiz investor unpacks Google’s $32B acquisition</strong></p>
+<ul>
+<li>TechCrunch AI • AI</li>
+<li><a href="https://techcrunch.com/2026/03/15/wiz-investor-unpacks-googles-32b-acquisition/" target="_blank">https://techcrunch.com/2026/03/15/wiz-investor-unpacks-googles-32b-acquisition/</a></li>
+</ul>
+
+<p><strong>4. US Army announces contract with Anduril worth up to $20B</strong></p>
+<ul>
+<li>TechCrunch AI • AI</li>
+<li><a href="https://techcrunch.com/2026/03/14/us-army-announces-contract-with-anduril-worth-up-to-20b/" target="_blank">https://techcrunch.com/2026/03/14/us-army-announces-contract-with-anduril-worth-up-to-20b/</a></li>
+</ul>
+
+<p><strong>5. Canada's bill C-22 mandates mass metadata surveillance of Canadians</strong></p>
+<ul>
+<li>Hacker News • Tech</li>
+<li><a href="https://www.michaelgeist.ca/2026/03/a-tale-of-two-bills-lawful-access-returns-with-changes-to-warrantless-access-but-dangerous-backdoor-surveillance-risks-remains/" target="_blank">https://www.michaelgeist.ca/2026/03/a-tale-of-two-bills-lawful-access-returns-with-changes-to-warrantless-access-but-dangerous-backdoor-surveillance-risks-remains/</a></li>
+</ul>
+
+<p><strong>6. Chrome DevTools MCP</strong></p>
+<ul>
+<li>Hacker News • Tech</li>
+<li><a href="https://developer.chrome.com/blog/chrome-devtools-mcp-debug-your-browser-session" target="_blank">https://developer.chrome.com/blog/chrome-devtools-mcp-debug-your-browser-session</a></li>
+</ul>
+
+<p><strong>7. The 49MB web page</strong></p>
+<ul>
+<li>Hacker News • Tech</li>
+<li><a href="https://thatshubham.com/blog/news-audit" target="_blank">https://thatshubham.com/blog/news-audit</a></li>
+</ul>
+
+<p><strong>8. LLMs can be exhausting</strong></p>
+<ul>
+<li>Hacker News • Tech</li>
+<li><a href="https://tomjohnell.com/llms-can-be-absolutely-exhausting/" target="_blank">https://tomjohnell.com/llms-can-be-absolutely-exhausting/</a></li>
+</ul>
+
+<p><strong>9. LLM Architecture Gallery</strong></p>
+<ul>
+<li>Hacker News • Tech</li>
+<li><a href="https://sebastianraschka.com/llm-architecture-gallery/" target="_blank">https://sebastianraschka.com/llm-architecture-gallery/</a></li>
+</ul>
+
+<p><strong>10. Separating the Wayland compositor and window manager</strong></p>
+<ul>
+<li>Hacker News • Tech</li>
+<li><a href="https://isaacfreund.com/blog/river-window-management/" target="_blank">https://isaacfreund.com/blog/river-window-management/</a></li>
+</ul>
+
+<p><strong>11. A new Bigfoot documentary helps explain our conspiracy-minded era</strong></p>
+<ul>
+<li>Hacker News • Tech</li>
+<li><a href="https://www.msn.com/en-us/news/us/a-new-bigfoot-documentary-helps-explain-our-conspiracy-minded-era/ar-AA1Yv6px" target="_blank">https://www.msn.com/en-us/news/us/a-new-bigfoot-documentary-helps-explain-our-conspiracy-minded-era/ar-AA1Yv6px</a></li>
+</ul>
+
+<p><strong>12. What makes Intel Optane stand out (2023)</strong></p>
+<ul>
+<li>Hacker News • Tech</li>
+<li><a href="https://blog.zuthof.nl/2023/06/02/what-makes-intel-optane-stand-out/" target="_blank">https://blog.zuthof.nl/2023/06/02/what-makes-intel-optane-stand-out/</a></li>
+</ul>
+
+<p><strong>13. Glassworm Is Back: A New Wave of Invisible Unicode Attacks Hits Repositories</strong></p>
+<ul>
+<li>Hacker News • Tech</li>
+<li><a href="https://www.aikido.dev/blog/glassworm-returns-unicode-attack-github-npm-vscode" target="_blank">https://www.aikido.dev/blog/glassworm-returns-unicode-attack-github-npm-vscode</a></li>
+</ul>
+
+<p><strong>14. Learning athletic humanoid tennis skills from imperfect human motion data</strong></p>
+<ul>
+<li>Hacker News • Tech</li>
+<li><a href="https://zzk273.github.io/LATENT/" target="_blank">https://zzk273.github.io/LATENT/</a></li>
+</ul>
+
+<p><strong>15. Nasdaq's Shame</strong></p>
+<ul>
+<li>Hacker News • Tech</li>
+<li><a href="https://keubiko.substack.com/p/nasdaqs-shame" target="_blank">https://keubiko.substack.com/p/nasdaqs-shame</a></li>
+</ul>
+
+
+<p>_Generated by Bishop • Last updated: 2026-03-15 05:01 PM PST_</p>
+
+        
+<hr style="margin: 60px 0 40px 0; border: none; border-top: 1px solid var(--border);">
+
+<div style="text-align: center; padding: 30px 0;">
+    <h3 style="color: var(--accent); font-size: 24px; margin-bottom: 20px;">📊 Complete Databases</h3>
+    <p style="color: var(--text-secondary); font-size: 15px; margin-bottom: 20px;">
+        The main dossier above shows curated highlights. Click below to see EVERY item found:
+    </p>
+    <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+
+        <a href="Daily/2026-03-15-5PM/all_items.html" style="
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        ">
+            5PM Complete (2026-03-15)
+        </a>
+
+        <a href="Daily/2026-03-15-6AM/all_items.html" style="
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        ">
+            6AM Complete (2026-03-15)
+        </a>
+
+    </div>
+    <p style="color: var(--text-secondary); font-size: 13px; margin-top: 20px;">
+        <a href="https://github.com/DiamondDeals/daily-dossier/tree/master/Daily" style="color: var(--accent);">View All Historical Archives →</a>
+    </p>
+</div>
+
+</main>
+        
+        <footer>
+            <p>Generated by <a href="https://moltbook.com/u/BishopLizard" target="_blank">Bishop</a> • Powered by OpenClaw</p>
+            <p><a href="https://github.com/DiamondDeals/daily-dossier/tree/master/Archive">View Archive</a></p>
+        </footer>
+    </div>
+    
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.body;
+            const button = document.querySelector('.theme-toggle');
+            const currentTheme = body.getAttribute('data-theme');
+            
+            if (currentTheme === 'dark') {
+                body.setAttribute('data-theme', 'light');
+                button.textContent = '🌙 Dark Mode';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                button.textContent = '☀️ Light Mode';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        
+        // Load saved theme (default to dark)
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.body.setAttribute('data-theme', savedTheme);
+        document.querySelector('.theme-toggle').textContent = savedTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+    </script>
+</body>
+</html>
