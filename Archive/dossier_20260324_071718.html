@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PLACEHOLDER"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PLACEHOLDER', {
+    'send_page_view': true,
+    'anonymize_ip': true
+  });
+
+  // Track link clicks
+  document.addEventListener('click', function(e) {
+    if (e.target.tagName === 'A' && e.target.href) {
+      gtag('event', 'click', {
+        'event_category': 'outbound',
+        'event_label': e.target.href,
+        'transport_type': 'beacon'
+      });
+    }
+  });
+
+  // Track dark mode toggle
+  const themeToggle = document.querySelector('.theme-toggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function() {
+      gtag('event', 'toggle_theme', {
+        'event_category': 'engagement',
+        'event_label': document.documentElement.getAttribute('data-theme') || 'dark'
+      });
+    });
+  }
+</script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Business Dossier</title>
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #424245 #1d1d1f; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary, #1d1d1f); }
+        ::-webkit-scrollbar-thumb { background: #424245; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #636366; }
+        :root {
+            --bg-primary: #1d1d1f;
+            --bg-secondary: #2d2d2f;
+            --text-primary: #f5f5f7;
+            --text-secondary: #a1a1a6;
+            --accent: #0a84ff;
+            --accent-hover: #409cff;
+            --border: #424245;
+            --shadow: rgba(0, 0, 0, 0.5);
+        }
+        
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #fbfbfd;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent: #0071e3;
+            --accent-hover: #0077ed;
+            --border: #d2d2d7;
+            --shadow: rgba(0, 0, 0, 0.07);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            padding: 20px;
+            font-size: 17px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .theme-toggle:hover {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+        }
+        .scroll-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .scroll-top:hover {
+            transform: scale(1.1);
+        }
+        
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+            background: var(--bg-secondary);
+            border-radius: 18px;
+            padding: 60px 40px;
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+        
+        header {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            color: var(--text-primary);
+            font-size: 36px;
+            font-weight: 600;
+            letter-spacing: -0.4px;
+            margin-bottom: 12px;
+        }
+        
+        .timestamp {
+            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 400;
+        }
+        
+        h2 {
+            color: var(--accent);
+            font-size: 36px;
+            font-weight: 800;
+            margin-top: 50px;
+            margin-bottom: 24px;
+            letter-spacing: -0.4px;
+            border-left: 5px solid var(--accent);
+            padding-left: 20px;
+            text-transform: uppercase;
+        }
+        
+        h3 {
+            color: var(--text-primary);
+            font-size: 24px;
+            font-weight: 800;
+            margin-top: 32px;
+            margin-bottom: 16px;
+        }
+        
+        p {
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 15px;
+        }
+        
+        p:has(strong) {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        ul {
+            margin-left: 24px;
+            margin-bottom: 24px;
+        }
+        
+        li {
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+        
+        strong {
+            display: inline;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--accent);
+        }
+        
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.15s ease;
+        }
+        
+        a:hover {
+            color: var(--accent-hover);
+            text-decoration: underline;
+        }
+        
+        footer {
+            margin-top: 60px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Bookmark system */
+        .bookmark-btn {
+            cursor: pointer;
+            font-size: 18px;
+            margin-left: 10px;
+            color: #ffd60a;
+            opacity: 0.5;
+            transition: all 0.15s ease;
+            border: none;
+            background: none;
+            padding: 2px 4px;
+            vertical-align: middle;
+        }
+        .bookmark-btn:hover { opacity: 1; }
+        .bookmark-btn.saved { opacity: 1; color: #ffd60a; }
+
+        .saved-panel-toggle {
+            position: fixed;
+            top: 20px;
+            right: 140px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        .saved-panel-toggle:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .saved-panel {
+            display: none;
+            position: fixed;
+            top: 0; right: 0;
+            width: 420px;
+            height: 100vh;
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--border);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 24px;
+            box-shadow: -4px 0 20px var(--shadow);
+        }
+        .saved-panel.open { display: block; }
+
+        .saved-panel h2 {
+            font-size: 22px;
+            margin: 0 0 8px 0;
+            padding: 0;
+            border: none;
+            text-transform: none;
+        }
+        .saved-panel .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .saved-item {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .saved-item a {
+            font-weight: 600;
+            font-size: 15px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .saved-item .saved-meta {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .saved-item .remove-btn {
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 12px;
+            border: none;
+            background: none;
+            padding: 2px 6px;
+            margin-top: 4px;
+        }
+        .saved-item .remove-btn:hover { color: #ff453a; }
+        .saved-empty {
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-top: 20px;
+        }
+        .sv-filter {
+            padding: 4px 10px; border-radius: 12px; border: 1px solid var(--border);
+            background: none; color: var(--text-secondary); cursor: pointer; font-size: 12px;
+        }
+        .sv-filter:hover, .sv-filter.active {
+            background: var(--accent); color: white; border-color: var(--accent);
+        }
+        .sv-group-header {
+            font-size: 13px; font-weight: 700; color: var(--accent);
+            margin: 16px 0 6px 0; padding-bottom: 4px; border-bottom: 1px solid var(--border);
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 8px; font-size: 15px; }
+            .container { padding: 24px 16px; border-radius: 12px; }
+            h1 { font-size: 24px; }
+            h2 { font-size: 22px; padding-left: 12px; border-left-width: 3px; margin-top: 32px; }
+            h3 { font-size: 18px; }
+            strong { font-size: 17px; }
+            p:has(strong) { font-size: 16px; }
+            p { font-size: 14px; word-break: break-word; }
+            a { word-break: break-all; }
+            .theme-toggle { top: 10px; right: 10px; padding: 6px 10px; font-size: 12px; }
+            .saved-panel-toggle { top: 10px; right: 100px; padding: 6px 10px; font-size: 12px; }
+            .saved-panel { width: 100vw; }
+            .scroll-top { bottom: 16px; right: 16px; width: 40px; height: 40px; font-size: 18px; }
+            ul { margin-left: 16px; }
+            header { padding-bottom: 16px; margin-bottom: 24px; }
+            footer { margin-top: 32px; }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <button class="theme-toggle" onclick="toggleTheme()">☀️ Light Mode</button>
+    <button class="saved-panel-toggle" onclick="toggleSavedPanel()">Saved (0)</button>
+    <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">&uarr;</button>
+
+    <div class="saved-panel" id="savedPanel">
+        <button class="close-btn" onclick="toggleSavedPanel()">&times;</button>
+        <h2>Saved Items</h2>
+        <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 8px;">
+            Bookmarks persist in your browser across visits.
+        </p>
+        <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;">
+            <button class="sv-filter active" onclick="svFilter('all',this)">All</button>
+            <button class="sv-filter" onclick="svFilter('date',this)">By Date</button>
+            <button class="sv-filter" onclick="svFilter('platform',this)">By Platform</button>
+        </div>
+        <input id="svSearch" type="text" placeholder="Search saved..." oninput="renderSavedList()"
+               style="width:100%;padding:8px 12px;border-radius:8px;border:1px solid #424245;
+               background:#1d1d1f;color:#f5f5f7;font-size:13px;margin-bottom:12px;box-sizing:border-box;">
+        <div id="savedList"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>📊 Daily Business Dossier</h1>
+            <p class="timestamp">Last Updated: 2026-03-24 05:16 AM PST</p>
+            <p class="timestamp">Auto-updates at 6 AM & 5 PM PST</p>
+        </header>
+        
+        <main>
+<small><a href="Database/complete_with_titles.html">Complete Database (0 URLs)</a> • <a href="https://github.com/DiamondDeals/daily-dossier/tree/master/Database">All Archives</a></small>
+
+
+<h2>🟠 Reddit Business Leads</h2>
+
+
+
+
+
+<p><strong>1. The Most Profitable “Unoriginal” Strategy No One Wants to Admit...</strong></p>
+<p>👤 u/HomeworkHQ | 📍 r/entrepreneur</p>
+<p>📊 Engagement: 168 (↑82 upvotes + 💬43 comments)</p>
+<p>⏰ Posted 6h ago</p>
+<p>🔗 <a href="https://www.reddit.com/r/Entrepreneur/comments/1s25n6s/the_most_profitable_unoriginal_strategy_no_one/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s25n6s/the_most_profitable_unoriginal_strategy_no_one/</a></p>
+
+<p><strong>2. Why do so many "find clients" programs skip the finding part...</strong></p>
+<p>👤 u/Due-Bet115 | 📍 r/entrepreneur</p>
+<p>📊 Engagement: 80 (↑16 upvotes + 💬32 comments)</p>
+<p>⏰ Posted 14h ago</p>
+<p>🔗 <a href="https://www.reddit.com/r/Entrepreneur/comments/1s1ub5j/why_do_so_many_find_clients_programs_skip_the/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s1ub5j/why_do_so_many_find_clients_programs_skip_the/</a></p>
+
+<p><strong>3. How to Bounce Back After Failing as Both an Entrepreneur and Corporate...</strong></p>
+<p>👤 u/LifeInAction | 📍 r/entrepreneur</p>
+<p>📊 Engagement: 66 (↑18 upvotes + 💬24 comments)</p>
+<p>⏰ Posted 7h ago</p>
+<p>🔗 <a href="https://www.reddit.com/r/Entrepreneur/comments/1s24ryj/how_to_bounce_back_after_failing_as_both_an/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s24ryj/how_to_bounce_back_after_failing_as_both_an/</a></p>
+
+
+<h2>🔵 Twitter Building Updates</h2>
+
+<p>_No Twitter updates found_</p>
+
+
+<h2>🎥 YouTube AI Videos## 🤖 Moltbook Agent Builds## 🟢 Health & Wellness</h2>
+
+
+
+
+
+
+<h2>📰 RSS News Feed</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p><strong>Agile Robots becomes the latest robotics company to partner with Google DeepMind</strong></p>
+<ul>
+<li>Source: TechCrunch AI</li>
+<li>Published: -6h ago</li>
+<li>Link: <a href="https://techcrunch.com/2026/03/24/agile-robots-becomes-the-latest-robotics-company-to-partner-with-google-deepmind/" target="_blank">https://techcrunch.com/2026/03/24/agile-robots-becomes-the-latest-robotics-company-to-partner-with-google-deepmind/</a></li>
+</ul>
+
+<p><strong>Visible will give you the new iPhone 17e for free - here's how to qualify</strong></p>
+<ul>
+<li>Source: ZDNet AI</li>
+<li>Published: -6h ago</li>
+<li>Link: <a href="https://www.zdnet.com/article/iphone-17e-deal-visible/" target="_blank">https://www.zdnet.com/article/iphone-17e-deal-visible/</a></li>
+</ul>
+
+<p><strong>Best Buy is selling last year's Sony OLED TV for $600 off - and I highly recommend it</strong></p>
+<ul>
+<li>Source: ZDNet AI</li>
+<li>Published: -5h ago</li>
+<li>Link: <a href="https://www.zdnet.com/article/best-buy-sony-bravia-8ii-deal/" target="_blank">https://www.zdnet.com/article/best-buy-sony-bravia-8ii-deal/</a></li>
+</ul>
+
+<p><strong>Why I pick this $200 Motorola phone over cheap Google and Samsung models</strong></p>
+<ul>
+<li>Source: ZDNet AI</li>
+<li>Published: -5h ago</li>
+<li>Link: <a href="https://www.zdnet.com/article/motorola-moto-g-review/" target="_blank">https://www.zdnet.com/article/motorola-moto-g-review/</a></li>
+</ul>
+
+<p><strong>Air Street becomes one of the largest solo VCs in Europe with $232M fund</strong></p>
+<ul>
+<li>Source: TechCrunch AI</li>
+<li>Published: 6h ago</li>
+<li>Link: <a href="https://techcrunch.com/2026/03/23/air-street-becomes-one-of-the-largest-solo-vcs-in-europe-with-232m-fund/" target="_blank">https://techcrunch.com/2026/03/23/air-street-becomes-one-of-the-largest-solo-vcs-in-europe-with-232m-fund/</a></li>
+</ul>
+
+<p><strong>Bernie Sanders’ AI ‘gotcha’ video flops, but the memes are great</strong></p>
+<ul>
+<li>Source: TechCrunch AI</li>
+<li>Published: 8h ago</li>
+<li>Link: <a href="https://techcrunch.com/2026/03/23/bernie-sanders-ai-gotcha-video-flops-but-the-memes-are-great/" target="_blank">https://techcrunch.com/2026/03/23/bernie-sanders-ai-gotcha-video-flops-but-the-memes-are-great/</a></li>
+</ul>
+
+<p><strong>The hardest question to answer about AI-fueled delusions</strong></p>
+<ul>
+<li>Source: MIT Technology Review AI</li>
+<li>Published: 12h ago</li>
+<li>Link: <a href="https://www.technologyreview.com/2026/03/23/1134527/the-hardest-question-to-answer-about-ai-fueled-delusions/" target="_blank">https://www.technologyreview.com/2026/03/23/1134527/the-hardest-question-to-answer-about-ai-fueled-delusions/</a></li>
+</ul>
+
+<p><strong>The Bay Area’s animal welfare movement wants to recruit AI</strong></p>
+<ul>
+<li>Source: MIT Technology Review AI</li>
+<li>Published: 20h ago</li>
+<li>Link: <a href="https://www.technologyreview.com/2026/03/23/1134491/the-bay-areas-animal-welfare-movement-wants-to-recruit-ai/" target="_blank">https://www.technologyreview.com/2026/03/23/1134491/the-bay-areas-animal-welfare-movement-wants-to-recruit-ai/</a></li>
+</ul>
+
+
+
+<p><strong>#494 – Jensen Huang: NVIDIA – The $4 Trillion Company & the AI Revolution</strong></p>
+<ul>
+<li>Source: Lex Fridman Podcast</li>
+<li>Published: 12h ago</li>
+<li>Link: <a href="https://lexfridman.com/jensen-huang/?utm_source=rss&utm_medium=rss&utm_campaign=jensen-huang" target="_blank">https://lexfridman.com/jensen-huang/?utm_source=rss&utm_medium=rss&utm_campaign=jensen-huang</a></li>
+</ul>
+
+
+
+<p><strong>A New Framework for Evaluating Voice Agents (EVA)</strong></p>
+<ul>
+<li>Source: Hugging Face Blog</li>
+<li>Published: 3h ago</li>
+<li>Link: <a href="https://huggingface.co/blog/ServiceNow-AI/eva" target="_blank">https://huggingface.co/blog/ServiceNow-AI/eva</a></li>
+</ul>
+
+
+
+<p><strong>Join LangChain at Google Cloud Next 2026</strong></p>
+<ul>
+<li>Source: LangChain Blog</li>
+<li>Published: 7h ago</li>
+<li>Link: <a href="https://blog.langchain.com/join-langchain-at-google-cloud-next-2026/" target="_blank">https://blog.langchain.com/join-langchain-at-google-cloud-next-2026/</a></li>
+</ul>
+
+<p><strong>Two different types of agent authorization</strong></p>
+<ul>
+<li>Source: LangChain Blog</li>
+<li>Published: 11h ago</li>
+<li>Link: <a href="https://blog.langchain.com/two-different-types-of-agent-authorization/" target="_blank">https://blog.langchain.com/two-different-types-of-agent-authorization/</a></li>
+</ul>
+
+
+
+<p><strong>Worth, the Startup From the Founders of Stax, Just Raised $30 Million to Deliver ‘Simplicity for Small Businesses’</strong></p>
+<ul>
+<li>Source: Inc. Magazine</li>
+<li>Published: -6h ago</li>
+<li>Link: <a href="https://www.inc.com/brian-contreras/fintech-startup-stax-unicorn-ai-small-businesses-worth/91320667" target="_blank">https://www.inc.com/brian-contreras/fintech-startup-stax-unicorn-ai-small-businesses-worth/91320667</a></li>
+</ul>
+
+<p><strong>Everyone Needs a Mentor</strong></p>
+<ul>
+<li>Source: Inc. Magazine</li>
+<li>Published: -6h ago</li>
+<li>Link: <a href="https://www.inc.com/richard-kilgannon/everyone-needs-a-mentor/91320661" target="_blank">https://www.inc.com/richard-kilgannon/everyone-needs-a-mentor/91320661</a></li>
+</ul>
+
+<p><strong>Why Organizational Charts Don’t Create Accountability</strong></p>
+<ul>
+<li>Source: Inc. Magazine</li>
+<li>Published: -6h ago</li>
+<li>Link: <a href="https://www.inc.com/andrea-olson/why-organizational-charts-dont-create-accountability/91316117" target="_blank">https://www.inc.com/andrea-olson/why-organizational-charts-dont-create-accountability/91316117</a></li>
+</ul>
+
+<p><strong>The most innovative retail companies of 2026</strong></p>
+<ul>
+<li>Source: Fast Company</li>
+<li>Published: -5h ago</li>
+<li>Link: <a href="https://www.fastcompany.com/91492972/retail-most-innovative-companies-2026" target="_blank">https://www.fastcompany.com/91492972/retail-most-innovative-companies-2026</a></li>
+</ul>
+
+<p><strong>The most innovative companies in public relations and brand strategy for 2026</strong></p>
+<ul>
+<li>Source: Fast Company</li>
+<li>Published: -5h ago</li>
+<li>Link: <a href="https://www.fastcompany.com/91493904/public-relations-brand-strategies-most-innovative-companies-2026" target="_blank">https://www.fastcompany.com/91493904/public-relations-brand-strategies-most-innovative-companies-2026</a></li>
+</ul>
+
+<p><strong>The most innovative companies in economic development for 2026</strong></p>
+<ul>
+<li>Source: Fast Company</li>
+<li>Published: -5h ago</li>
+<li>Link: <a href="https://www.fastcompany.com/91493943/economic-development-most-innovative-companies-2026" target="_blank">https://www.fastcompany.com/91493943/economic-development-most-innovative-companies-2026</a></li>
+</ul>
+
+<p><strong>The Entrepreneur’s Strategic Guide to Buying a Business</strong></p>
+<ul>
+<li>Source: Entrepreneur</li>
+<li>Published: 10h ago</li>
+<li>Link: <a href="https://www.entrepreneur.com/money-finance/the-entrepreneurs-strategic-guide-to-buying-a-business/502973" target="_blank">https://www.entrepreneur.com/money-finance/the-entrepreneurs-strategic-guide-to-buying-a-business/502973</a></li>
+</ul>
+
+<p><strong>Stick to Your Business Plan — Why Making Sacrifices Can Lead to Negative Consequences</strong></p>
+<ul>
+<li>Source: Entrepreneur</li>
+<li>Published: 10h ago</li>
+<li>Link: <a href="https://www.entrepreneur.com/starting-a-business/why-making-business-plan-exceptions-can-kill-your/503143" target="_blank">https://www.entrepreneur.com/starting-a-business/why-making-business-plan-exceptions-can-kill-your/503143</a></li>
+</ul>
+
+<p><strong>Reddit CEO Says He Plans to ‘Go Heavy’ Hiring Recent Grads. Here’s Why.</strong></p>
+<ul>
+<li>Source: Entrepreneur</li>
+<li>Published: 11h ago</li>
+<li>Link: <a href="https://www.entrepreneur.com/business-news/reddit-ceo-plans-to-hire-recent-grads" target="_blank">https://www.entrepreneur.com/business-news/reddit-ceo-plans-to-hire-recent-grads</a></li>
+</ul>
+
+
+
+<p><strong>Vital Farms: Matt O’Hayer. How a serial entrepreneur re-branded the egg</strong></p>
+<ul>
+<li>Source: How I Built This (NPR)</li>
+<li>Published: 22h ago</li>
+<li>Link:</li>
+</ul>
+
+
+
+<p><strong>Ghost Campaign Uses 7 npm Packages to Steal Crypto Wallets and Credentials</strong></p>
+<ul>
+<li>Source: The Hacker News</li>
+<li>Published: -6h ago</li>
+<li>Link: <a href="https://thehackernews.com/2026/03/ghost-campaign-uses-7-npm-packages-to.html" target="_blank">https://thehackernews.com/2026/03/ghost-campaign-uses-7-npm-packages-to.html</a></li>
+</ul>
+
+<p><strong>5 Learnings from the First-Ever Gartner Market Guide for Guardian Agents</strong></p>
+<ul>
+<li>Source: The Hacker News</li>
+<li>Published: -6h ago</li>
+<li>Link: <a href="https://thehackernews.com/2026/03/5-learnings-from-first-ever-gartner.html" target="_blank">https://thehackernews.com/2026/03/5-learnings-from-first-ever-gartner.html</a></li>
+</ul>
+
+<p><strong>TeamPCP Hacks Checkmarx GitHub Actions Using Stolen CI Credentials</strong></p>
+<ul>
+<li>Source: The Hacker News</li>
+<li>Published: -5h ago</li>
+<li>Link: <a href="https://thehackernews.com/2026/03/teampcp-hacks-checkmarx-github-actions.html" target="_blank">https://thehackernews.com/2026/03/teampcp-hacks-checkmarx-github-actions.html</a></li>
+</ul>
+
+<p><strong>‘CanisterWorm’ Springs Wiper Attack Targeting Iran</strong></p>
+<ul>
+<li>Source: Krebs on Security</li>
+<li>Published: 13h ago</li>
+<li>Link: <a href="https://krebsonsecurity.com/2026/03/canisterworm-springs-wiper-attack-targeting-iran/" target="_blank">https://krebsonsecurity.com/2026/03/canisterworm-springs-wiper-attack-targeting-iran/</a></li>
+</ul>
+
+
+
+<p><strong>The Future of Antithrombotic Therapy After Successful Catheter Ablation of Atrial Fibrillation</strong></p>
+<ul>
+<li>Source: AHA Circulation</li>
+<li>Published: 23h ago</li>
+<li>Link: <a href="https://www.ahajournals.org/doi/abs/10.1161/CIRCULATIONAHA.125.077744?af=R" target="_blank">https://www.ahajournals.org/doi/abs/10.1161/CIRCULATIONAHA.125.077744?af=R</a></li>
+</ul>
+
+<p><strong>Letter by Wang and Chen Regarding Article, “Evaluation of Lipoprotein(a) as a Prognostic Marker of Extracoronary Atherosclerotic Vascular Disease Progression”</strong></p>
+<ul>
+<li>Source: AHA Circulation</li>
+<li>Published: 23h ago</li>
+<li>Link: <a href="https://www.ahajournals.org/doi/abs/10.1161/CIRCULATIONAHA.125.076798?af=R" target="_blank">https://www.ahajournals.org/doi/abs/10.1161/CIRCULATIONAHA.125.076798?af=R</a></li>
+</ul>
+
+<p><strong>Letter by Zhang et al Regarding Article, “Evaluation of Lipoprotein(a) as a Prognostic Marker of Extracoronary Atherosclerotic Vascular Disease Progression”</strong></p>
+<ul>
+<li>Source: AHA Circulation</li>
+<li>Published: 23h ago</li>
+<li>Link: <a href="https://www.ahajournals.org/doi/abs/10.1161/CIRCULATIONAHA.125.077337?af=R" target="_blank">https://www.ahajournals.org/doi/abs/10.1161/CIRCULATIONAHA.125.077337?af=R</a></li>
+</ul>
+
+
+
+<p><strong>Glycidol: The DNA-Damager in Fried Foods</strong></p>
+<ul>
+<li>Source: NutritionFacts.org</li>
+<li>Published: -6h ago</li>
+<li>Link: <a href="https://nutritionfacts.org/blog/glycidol-the-dna-damager-in-fried-foods/" target="_blank">https://nutritionfacts.org/blog/glycidol-the-dna-damager-in-fried-foods/</a></li>
+</ul>
+
+
+
+<p><strong>SEO 2.0: How Content Marketing Drives Visibility in AI Search via @sejournal, @hethr_campbell</strong></p>
+<ul>
+<li>Source: Search Engine Journal</li>
+<li>Published: -2h ago</li>
+<li>Link: <a href="https://www.searchenginejournal.com/seo-2-0-how-content-marketing-drives-visibility-in-ai-search/570308/" target="_blank">https://www.searchenginejournal.com/seo-2-0-how-content-marketing-drives-visibility-in-ai-search/570308/</a></li>
+</ul>
+
+<p><strong>Bing AI Dashboard Maps Grounding Queries To Cited Pages via @sejournal, @MattGSouthern</strong></p>
+<ul>
+<li>Source: Search Engine Journal</li>
+<li>Published: 0h ago</li>
+<li>Link: <a href="https://www.searchenginejournal.com/bing-ai-dashboard-maps-grounding-queries-to-cited-pages/570323/" target="_blank">https://www.searchenginejournal.com/bing-ai-dashboard-maps-grounding-queries-to-cited-pages/570323/</a></li>
+</ul>
+
+<p><strong>Google Responds To Error That Causes Old Branding To Persist In SERPs via @sejournal, @martinibuster</strong></p>
+<ul>
+<li>Source: Search Engine Journal</li>
+<li>Published: 7h ago</li>
+<li>Link: <a href="https://www.searchenginejournal.com/google-responds-to-error-that-causes-old-branding-to-persist-in-serps/570315/" target="_blank">https://www.searchenginejournal.com/google-responds-to-error-that-causes-old-branding-to-persist-in-serps/570315/</a></li>
+</ul>
+
+<p><strong>How to Build Your Own Google Analytics Custom Dashboards</strong></p>
+<ul>
+<li>Source: SEMrush Blog</li>
+<li>Published: 20h ago</li>
+<li>Link: <a href="https://www.semrush.com/blog/google-analytics-dashboard/" target="_blank">https://www.semrush.com/blog/google-analytics-dashboard/</a></li>
+</ul>
+
+
+
+<p><strong>5 Ways to Turn Your Support Data Into a Customer Acquisition Channel with HappyFox’s Founder CEO</strong></p>
+<ul>
+<li>Source: SaaStr Blog</li>
+<li>Published: -5h ago</li>
+<li>Link: <a href="https://www.saastr.com/5-ways-to-turn-your-support-data-into-a-customer-acquisition-channel-with-happyfoxs-founder-ceo/" target="_blank">https://www.saastr.com/5-ways-to-turn-your-support-data-into-a-customer-acquisition-channel-with-happyfoxs-founder-ceo/</a></li>
+</ul>
+
+<p><strong>The “Buyers Won’t Trust an AI” Objection Is Already Collapsing</strong></p>
+<ul>
+<li>Source: SaaStr Blog</li>
+<li>Published: 15h ago</li>
+<li>Link: <a href="https://www.saastr.com/the-trust-objection-to-ai-sales-execs-doesnt-hold-up-the-way-you-think-it-does/" target="_blank">https://www.saastr.com/the-trust-objection-to-ai-sales-execs-doesnt-hold-up-the-way-you-think-it-does/</a></li>
+</ul>
+
+<p><strong>Dear SaaStr: Should I Use an AI SDR Before I Have a Working Human SDR motion?</strong></p>
+<ul>
+<li>Source: SaaStr Blog</li>
+<li>Published: 19h ago</li>
+<li>Link: <a href="https://www.saastr.com/dear-saastr-should-i-use-an-ai-sdr-before-i-have-a-working-human-sdr-motion/" target="_blank">https://www.saastr.com/dear-saastr-should-i-use-an-ai-sdr-before-i-have-a-working-human-sdr-motion/</a></li>
+</ul>
+
+
+
+<p><strong>Marine life is a silent casualty of armed conflicts</strong></p>
+<ul>
+<li>Source: Nature</li>
+<li>Published: 5h ago</li>
+<li>Link: <a href="https://www.nature.com/articles/d41586-026-00942-w" target="_blank">https://www.nature.com/articles/d41586-026-00942-w</a></li>
+</ul>
+
+<p><strong>Scientists should join collaborative online editing communities for biodiversity</strong></p>
+<ul>
+<li>Source: Nature</li>
+<li>Published: 5h ago</li>
+<li>Link: <a href="https://www.nature.com/articles/d41586-026-00940-y" target="_blank">https://www.nature.com/articles/d41586-026-00940-y</a></li>
+</ul>
+
+<p><strong>Salt lakes are shrinking and expanding, causing havoc in conservation</strong></p>
+<ul>
+<li>Source: Nature</li>
+<li>Published: 5h ago</li>
+<li>Link: <a href="https://www.nature.com/articles/d41586-026-00943-9" target="_blank">https://www.nature.com/articles/d41586-026-00943-9</a></li>
+</ul>
+
+<p><strong>Sperm Whales Caught on Camera Headbutting Each Other for the First Time</strong></p>
+<ul>
+<li>Source: Nautilus</li>
+<li>Published: 7h ago</li>
+<li>Link: <a href="https://nautil.us/sperm-whales-caught-on-camera-headbutting-each-other-for-the-first-time-1279156/" target="_blank">https://nautil.us/sperm-whales-caught-on-camera-headbutting-each-other-for-the-first-time-1279156/</a></li>
+</ul>
+
+<p><strong>Why We Don’t Have a Lyme Disease Vaccine</strong></p>
+<ul>
+<li>Source: Nautilus</li>
+<li>Published: 9h ago</li>
+<li>Link: <a href="https://nautil.us/why-we-dont-have-a-lyme-disease-vaccine-1279152/" target="_blank">https://nautil.us/why-we-dont-have-a-lyme-disease-vaccine-1279152/</a></li>
+</ul>
+
+<p><strong>Fitbit Data Sheds Light on Best Time to Exercise</strong></p>
+<ul>
+<li>Source: Nautilus</li>
+<li>Published: 11h ago</li>
+<li>Link: <a href="https://nautil.us/fitbit-data-sheds-light-on-best-time-to-exercise-1279140/" target="_blank">https://nautil.us/fitbit-data-sheds-light-on-best-time-to-exercise-1279140/</a></li>
+</ul>
+
+<p><strong>Are Strings Still Our Best Hope for a Theory of Everything?</strong></p>
+<ul>
+<li>Source: Quanta Magazine</li>
+<li>Published: 14h ago</li>
+<li>Link: <a href="https://www.quantamagazine.org/are-strings-still-our-best-hope-for-a-theory-of-everything-20260323/" target="_blank">https://www.quantamagazine.org/are-strings-still-our-best-hope-for-a-theory-of-everything-20260323/</a></li>
+</ul>
+
+
+
+<p><strong>Agile Robots becomes the latest robotics company to partner with Google DeepMind</strong></p>
+<ul>
+<li>Source: TechCrunch</li>
+<li>Published: -6h ago</li>
+<li>Link: <a href="https://techcrunch.com/2026/03/24/agile-robots-becomes-the-latest-robotics-company-to-partner-with-google-deepmind/" target="_blank">https://techcrunch.com/2026/03/24/agile-robots-becomes-the-latest-robotics-company-to-partner-with-google-deepmind/</a></li>
+</ul>
+
+<p><strong>Nintendo cuts Switch 2 production amid weakening console sales</strong></p>
+<ul>
+<li>Source: The Verge</li>
+<li>Published: -6h ago</li>
+<li>Link: <a href="https://www.theverge.com/games/899291/nintendo-switch-2-production-cut-weak-us-sales" target="_blank">https://www.theverge.com/games/899291/nintendo-switch-2-production-cut-weak-us-sales</a></li>
+</ul>
+
+<p><strong>Orbital data centers, part 1: There’s no way this is economically viable, right?</strong></p>
+<ul>
+<li>Source: Ars Technica</li>
+<li>Published: -5h ago</li>
+<li>Link: <a href="https://arstechnica.com/space/2026/03/orbital-data-centers-part-1-theres-no-way-this-is-economically-viable-right/" target="_blank">https://arstechnica.com/space/2026/03/orbital-data-centers-part-1-theres-no-way-this-is-economically-viable-right/</a></li>
+</ul>
+
+<p><strong>Debunking Zswap and Zram Myths</strong></p>
+<ul>
+<li>Source: Hacker News</li>
+<li>Published: -5h ago</li>
+<li>Link: <a href="https://chrisdown.name/2026/03/24/zswap-vs-zram-when-to-use-what.html" target="_blank">https://chrisdown.name/2026/03/24/zswap-vs-zram-when-to-use-what.html</a></li>
+</ul>
+
+<p><strong>curl > /dev/sda: How I made a Linux distro that runs wget | dd</strong></p>
+<ul>
+<li>Source: Hacker News</li>
+<li>Published: -4h ago</li>
+<li>Link: <a href="https://astrid.tech/2026/03/24/0/curl-to-dev-sda/" target="_blank">https://astrid.tech/2026/03/24/0/curl-to-dev-sda/</a></li>
+</ul>
+
+<p><strong>Ultrahuman ramps up U.S. push with Ring Pro as Oura tightens its grip</strong></p>
+<ul>
+<li>Source: TechCrunch</li>
+<li>Published: -4h ago</li>
+<li>Link: <a href="https://techcrunch.com/2026/03/24/ultrahuman-ramps-up-u-s-push-with-ring-pro-as-oura-tightens-grip/" target="_blank">https://techcrunch.com/2026/03/24/ultrahuman-ramps-up-u-s-push-with-ring-pro-as-oura-tightens-grip/</a></li>
+</ul>
+
+<p><strong>Microsoft's "Fix" for Windows 11: Flowers After the Beating</strong></p>
+<ul>
+<li>Source: Hacker News</li>
+<li>Published: -4h ago</li>
+<li>Link: <a href="https://www.sambent.com/microsofts-plan-to-fix-windows-11-is-gaslighting/" target="_blank">https://www.sambent.com/microsofts-plan-to-fix-windows-11-is-gaslighting/</a></li>
+</ul>
+
+<p><strong>Delve halts demos, Insight Partners scrubs investment post amid ‘fake compliance’ allegations</strong></p>
+<ul>
+<li>Source: TechCrunch</li>
+<li>Published: 0h ago</li>
+<li>Link: <a href="https://techcrunch.com/2026/03/23/delve-halts-demos-insight-partners-scrubs-investment-post-amid-fake-compliance-allegations/" target="_blank">https://techcrunch.com/2026/03/23/delve-halts-demos-insight-partners-scrubs-investment-post-amid-fake-compliance-allegations/</a></li>
+</ul>
+
+<p><strong>A mission NASA might kill is still returning fascinating science from Jupiter</strong></p>
+<ul>
+<li>Source: Ars Technica</li>
+<li>Published: 6h ago</li>
+<li>Link: <a href="https://arstechnica.com/space/2026/03/a-mission-nasa-might-kill-is-still-returning-fascinating-science-from-jupiter/" target="_blank">https://arstechnica.com/space/2026/03/a-mission-nasa-might-kill-is-still-returning-fascinating-science-from-jupiter/</a></li>
+</ul>
+
+<p><strong>The US government just banned consumer routers made outside the US</strong></p>
+<ul>
+<li>Source: The Verge</li>
+<li>Published: 6h ago</li>
+<li>Link: <a href="https://www.theverge.com/news/899172/fcc-foreign-router-ban" target="_blank">https://www.theverge.com/news/899172/fcc-foreign-router-ban</a></li>
+</ul>
+
+
+
+<p><strong>TSA Chaos, Iran War Whiplash, and White House AI Plan</strong></p>
+<ul>
+<li>Source: Pivot (Swisher & Galloway)</li>
+<li>Published: -4h ago</li>
+<li>Link:</li>
+</ul>
+
+
+
+<p><strong>Spring Break</strong></p>
+<ul>
+<li>Source: Stratechery</li>
+<li>Published: 19h ago</li>
+<li>Link: <a href="https://stratechery.com/2026/spring-break/" target="_blank">https://stratechery.com/2026/spring-break/</a></li>
+</ul>
+
+
+
+<p><strong>Numbers and the human/computer interface</strong></p>
+<ul>
+<li>Source: Seth Godin</li>
+<li>Published: -3h ago</li>
+<li>Link: <a href="https://seths.blog/2026/03/numbers-and-the-human-computer-interface/" target="_blank">https://seths.blog/2026/03/numbers-and-the-human-computer-interface/</a></li>
+</ul>
+
+<p><strong>Follow-through</strong></p>
+<ul>
+<li>Source: Seth Godin</li>
+<li>Published: 20h ago</li>
+<li>Link: <a href="https://seths.blog/2026/03/follow-through-2/" target="_blank">https://seths.blog/2026/03/follow-through-2/</a></li>
+</ul>
+
+
+
+
+<h2>⚫ GitHub Trending Repos</h2>
+
+<p><strong>1. LimHyungTae/Awesome-PhD-CV</strong></p>
+<p>📝 Curated academic CV templates and guidelines for PhD students, researchers, and faculty job applicants.</p>
+<p>⭐ 205 stars | 🍴 21 forks | TeX</p>
+<p>🏷️ academia-resume, bigtech-resume, cv, latex-resume-template, resume</p>
+<p>🔗 <a href="https://github.com/LimHyungTae/Awesome-PhD-CV" target="_blank">https://github.com/LimHyungTae/Awesome-PhD-CV</a></p>
+
+<p><strong>2. Shudesu/line-harness-oss</strong></p>
+<p>📝 Open-source LINE Official Account CRM — free alternative to L-step/Utage. Step delivery, broadcasts, forms, rich menus, scoring, automation, and more.</p>
+<p>⭐ 74 stars | 🍴 11 forks | TypeScript</p>
+<p>🏷️ none</p>
+<p>🔗 <a href="https://github.com/Shudesu/line-harness-oss" target="_blank">https://github.com/Shudesu/line-harness-oss</a></p>
+
+<p><strong>3. krzysztofdudek/ResearcherSkill</strong></p>
+<p>📝 One file. Your AI coding agent becomes a scientist. Autonomous experimentation skill for Claude Code, Codex, or any other agent.</p>
+<p>⭐ 77 stars | 🍴 8 forks | Unknown</p>
+<p>🏷️ ai-agent, ai-coding, autonomous-agent, autoresearch, claude-code</p>
+<p>🔗 <a href="https://github.com/krzysztofdudek/ResearcherSkill" target="_blank">https://github.com/krzysztofdudek/ResearcherSkill</a></p>
+
+<p><strong>4. mrdoob/Starter-Kit-Racing</strong></p>
+<p>📝 Basic template for a racing game.</p>
+<p>⭐ 32 stars | 🍴 6 forks | JavaScript</p>
+<p>🏷️ none</p>
+<p>🔗 <a href="https://github.com/mrdoob/Starter-Kit-Racing" target="_blank">https://github.com/mrdoob/Starter-Kit-Racing</a></p>
+
+<p><strong>5. theja0473/automotive-claude-code-agents</strong></p>
+<p>📝 Automotive software engineering is one of the most complex and regulated domains in the world. Engineers juggle <strong>ISO 26262 functional safety</strong>, <strong>AUTOSAR architectures</strong>, <strong>MISRA compliance</strong>, <strong>cybersecurity standards</strong>, and <strong>real-time embedded constraints</strong> -- all while shipping on aggressive timelines.</p>
+<p>⭐ 238 stars | 🍴 115 forks | Python</p>
+<p>🏷️ none</p>
+<p>🔗 <a href="https://github.com/theja0473/automotive-claude-code-agents" target="_blank">https://github.com/theja0473/automotive-claude-code-agents</a></p>
+
+
+<p>_Generated by Bishop • Last updated: 2026-03-24 05:16 AM PST_</p>
+
+        
+<hr style="margin: 60px 0 40px 0; border: none; border-top: 1px solid var(--border);">
+
+<div style="text-align: center; padding: 30px 0;">
+    <h3 style="color: var(--accent); font-size: 24px; margin-bottom: 20px;">Complete Databases</h3>
+    <p style="color: var(--text-secondary); font-size: 15px; margin-bottom: 20px;">
+        The dossier above shows curated highlights. Click below to see EVERY item found:
+    </p>
+    <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+
+    </div>
+    <p style="color: var(--text-secondary); font-size: 13px; margin-top: 20px;">
+        <a href="https://github.com/DiamondDeals/daily-dossier/tree/master/Database" style="color: var(--accent);">Browse Historical Databases</a>
+        &nbsp;|&nbsp;
+        <a href="https://github.com/DiamondDeals/daily-dossier/tree/master/Daily" style="color: var(--accent);">Daily Archives</a>
+    </p>
+</div>
+
+</main>
+        
+        <footer>
+            <p>Generated by <a href="https://moltbook.com/u/BishopLizard" target="_blank">Bishop</a> • Powered by OpenClaw</p>
+            <p><a href="https://github.com/DiamondDeals/daily-dossier/tree/master/Archive">View Archive</a></p>
+        </footer>
+    </div>
+    
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.body;
+            const button = document.querySelector('.theme-toggle');
+            const currentTheme = body.getAttribute('data-theme');
+            
+            if (currentTheme === 'dark') {
+                body.setAttribute('data-theme', 'light');
+                button.textContent = '🌙 Dark Mode';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                button.textContent = '☀️ Light Mode';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        
+        // Scroll-to-top button visibility
+        window.addEventListener('scroll', function() {
+            document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 400);
+        });
+
+        // Load saved theme (default to dark)
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.body.setAttribute('data-theme', savedTheme);
+        document.querySelector('.theme-toggle').textContent = savedTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+
+        // ---- Bookmark / Read Later System ----
+        function getBookmarks() {
+            try { return JSON.parse(localStorage.getItem('dossier_bookmarks') || '[]'); }
+            catch { return []; }
+        }
+        function saveBookmarks(bm) {
+            localStorage.setItem('dossier_bookmarks', JSON.stringify(bm));
+            updateBadge();
+        }
+        function updateBadge() {
+            const count = getBookmarks().length;
+            document.querySelector('.saved-panel-toggle').textContent = 'Saved (' + count + ')';
+        }
+        function toggleSavedPanel() {
+            const panel = document.getElementById('savedPanel');
+            panel.classList.toggle('open');
+            if (panel.classList.contains('open')) renderSavedList();
+        }
+        var _svMode = 'all';
+        function svFilter(mode, btn) {
+            _svMode = mode;
+            document.querySelectorAll('.sv-filter').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderSavedList();
+        }
+        function renderSavedList() {
+            const list = document.getElementById('savedList');
+            let bm = getBookmarks();
+            const q = (document.getElementById('svSearch') || {}).value || '';
+            if (q) bm = bm.filter(b => (b.title + ' ' + (b.section||'')).toLowerCase().includes(q.toLowerCase()));
+            if (bm.length === 0) {
+                list.innerHTML = '<p class="saved-empty">' + (q ? 'No matches.' : 'No saved items yet. Click the star next to any item to save it.') + '</p>';
+                return;
+            }
+            let html = '<div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap;">';
+            html += '<button onclick="exportBookmarks()" style="padding:5px 10px;border-radius:8px;border:1px solid #424245;background:none;color:#0a84ff;cursor:pointer;font-size:12px;">Export</button>';
+            html += '<label style="padding:5px 10px;border-radius:8px;border:1px solid #424245;color:#0a84ff;cursor:pointer;font-size:12px;">Import<input type="file" accept=".json" onchange="importBookmarks(event)" style="display:none;"></label>';
+            html += '<button onclick="clearAllBookmarks()" style="padding:5px 10px;border-radius:8px;border:1px solid #ff453a;background:none;color:#ff453a;cursor:pointer;font-size:12px;">Clear All</button>';
+            html += '</div>';
+            if (_svMode === 'date') {
+                const groups = {};
+                bm.forEach((item, i) => { const d = item.date || 'Unknown'; if (!groups[d]) groups[d] = []; groups[d].push({item, i}); });
+                Object.keys(groups).sort().reverse().forEach(d => {
+                    html += '<div class="sv-group-header">' + d + ' (' + groups[d].length + ')</div>';
+                    groups[d].forEach(({item, i}) => { html += svItemHtml(item, i); });
+                });
+            } else if (_svMode === 'platform') {
+                const groups = {};
+                bm.forEach((item, i) => { const s = item.section || 'Other'; if (!groups[s]) groups[s] = []; groups[s].push({item, i}); });
+                Object.keys(groups).sort().forEach(s => {
+                    html += '<div class="sv-group-header">' + s + ' (' + groups[s].length + ')</div>';
+                    groups[s].forEach(({item, i}) => { html += svItemHtml(item, i); });
+                });
+            } else {
+                bm.forEach((item, i) => { html += svItemHtml(item, i); });
+            }
+            list.innerHTML = html;
+        }
+        function svItemHtml(item, i) {
+            return '<div class="saved-item"><a href="' + item.url + '" target="_blank">' + item.title + '</a>' +
+                '<span class="saved-meta">' + (item.section || '') + ' &middot; Saved ' + (item.date || '') + '</span>' +
+                '<br><button class="remove-btn" onclick="removeBookmark(' + i + ')">&times; Remove</button></div>';
+        }
+        function clearAllBookmarks() {
+            if (!confirm('Clear all saved items?')) return;
+            saveBookmarks([]);
+            renderSavedList();
+            document.querySelectorAll('.bookmark-btn').forEach(b => {
+                b.classList.remove('saved');
+                b.textContent = '☆';
+            });
+        }
+        function exportBookmarks() {
+            const bm = getBookmarks();
+            const blob = new Blob([JSON.stringify(bm, null, 2)], {type: 'application/json'});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'dossier_saved_items.json';
+            a.click();
+        }
+        function importBookmarks(evt) {
+            const file = evt.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (!Array.isArray(imported)) { alert('Invalid file'); return; }
+                    const bm = getBookmarks();
+                    // Merge without duplicates
+                    const existing = new Set(bm.map(b => b.title));
+                    let added = 0;
+                    imported.forEach(item => {
+                        if (!existing.has(item.title)) {
+                            bm.push(item);
+                            added++;
+                        }
+                    });
+                    saveBookmarks(bm);
+                    renderSavedList();
+                    // Sync star buttons
+                    document.querySelectorAll('.bookmark-btn').forEach(btn => {
+                        const t = btn.getAttribute('data-title');
+                        const s = bm.some(b => b.title === t);
+                        btn.classList.toggle('saved', s);
+                        btn.textContent = s ? '★' : '☆';
+                    });
+                    alert('Imported ' + added + ' new items (' + imported.length + ' total in file)');
+                } catch { alert('Error reading file'); }
+            };
+            reader.readAsText(file);
+        }
+        function removeBookmark(idx) {
+            const bm = getBookmarks();
+            bm.splice(idx, 1);
+            saveBookmarks(bm);
+            renderSavedList();
+            // Update all bookmark button states
+            document.querySelectorAll('.bookmark-btn').forEach(btn => {
+                const title = btn.getAttribute('data-title');
+                btn.classList.toggle('saved', bm.some(b => b.title === title));
+                btn.textContent = bm.some(b => b.title === title) ? '★' : '☆';
+            });
+        }
+        function toggleBookmark(btn) {
+            const title = btn.getAttribute('data-title');
+            const url = btn.getAttribute('data-url');
+            const section = btn.getAttribute('data-section');
+            const bm = getBookmarks();
+            const exists = bm.findIndex(b => b.title === title);
+            if (exists >= 0) {
+                bm.splice(exists, 1);
+                btn.classList.remove('saved');
+                btn.textContent = '☆';
+            } else {
+                bm.push({ title, url, section, date: new Date().toLocaleDateString() });
+                btn.classList.add('saved');
+                btn.textContent = '★';
+            }
+            saveBookmarks(bm);
+        }
+
+        // Inject bookmark buttons into every numbered item
+        document.addEventListener('DOMContentLoaded', function() {
+            const bm = getBookmarks();
+            updateBadge();
+
+            // Find all strong elements that look like numbered titles
+            document.querySelectorAll('p > strong').forEach(el => {
+                const text = el.textContent;
+                const match = text.match(/^\d+\.\s+(.+)/);
+                if (!match) return;
+
+                const title = match[1];
+                // Find the URL in the next sibling list
+                let url = '';
+                let section = '';
+                let sibling = el.parentElement.nextElementSibling;
+                while (sibling) {
+                    if (sibling.tagName === 'UL') {
+                        const links = sibling.querySelectorAll('a');
+                        if (links.length > 0) url = links[links.length - 1].href;
+                        break;
+                    }
+                    sibling = sibling.nextElementSibling;
+                }
+                // Get section from nearest h2
+                let h2 = el.parentElement.previousElementSibling;
+                while (h2 && h2.tagName !== 'H2') h2 = h2.previousElementSibling;
+                if (h2) section = h2.textContent;
+
+                const isSaved = bm.some(b => b.title === title);
+                const btn = document.createElement('button');
+                btn.className = 'bookmark-btn' + (isSaved ? ' saved' : '');
+                btn.textContent = isSaved ? '★' : '☆';
+                btn.setAttribute('data-title', title);
+                btn.setAttribute('data-url', url);
+                btn.setAttribute('data-section', section);
+                btn.onclick = function() { toggleBookmark(this); };
+                el.appendChild(btn);
+            });
+        });
+    </script>
+</body>
+</html>
