@@ -321,13 +321,24 @@ def run_full_digest():
     </div>
 """
 
+    # Add section jump links (TOC)
+    toc_html = '<nav style="display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 24px 0;">'
+    for pn, pd in [
+        ('reddit', '🟠 Reddit'), ('twitter', '🦋 Bluesky'), ('youtube', '🎥 YouTube'),
+        ('moltbook', '🤖 Moltbook'), ('health', '🟢 Health'), ('rss', '📰 RSS')
+    ]:
+        cnt = results[pn]['count']
+        toc_html += f'<a href="#sec-{pn}" style="padding:6px 14px;border-radius:8px;background:#2d2d2f;color:#f5f5f7;text-decoration:none;font-size:13px;border:1px solid #424245;">{pd} ({cnt})</a>'
+    toc_html += '</nav>'
+    all_items_html += toc_html
+
     # Add all items by platform
     for platform_name, platform_data in [
         ('reddit', '🟠 Reddit'), ('twitter', '🦋 Bluesky'), ('youtube', '🎥 YouTube'),
         ('moltbook', '🤖 Moltbook'), ('health', '🟢 Health'), ('rss', '📰 RSS')
     ]:
         count = results[platform_name]['count']
-        all_items_html += f"\n<h2>{platform_data} ({count} items)</h2>\n"
+        all_items_html += f'\n<h2 id="sec-{platform_name}">{platform_data} ({count} items)</h2>\n'
 
         if count > 0:
             items = results[platform_name].get('posts', results[platform_name].get('videos', results[platform_name].get('articles', [])))

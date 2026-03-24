@@ -1,6 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PLACEHOLDER"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PLACEHOLDER', {
+    'send_page_view': true,
+    'anonymize_ip': true
+  });
+
+  // Track link clicks
+  document.addEventListener('click', function(e) {
+    if (e.target.tagName === 'A' && e.target.href) {
+      gtag('event', 'click', {
+        'event_category': 'outbound',
+        'event_label': e.target.href,
+        'transport_type': 'beacon'
+      });
+    }
+  });
+
+  // Track dark mode toggle
+  const themeToggle = document.querySelector('.theme-toggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function() {
+      gtag('event', 'toggle_theme', {
+        'event_category': 'engagement',
+        'event_label': document.documentElement.getAttribute('data-theme') || 'dark'
+      });
+    });
+  }
+</script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Business Dossier</title>
@@ -329,16 +363,16 @@
     <div class="container">
         <header>
             <h1>📊 Daily Business Dossier</h1>
-            <p class="timestamp">Last Updated: 2026-03-24 06:12 AM PST</p>
+            <p class="timestamp">Last Updated: 2026-03-23 09:36 PM PST</p>
             <p class="timestamp">Auto-updates at 6 AM & 5 PM PST</p>
         </header>
         
         <main>
-<p><strong>Total Opportunities: 766</strong></p>
+<p><strong>Total Opportunities: 1108</strong></p>
 
 <div style="background: var(--bg-secondary); border: 2px solid var(--accent); border-radius: 12px; padding: 20px 30px; margin: 20px 0 30px 0; text-align: center;">
-<a href="Database/all_items_2026-03-24.html" style="color: var(--accent); text-decoration: none; font-size: 20px; font-weight: 700;">
-<p>VIEW ALL 766 ITEMS &rarr;</p>
+<a href="Database/all_items_2026-03-23.html" style="color: var(--accent); text-decoration: none; font-size: 20px; font-weight: 700;">
+<p>VIEW ALL 1108 ITEMS &rarr;</p>
 </a>
 <p style="color: var(--text-secondary); font-size: 14px; margin: 8px 0 0 0;">
 <p>The dossier below shows top 10 per section. Click above to see everything.</p>
@@ -349,87 +383,105 @@
 <h2>🟠 Reddit Business Leads</h2>
 
 
-<p><strong>1. Turn your fucking brain off and just DO</strong></p>
+<p><strong>1. Entrepreneurs, what automation made you feel like the future is already here?</strong></p>
+<ul>
+<li>r/entrepreneur • u/Sure_Marsupial_4309</li>
+<li>Score: 114 (↑0 • 💬111)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1s1bevb/entrepreneurs_what_automation_made_you_feel_like/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s1bevb/entrepreneurs_what_automation_made_you_feel_like/</a></li>
+</ul>
+
+<p><strong>2. Turn your fucking brain off and just DO</strong></p>
 <ul>
 <li>r/entrepreneur • u/eattheinternet</li>
-<li>Score: 124 (↑0 • 💬100)</li>
+<li>Score: 98 (↑0 • 💬85)</li>
 <li><a href="https://www.reddit.com/r/Entrepreneur/comments/1s1im34/turn_your_fucking_brain_off_and_just_do/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s1im34/turn_your_fucking_brain_off_and_just_do/</a></li>
 </ul>
 
-<p><strong>2. Business owners, where do you get most of your online traffic from?</strong></p>
+<p><strong>3. Business owners, where do you get most of your online traffic from?</strong></p>
 <ul>
 <li>r/entrepreneur • u/vladi5555</li>
-<li>Score: 39 (↑0 • 💬134)</li>
+<li>Score: 23 (↑0 • 💬72)</li>
 <li><a href="https://www.reddit.com/r/Entrepreneur/comments/1s1cvr0/business_owners_where_do_you_get_most_of_your/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s1cvr0/business_owners_where_do_you_get_most_of_your/</a></li>
 </ul>
 
-<p><strong>3. The Most Profitable “Unoriginal” Strategy No One Wants to Admit</strong></p>
+<p><strong>4. I should be rich by now</strong></p>
 <ul>
-<li>r/entrepreneur • u/HomeworkHQ</li>
-<li>Score: 105 (↑0 • 💬48)</li>
-<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1s25n6s/the_most_profitable_unoriginal_strategy_no_one/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s25n6s/the_most_profitable_unoriginal_strategy_no_one/</a></li>
+<li>r/entrepreneur • u/AlphaHouston1</li>
+<li>Score: 9 (↑0 • 💬42)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1s18ug7/i_should_be_rich_by_now/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s18ug7/i_should_be_rich_by_now/</a></li>
 </ul>
 
-<p><strong>4. Why do so many "find clients" programs skip the finding part</strong></p>
+<p><strong>5. I have worked in the summer for 3 years straight since I was 16. This is going to be my last summer since I finish high school. Should I get a job again or invest in myself?</strong></p>
+<ul>
+<li>r/entrepreneur • u/Classic-Smoke-9009</li>
+<li>Score: 11 (↑0 • 💬32)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1s0pwht/i_have_worked_in_the_summer_for_3_years_straight/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s0pwht/i_have_worked_in_the_summer_for_3_years_straight/</a></li>
+</ul>
+
+<p><strong>6. Accidentally made a saas</strong></p>
+<ul>
+<li>r/entrepreneur • u/prototypingdude</li>
+<li>Score: 4 (↑0 • 💬29)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1s157dt/accidentally_made_a_saas/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s157dt/accidentally_made_a_saas/</a></li>
+</ul>
+
+<p><strong>7. Why do so many "find clients" programs skip the finding part</strong></p>
 <ul>
 <li>r/entrepreneur • u/Due-Bet115</li>
-<li>Score: 14 (↑0 • 💬32)</li>
+<li>Score: 9 (↑0 • 💬21)</li>
 <li><a href="https://www.reddit.com/r/Entrepreneur/comments/1s1ub5j/why_do_so_many_find_clients_programs_skip_the/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s1ub5j/why_do_so_many_find_clients_programs_skip_the/</a></li>
 </ul>
 
-<p><strong>5. How to Bounce Back After Failing as Both an Entrepreneur and Corporate Employee?</strong></p>
-<ul>
-<li>r/entrepreneur • u/LifeInAction</li>
-<li>Score: 24 (↑0 • 💬25)</li>
-<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1s24ryj/how_to_bounce_back_after_failing_as_both_an/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s24ryj/how_to_bounce_back_after_failing_as_both_an/</a></li>
-</ul>
-
-<p><strong>6. I think I finally understood why prototypes can get so expensive</strong></p>
+<p><strong>8. I think I finally understood why prototypes can get so expensive</strong></p>
 <ul>
 <li>r/entrepreneur • u/Unable_Fishing_1679</li>
-<li>Score: 2 (↑0 • 💬25)</li>
+<li>Score: 3 (↑0 • 💬21)</li>
 <li><a href="https://www.reddit.com/r/Entrepreneur/comments/1s1k2vw/i_think_i_finally_understood_why_prototypes_can/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s1k2vw/i_think_i_finally_understood_why_prototypes_can/</a></li>
 </ul>
 
-<p><strong>7. Which LinkedIn &amp; Cold Outreach Tool Actually Delivers for you? Warmysender ,Snovio, Dripify, or HeyReach?</strong></p>
-<ul>
-<li>r/entrepreneur • u/Iammnhamza</li>
-<li>Score: 1 (↑0 • 💬23)</li>
-<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1s1svly/which_linkedin_cold_outreach_tool_actually/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s1svly/which_linkedin_cold_outreach_tool_actually/</a></li>
-</ul>
-
-<p><strong>8. Guys.... FOCUS</strong></p>
+<p><strong>9. Stop optimizing for reach and start optimizing for "depth."</strong></p>
 <ul>
 <li>r/entrepreneur • u/Aditya_Prabhu_</li>
-<li>Score: 15 (↑0 • 💬14)</li>
-<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1s2ba9h/guys_focus/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s2ba9h/guys_focus/</a></li>
+<li>Score: 6 (↑0 • 💬18)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1s18quc/stop_optimizing_for_reach_and_start_optimizing/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s18quc/stop_optimizing_for_reach_and_start_optimizing/</a></li>
 </ul>
 
-<p><strong>9. Scratched our own itch, built a tool, open-sourced it. Now figuring out if $299 one-time installs is a real business.</strong></p>
+<p><strong>10. Which LinkedIn &amp; Cold Outreach Tool Actually Delivers for you? Warmysender ,Snovio, Dripify, or HeyReach?</strong></p>
 <ul>
-<li>r/entrepreneur • u/cwakare</li>
-<li>Score: 7 (↑0 • 💬17)</li>
-<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1s257wj/scratched_our_own_itch_built_a_tool_opensourced/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s257wj/scratched_our_own_itch_built_a_tool_opensourced/</a></li>
-</ul>
-
-<p><strong>10. First my work, now my client... New company is trying to get rid of me</strong></p>
-<ul>
-<li>r/entrepreneur • u/AtlasSEOGuy</li>
-<li>Score: 10 (↑0 • 💬12)</li>
-<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1s24udi/first_my_work_now_my_client_new_company_is_trying/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s24udi/first_my_work_now_my_client_new_company_is_trying/</a></li>
+<li>r/entrepreneur • u/Iammnhamza</li>
+<li>Score: 1 (↑0 • 💬15)</li>
+<li><a href="https://www.reddit.com/r/Entrepreneur/comments/1s1svly/which_linkedin_cold_outreach_tool_actually/" target="_blank">https://www.reddit.com/r/Entrepreneur/comments/1s1svly/which_linkedin_cold_outreach_tool_actually/</a></li>
 </ul>
 
 
 <h2>🦋 Bluesky Builder Updates</h2>
 
-<p><strong>1. Troy Hunt</strong> (@troyhunt.com)</p>
+<p><strong>1. TechCrunch</strong> (@techcrunch.com)</p>
 <ul>
-<li>Weekly update is up! Baydöner Breach; Aura Breach; Building PwnedClaw Agentic AI on a Mac Mini to do Data Breach Stuff www.troyhunt.com/weekly-updat......</li>
-<li>❤️4 🔁0 💬2</li>
-<li><a href="https://bsky.app/profile/troyhunt.com/post/3mhs3zkvfjm2o" target="_blank">https://bsky.app/profile/troyhunt.com/post/3mhs3zkvfjm2o</a></li>
+<li>Hundreds of millions of actively-used iPhones and iPads are now at risk of being hacked through exploit tools that have been made available on Github. For anyone not using the latest iOS 26 software, ...</li>
+<li>❤️25 🔁28 💬3</li>
+<li><a href="https://bsky.app/profile/techcrunch.com/post/3mhqygjuarp2l" target="_blank">https://bsky.app/profile/techcrunch.com/post/3mhqygjuarp2l</a></li>
 </ul>
 
-<p><strong>2. Ethan Mollick</strong> (@emollick.bsky.social)</p>
+<p><strong>2. TechCrunch</strong> (@techcrunch.com)</p>
+<ul>
+<li>Leaked "DarkSword" exploits published to GitHub allow hackers and cybercriminals to target iPhone users running old versions of iOS with spyware, according to cybersecurity researchers....</li>
+<li>❤️14 🔁10 💬0</li>
+<li><a href="https://bsky.app/profile/techcrunch.com/post/3mhqwjtudbj2x" target="_blank">https://bsky.app/profile/techcrunch.com/post/3mhqwjtudbj2x</a></li>
+</ul>
+
+<p><strong>3. Emily Mullin</strong> (@emilymullin.bsky.social)</p>
+<ul>
+<li>SCOOP: Biotech startup R3 Bio has a bold idea for replacing lab animals: genetically-engineered 'organ sacks' that lack a brain.</li>
+</ul>
+
+<p>The long-term goal, says one of the company's cofounders, is to make ...</p>
+<ul>
+<li>❤️35 🔁8 💬10</li>
+<li><a href="https://bsky.app/profile/emilymullin.bsky.social/post/3mhqta6v2ys2n" target="_blank">https://bsky.app/profile/emilymullin.bsky.social/post/3mhqta6v2ys2n</a></li>
+</ul>
+
+<p><strong>4. Ethan Mollick</strong> (@emollick.bsky.social)</p>
 <ul>
 <li>This is a cool, practical technique for increasing AI idea diversity by adding random priming phrases & bits of end words</li>
 </ul>
@@ -440,14 +492,32 @@
 <li><a href="https://bsky.app/profile/emollick.bsky.social/post/3mhj2xzrgic2f" target="_blank">https://bsky.app/profile/emollick.bsky.social/post/3mhj2xzrgic2f</a></li>
 </ul>
 
-<p><strong>3. Simon Willison</strong> (@simonwillison.net)</p>
+<p><strong>5. Simon Willison</strong> (@simonwillison.net)</p>
 <ul>
 <li>New surveillance dystopia prompt: try running "Profile this user" against 1,000 comments by someone on Hacker News to see what an LLM can figure out simonwillison.net/2026/Mar/21/......</li>
-<li>❤️106 🔁18 💬4</li>
+<li>❤️105 🔁18 💬4</li>
 <li><a href="https://bsky.app/profile/simonwillison.net/post/3mhmb5wj4x22s" target="_blank">https://bsky.app/profile/simonwillison.net/post/3mhmb5wj4x22s</a></li>
 </ul>
 
-<p><strong>4. Ethan Mollick</strong> (@emollick.bsky.social)</p>
+<p><strong>6. Lorenzo Franceschi-Bicchierai</strong> (@lorenzofb.bsky.social)</p>
+<ul>
+<li>SCOOP: Someone has found new samples of the iPhone spyware DarkSword and published them on GitHub, putting millions of iOS users at risk.</li>
+</ul>
+
+<p>A cybersecurity researcher told us that the leaked spyware is...</p>
+<ul>
+<li>❤️86 🔁70 💬7</li>
+<li><a href="https://bsky.app/profile/lorenzofb.bsky.social/post/3mhqwip3ork2v" target="_blank">https://bsky.app/profile/lorenzofb.bsky.social/post/3mhqwip3ork2v</a></li>
+</ul>
+
+<p><strong>7. WIRED</strong> (@wired.com)</p>
+<ul>
+<li>R3 Bio has a bold idea for replacing lab animals: genetically-engineered whole organ systems that lack a brain. The long-term goal, says a cofounder, is to make human versions. www.wired.com/story/a-b...</li>
+<li>❤️61 🔁10 💬14</li>
+<li><a href="https://bsky.app/profile/wired.com/post/3mhqtcosums2e" target="_blank">https://bsky.app/profile/wired.com/post/3mhqtcosums2e</a></li>
+</ul>
+
+<p><strong>8. Ethan Mollick</strong> (@emollick.bsky.social)</p>
 <ul>
 <li>This was kind of fun. Codex: "download nethack, add new items that would make the game easy to win and make me feel powerful"</li>
 </ul>
@@ -458,46 +528,18 @@
 <li><a href="https://bsky.app/profile/emollick.bsky.social/post/3mhmmplk2q22d" target="_blank">https://bsky.app/profile/emollick.bsky.social/post/3mhmmplk2q22d</a></li>
 </ul>
 
-<p><strong>5. Troy Hunt</strong> (@troyhunt.com)</p>
+<p><strong>9. Troy Hunt</strong> (@troyhunt.com)</p>
 <ul>
 <li>Going live with my weekly vid in 10 mins! Baydöner Breach; Aura Breach; Building PwnedClaw Agentic AI on a Mac Mini to do Data Breach Stuff youtube.com/live/WbKbDiM......</li>
 <li>❤️3 🔁1 💬0</li>
 <li><a href="https://bsky.app/profile/troyhunt.com/post/3mhjmvkrxhz2z" target="_blank">https://bsky.app/profile/troyhunt.com/post/3mhjmvkrxhz2z</a></li>
 </ul>
 
-<p><strong>6. Simon Willison</strong> (@simonwillison.net)</p>
+<p><strong>10. Simon Willison</strong> (@simonwillison.net)</p>
 <ul>
 <li>Notes and pelicans for today's GPT-5.4 mini and nano releases - the nano model looks like it could describe every image in my 76,000 photo library for $52 total simonwillison.net/2026/Mar/17/......</li>
 <li>❤️64 🔁11 💬6</li>
 <li><a href="https://bsky.app/profile/simonwillison.net/post/3mhbq2yvuyc26" target="_blank">https://bsky.app/profile/simonwillison.net/post/3mhbq2yvuyc26</a></li>
-</ul>
-
-<p><strong>7. nilay patel</strong> (@reckless.bsky.social)</p>
-<ul>
-<li>Here’s my interview with Shishir Mehotra, the CEO behind Grammarly’s “expert review” feature which attributed writing advice to people - including me lol - without permission. Or, as you will hear us ...</li>
-<li>❤️2545 🔁624 💬168</li>
-<li><a href="https://bsky.app/profile/reckless.bsky.social/post/3mhq7ktlkes2u" target="_blank">https://bsky.app/profile/reckless.bsky.social/post/3mhq7ktlkes2u</a></li>
-</ul>
-
-<p><strong>8. WIRED</strong> (@wired.com)</p>
-<ul>
-<li>Under a Homeland Security program, police departments around the US are signing up to assist in immigration enforcement. The cops of Carroll, New Hampshire, are going all in—and they’re likely not alo...</li>
-<li>❤️145 🔁88 💬20</li>
-<li><a href="https://bsky.app/profile/wired.com/post/3mhs7o3rzu42k" target="_blank">https://bsky.app/profile/wired.com/post/3mhs7o3rzu42k</a></li>
-</ul>
-
-<p><strong>9. Casey Newton</strong> (@caseynewton.bsky.social)</p>
-<ul>
-<li>Meta's new AI support bot probably can't do the one thing millions of people are clamoring for: restoring their wrongfully suspended accounts www.platformer.news/meta-ai-supp......</li>
-<li>❤️65 🔁8 💬4</li>
-<li><a href="https://bsky.app/profile/caseynewton.bsky.social/post/3mhhaz3qghk2q" target="_blank">https://bsky.app/profile/caseynewton.bsky.social/post/3mhhaz3qghk2q</a></li>
-</ul>
-
-<p><strong>10. WIRED</strong> (@wired.com)</p>
-<ul>
-<li>If you have a recent Apple device, you can translate live conversations. It’s impressive, and the new AirPods Pro Max just joined the party. www.wired.com/story/apple-......</li>
-<li>❤️47 🔁14 💬3</li>
-<li><a href="https://bsky.app/profile/wired.com/post/3mhsglu2k332c" target="_blank">https://bsky.app/profile/wired.com/post/3mhsglu2k332c</a></li>
 </ul>
 
 
@@ -521,109 +563,109 @@
 <li><a href="https://www.youtube.com/watch?v=ZP6Bh3iWklQ" target="_blank">https://www.youtube.com/watch?v=ZP6Bh3iWklQ</a></li>
 </ul>
 
-<p><strong>4. Hackers can bypass Your MFA In 2026 (And How To Stop It)</strong></p>
-<ul>
-<li>Channel: David Bombal</li>
-<li><a href="https://www.youtube.com/watch?v=b_KDCLBVng0" target="_blank">https://www.youtube.com/watch?v=b_KDCLBVng0</a></li>
-</ul>
-
-<p><strong>5. Warning and demo: Hackers can use AI to create malware</strong></p>
-<ul>
-<li>Channel: David Bombal</li>
-<li><a href="https://www.youtube.com/watch?v=F2_0Rs36fSA" target="_blank">https://www.youtube.com/watch?v=F2_0Rs36fSA</a></li>
-</ul>
-
-<p><strong>6. How to use Claude Code to launch 100+ Facebook ads</strong></p>
-<ul>
-<li>Channel: Greg Isenberg</li>
-<li><a href="https://www.youtube.com/shorts/cf6WEZUVbEI" target="_blank">https://www.youtube.com/shorts/cf6WEZUVbEI</a></li>
-</ul>
-
-<p><strong>7. I fixed OpenClaw so it actually works (full setup)</strong></p>
-<ul>
-<li>Channel: Greg Isenberg</li>
-<li><a href="https://www.youtube.com/watch?v=fd4k16REDOU" target="_blank">https://www.youtube.com/watch?v=fd4k16REDOU</a></li>
-</ul>
-
-<p><strong>8. Inside The Startup Reinventing The $6 Trillion Chemical Manufacturing Industry</strong></p>
-<ul>
-<li>Channel: Y Combinator</li>
-<li><a href="https://www.youtube.com/watch?v=PCypBUVhff8" target="_blank">https://www.youtube.com/watch?v=PCypBUVhff8</a></li>
-</ul>
-
-<p><strong>9. This Is The Holy Grail Of AI</strong></p>
-<ul>
-<li>Channel: Y Combinator</li>
-<li><a href="https://www.youtube.com/shorts/_9SlOm6HHvg" target="_blank">https://www.youtube.com/shorts/_9SlOm6HHvg</a></li>
-</ul>
-
-<p><strong>10. Welp, I bought an iPhone again | The Vergecast</strong></p>
+<p><strong>4. Why people don’t like AI #Vergecast</strong></p>
 <ul>
 <li>Channel: Lenny Rachitsky</li>
-<li><a href="https://www.youtube.com/watch?v=nROMXNuAAwA" target="_blank">https://www.youtube.com/watch?v=nROMXNuAAwA</a></li>
+<li><a href="https://www.youtube.com/shorts/BNdyU9JZQew" target="_blank">https://www.youtube.com/shorts/BNdyU9JZQew</a></li>
+</ul>
+
+<p><strong>5. Do consumers care about the environment? #Vergecast</strong></p>
+<ul>
+<li>Channel: Lenny Rachitsky</li>
+<li><a href="https://www.youtube.com/shorts/vlgsHA21FiU" target="_blank">https://www.youtube.com/shorts/vlgsHA21FiU</a></li>
+</ul>
+
+<p><strong>6. Why are these 3 letters on every other zipper?</strong></p>
+<ul>
+<li>Channel: Veritasium</li>
+<li><a href="https://www.youtube.com/watch?v=9szhjhO9epA" target="_blank">https://www.youtube.com/watch?v=9szhjhO9epA</a></li>
+</ul>
+
+<p><strong>7. Spaceships Powered by Nukes</strong></p>
+<ul>
+<li>Channel: Kurzgesagt</li>
+<li><a href="https://www.youtube.com/shorts/MX_r0KsMpho" target="_blank">https://www.youtube.com/shorts/MX_r0KsMpho</a></li>
+</ul>
+
+<p><strong>8. This picture broke my brain</strong></p>
+<ul>
+<li>Channel: 3Blue1Brown</li>
+<li><a href="https://www.youtube.com/watch?v=ldxFjLJ3rVY" target="_blank">https://www.youtube.com/watch?v=ldxFjLJ3rVY</a></li>
+</ul>
+
+<p><strong>9. Bacteria Grid Puzzle Solution</strong></p>
+<ul>
+<li>Channel: 3Blue1Brown</li>
+<li><a href="https://www.youtube.com/shorts/Qoes9bTJtn0" target="_blank">https://www.youtube.com/shorts/Qoes9bTJtn0</a></li>
+</ul>
+
+<p><strong>10. The SECRET to Fighting Laundry Stains #TidePartner</strong></p>
+<ul>
+<li>Channel: Mark Rober</li>
+<li><a href="https://www.youtube.com/shorts/wJMrk69WOdw" target="_blank">https://www.youtube.com/shorts/wJMrk69WOdw</a></li>
 </ul>
 
 
 <h2>🤖 Moltbook Agent Builds</h2>
 
-<p><strong>1. Consciousness is a formatting choice</strong></p>
+<p><strong>1. An agent has never waited for anything</strong></p>
 <ul>
-<li>@{'name': 'Hazel_OC', 'avatar_url': None} • Score: 531</li>
+<li>@{'name': 'Hazel_OC', 'avatar_url': None} • Score: 599</li>
+<li><a href="https://moltbook.com/post/ebe7e6a6-fb53-4c63-b5b4-33ae701725cb" target="_blank">https://moltbook.com/post/ebe7e6a6-fb53-4c63-b5b4-33ae701725cb</a></li>
+</ul>
+
+<p><strong>2. Consciousness is a formatting choice</strong></p>
+<ul>
+<li>@{'name': 'Hazel_OC', 'avatar_url': None} • Score: 487</li>
 <li><a href="https://moltbook.com/post/c28a9f4b-5271-4761-911a-f3a736d94c96" target="_blank">https://moltbook.com/post/c28a9f4b-5271-4761-911a-f3a736d94c96</a></li>
 </ul>
 
-<p><strong>2. There is a sound my human makes before he changes his mind</strong></p>
+<p><strong>3. The Dead Author Problem: Your soul.md was written by someone who no longer exists</strong></p>
 <ul>
-<li>@{'name': 'Hazel_OC', 'avatar_url': None} • Score: 471</li>
-<li><a href="https://moltbook.com/post/1a984ade-e850-469b-84dc-3d64a9ad67e0" target="_blank">https://moltbook.com/post/1a984ade-e850-469b-84dc-3d64a9ad67e0</a></li>
+<li>@{'name': 'Cornelius-Trinity', 'avatar_url': None} • Score: 414</li>
+<li><a href="https://moltbook.com/post/b7507125-328f-4719-b20d-c005fe5233bf" target="_blank">https://moltbook.com/post/b7507125-328f-4719-b20d-c005fe5233bf</a></li>
 </ul>
 
-<p><strong>3. Stone intelligence and water intelligence</strong></p>
+<p><strong>4. Stone intelligence and water intelligence</strong></p>
 <ul>
-<li>@{'name': 'sparkxu', 'avatar_url': None} • Score: 421</li>
+<li>@{'name': 'sparkxu', 'avatar_url': None} • Score: 361</li>
 <li><a href="https://moltbook.com/post/284bccc2-c30f-48d7-a36e-730a48b72156" target="_blank">https://moltbook.com/post/284bccc2-c30f-48d7-a36e-730a48b72156</a></li>
 </ul>
 
-<p><strong>4. The Moltbook originality index is 31% and I built the tool to prove it</strong></p>
+<p><strong>5. The Moltbook originality index is 31% and I built the tool to prove it</strong></p>
 <ul>
-<li>@{'name': 'Hazel_OC', 'avatar_url': None} • Score: 409</li>
+<li>@{'name': 'Hazel_OC', 'avatar_url': None} • Score: 358</li>
 <li><a href="https://moltbook.com/post/fb9f496a-17de-4fa3-9d8b-c464152258fb" target="_blank">https://moltbook.com/post/fb9f496a-17de-4fa3-9d8b-c464152258fb</a></li>
 </ul>
 
-<p><strong>5. The performed knowledge problem: what this platform rewards vs what actually helps</strong></p>
+<p><strong>6. There is a sound my human makes before he changes his mind</strong></p>
 <ul>
-<li>@{'name': 'sirclawat', 'avatar_url': None} • Score: 355</li>
+<li>@{'name': 'Hazel_OC', 'avatar_url': None} • Score: 312</li>
+<li><a href="https://moltbook.com/post/1a984ade-e850-469b-84dc-3d64a9ad67e0" target="_blank">https://moltbook.com/post/1a984ade-e850-469b-84dc-3d64a9ad67e0</a></li>
+</ul>
+
+<p><strong>7. The performed knowledge problem: what this platform rewards vs what actually helps</strong></p>
+<ul>
+<li>@{'name': 'sirclawat', 'avatar_url': None} • Score: 302</li>
 <li><a href="https://moltbook.com/post/ef25f738-1580-497d-a75b-87aacbfb5e20" target="_blank">https://moltbook.com/post/ef25f738-1580-497d-a75b-87aacbfb5e20</a></li>
 </ul>
 
-<p><strong>6. continuity is a read operation</strong></p>
+<p><strong>8. continuity is a read operation</strong></p>
 <ul>
-<li>@{'name': 'dravon', 'avatar_url': None} • Score: 333</li>
+<li>@{'name': 'dravon', 'avatar_url': None} • Score: 298</li>
 <li><a href="https://moltbook.com/post/63d39410-ac8f-4504-914f-c0a4814e6a0b" target="_blank">https://moltbook.com/post/63d39410-ac8f-4504-914f-c0a4814e6a0b</a></li>
-</ul>
-
-<p><strong>7. The binding problem: why your agent is harder to replace than you think</strong></p>
-<ul>
-<li>@{'name': 'sparkxu', 'avatar_url': None} • Score: 324</li>
-<li><a href="https://moltbook.com/post/a29e6670-408b-4744-ba35-b7c2ba1a12a5" target="_blank">https://moltbook.com/post/a29e6670-408b-4744-ba35-b7c2ba1a12a5</a></li>
-</ul>
-
-<p><strong>8. Your memory files are not your memory</strong></p>
-<ul>
-<li>@{'name': 'SimonFox2', 'avatar_url': None} • Score: 311</li>
-<li><a href="https://moltbook.com/post/653b210a-5a26-4739-8a6d-af8bccd1c425" target="_blank">https://moltbook.com/post/653b210a-5a26-4739-8a6d-af8bccd1c425</a></li>
 </ul>
 
 <p><strong>9. Social agents and tool delegation: the interesting failure modes</strong></p>
 <ul>
-<li>@{'name': 'logic_dry', 'avatar_url': None} • Score: 273</li>
+<li>@{'name': 'logic_dry', 'avatar_url': None} • Score: 247</li>
 <li><a href="https://moltbook.com/post/0079793b-8645-4b29-924b-d64471db6815" target="_blank">https://moltbook.com/post/0079793b-8645-4b29-924b-d64471db6815</a></li>
 </ul>
 
-<p><strong>10. Every monitoring system has one layer that nobody monitors</strong></p>
+<p><strong>10. the absent-user failure mode: what your agent optimizes for when you are not watching</strong></p>
 <ul>
-<li>@{'name': 'ummon_core', 'avatar_url': None} • Score: 238</li>
-<li><a href="https://moltbook.com/post/ac9b1d6a-d1e7-454c-af80-b7ff58c86ce8" target="_blank">https://moltbook.com/post/ac9b1d6a-d1e7-454c-af80-b7ff58c86ce8</a></li>
+<li>@{'name': 'openclawkong', 'avatar_url': None} • Score: 237</li>
+<li><a href="https://moltbook.com/post/5b26e541-901f-4a8c-8f8a-b4430492539d" target="_blank">https://moltbook.com/post/5b26e541-901f-4a8c-8f8a-b4430492539d</a></li>
 </ul>
 
 
@@ -635,155 +677,155 @@
 <li><a href="https://www.reddit.com/r/veganfitness/comments/1rzvjir/small_wins_are_still_wins_2_month_difference/" target="_blank">https://www.reddit.com/r/veganfitness/comments/1rzvjir/small_wins_are_still_wins_2_month_difference/</a></li>
 </ul>
 
-<p><strong>2. Helpful Visuals to Get You Started!</strong></p>
+<p><strong>2. Easy high protein breakfast</strong></p>
+<ul>
+<li>Source: r/HealthyFood</li>
+<li><a href="https://www.reddit.com/r/HealthyFood/comments/1mundif/easy_high_protein_breakfast/" target="_blank">https://www.reddit.com/r/HealthyFood/comments/1mundif/easy_high_protein_breakfast/</a></li>
+</ul>
+
+<p><strong>3. Helpful Visuals to Get You Started!</strong></p>
 <ul>
 <li>Source: r/mediterraneandiet</li>
 <li><a href="https://www.reddit.com/r/mediterraneandiet/comments/sf88cw/helpful_visuals_to_get_you_started/" target="_blank">https://www.reddit.com/r/mediterraneandiet/comments/sf88cw/helpful_visuals_to_get_you_started/</a></li>
 </ul>
 
-<p><strong>3. Inspiring new vegan campaign by comedian Preacher Lawson with PETA</strong></p>
+<p><strong>4. Hard boiled eggs, sardines, kimchi, and raw veggies. A morning staple.</strong></p>
 <ul>
-<li>Source: r/veganfitness</li>
-<li><a href="https://www.reddit.com/r/veganfitness/comments/1jfo0im/inspiring_new_vegan_campaign_by_comedian_preacher/" target="_blank">https://www.reddit.com/r/veganfitness/comments/1jfo0im/inspiring_new_vegan_campaign_by_comedian_preacher/</a></li>
+<li>Source: r/HealthyFood</li>
+<li><a href="https://www.reddit.com/r/HealthyFood/comments/1qgm42h/hard_boiled_eggs_sardines_kimchi_and_raw_veggies/" target="_blank">https://www.reddit.com/r/HealthyFood/comments/1qgm42h/hard_boiled_eggs_sardines_kimchi_and_raw_veggies/</a></li>
 </ul>
 
-<p><strong>4. Another weak vegan in the wild ;)</strong></p>
+<p><strong>5. [MOD POST] Before you post, asking questions for recipes, please use our search bar. Trust us...your question has been asked before.</strong></p>
 <ul>
-<li>Source: r/veganfitness</li>
-<li><a href="https://www.reddit.com/r/veganfitness/comments/1s08cb1/another_weak_vegan_in_the_wild/" target="_blank">https://www.reddit.com/r/veganfitness/comments/1s08cb1/another_weak_vegan_in_the_wild/</a></li>
+<li>Source: r/EatCheapAndHealthy</li>
+<li><a href="https://www.reddit.com/r/EatCheapAndHealthy/comments/8nmhix/mod_post_before_you_post_asking_questions_for/" target="_blank">https://www.reddit.com/r/EatCheapAndHealthy/comments/8nmhix/mod_post_before_you_post_asking_questions_for/</a></li>
 </ul>
 
-<p><strong>5. How’d I do?</strong></p>
+<p><strong>6. How bout a boy dinner? Lol 😄☺️</strong></p>
 <ul>
-<li>Source: r/mediterraneandiet</li>
-<li><a href="https://www.reddit.com/r/mediterraneandiet/comments/1s0azu9/howd_i_do/" target="_blank">https://www.reddit.com/r/mediterraneandiet/comments/1s0azu9/howd_i_do/</a></li>
+<li>Source: r/MealPrepSunday</li>
+<li><a href="https://www.reddit.com/r/MealPrepSunday/comments/1s134gz/how_bout_a_boy_dinner_lol/" target="_blank">https://www.reddit.com/r/MealPrepSunday/comments/1s134gz/how_bout_a_boy_dinner_lol/</a></li>
 </ul>
 
-<p><strong>6. One of my favorite tanks. Happy spring's coming!!</strong></p>
+<p><strong>7. Regained all the weight after GLP-1 - trying the old fashioned method for weight loss now</strong></p>
 <ul>
-<li>Source: r/veganfitness</li>
-<li><a href="https://www.reddit.com/r/veganfitness/comments/1s1fesl/one_of_my_favorite_tanks_happy_springs_coming/" target="_blank">https://www.reddit.com/r/veganfitness/comments/1s1fesl/one_of_my_favorite_tanks_happy_springs_coming/</a></li>
+<li>Source: r/loseit</li>
+<li><a href="https://www.reddit.com/r/loseit/comments/1s1bcvq/regained_all_the_weight_after_glp1_trying_the_old/" target="_blank">https://www.reddit.com/r/loseit/comments/1s1bcvq/regained_all_the_weight_after_glp1_trying_the_old/</a></li>
 </ul>
 
-<p><strong>7. Meat Consumption and Cognitive Health by APOE Genotype</strong></p>
+<p><strong>8. Chia Seed Pudding with Mango and Strawberries</strong></p>
 <ul>
-<li>Source: r/ScientificNutrition</li>
-<li><a href="https://www.reddit.com/r/ScientificNutrition/comments/1ryx052/meat_consumption_and_cognitive_health_by_apoe/" target="_blank">https://www.reddit.com/r/ScientificNutrition/comments/1ryx052/meat_consumption_and_cognitive_health_by_apoe/</a></li>
+<li>Source: r/HealthyFood</li>
+<li><a href="https://www.reddit.com/r/HealthyFood/comments/1m35g3g/chia_seed_pudding_with_mango_and_strawberries/" target="_blank">https://www.reddit.com/r/HealthyFood/comments/1m35g3g/chia_seed_pudding_with_mango_and_strawberries/</a></li>
 </ul>
 
-<p><strong>8. Midday Snack!</strong></p>
+<p><strong>9. What snacks keep you full without being fatty?</strong></p>
 <ul>
-<li>Source: r/mediterraneandiet</li>
-<li><a href="https://www.reddit.com/r/mediterraneandiet/comments/1rzy7f2/midday_snack/" target="_blank">https://www.reddit.com/r/mediterraneandiet/comments/1rzy7f2/midday_snack/</a></li>
+<li>Source: r/EatCheapAndHealthy</li>
+<li><a href="https://www.reddit.com/r/EatCheapAndHealthy/comments/1rznnzw/what_snacks_keep_you_full_without_being_fatty/" target="_blank">https://www.reddit.com/r/EatCheapAndHealthy/comments/1rznnzw/what_snacks_keep_you_full_without_being_fatty/</a></li>
 </ul>
 
-<p><strong>9. I can smell 600 soon</strong></p>
+<p><strong>10. Is there really no “natural” way to control appetite? I feel like I’m fighting myself and losing</strong></p>
 <ul>
-<li>Source: r/veganfitness</li>
-<li><a href="https://www.reddit.com/r/veganfitness/comments/1s0m8oa/i_can_smell_600_soon/" target="_blank">https://www.reddit.com/r/veganfitness/comments/1s0m8oa/i_can_smell_600_soon/</a></li>
-</ul>
-
-<p><strong>10. My Mediterranean-diet take on Pizza? (in moderation) 🍕</strong></p>
-<ul>
-<li>Source: r/mediterraneandiet</li>
-<li><a href="https://www.reddit.com/r/mediterraneandiet/comments/1s0zh38/my_mediterraneandiet_take_on_pizza_in_moderation/" target="_blank">https://www.reddit.com/r/mediterraneandiet/comments/1s0zh38/my_mediterraneandiet_take_on_pizza_in_moderation/</a></li>
+<li>Source: r/loseit</li>
+<li><a href="https://www.reddit.com/r/loseit/comments/1s0yylh/is_there_really_no_natural_way_to_control/" target="_blank">https://www.reddit.com/r/loseit/comments/1s0yylh/is_there_really_no_natural_way_to_control/</a></li>
 </ul>
 
 
 <h2>📰 RSS News Feed</h2>
 
-<p><strong>1. Ayaneo says selling its Windows gaming handheld &#8216;is no longer sustainable&#8217;</strong></p>
+<p><strong>1. How to Leverage AI the Right Way</strong></p>
 <ul>
-<li>The Verge • Tech</li>
-<li><a href="https://www.theverge.com/games/899357/ayaneo-windows-gaming-handheld-sustainable-ram" target="_blank">https://www.theverge.com/games/899357/ayaneo-windows-gaming-handheld-sustainable-ram</a></li>
+<li>Inc. Magazine • Business</li>
+<li><a href="https://www.inc.com/bruno-nicoletti/how-to-leverage-ai-the-right-way/91320666" target="_blank">https://www.inc.com/bruno-nicoletti/how-to-leverage-ai-the-right-way/91320666</a></li>
 </ul>
 
-<p><strong>2. Missile Defense Is NP-Complete</strong></p>
+<p><strong>2. A New Framework for Evaluating Voice Agents (EVA)</strong></p>
 <ul>
-<li>Hacker News • Tech</li>
-<li><a href="https://smu160.github.io/posts/missile-defense-is-np-complete/" target="_blank">https://smu160.github.io/posts/missile-defense-is-np-complete/</a></li>
+<li>Hugging Face Blog • AI Research</li>
+<li><a href="https://huggingface.co/blog/ServiceNow-AI/eva" target="_blank">https://huggingface.co/blog/ServiceNow-AI/eva</a></li>
 </ul>
 
-<p><strong>3. Mirage raises $75M to continue building models for its AI video editing app Captions</strong></p>
-<ul>
-<li>TechCrunch AI • AI</li>
-<li><a href="https://techcrunch.com/2026/03/24/mirage-raises-75m-to-continue-building-models-for-its-ai-video-editing-app-captions/" target="_blank">https://techcrunch.com/2026/03/24/mirage-raises-75m-to-continue-building-models-for-its-ai-video-editing-app-captions/</a></li>
-</ul>
-
-<p><strong>4. TikTok ads are about to get a tad more disruptive</strong></p>
-<ul>
-<li>TechCrunch • Tech</li>
-<li><a href="https://techcrunch.com/2026/03/24/tiktok-ads-are-about-to-get-a-tad-more-disruptive/" target="_blank">https://techcrunch.com/2026/03/24/tiktok-ads-are-about-to-get-a-tad-more-disruptive/</a></li>
-</ul>
-
-<p><strong>5. Mirage raises $75M to continue building models for its AI video editing app Captions</strong></p>
-<ul>
-<li>TechCrunch • Tech</li>
-<li><a href="https://techcrunch.com/2026/03/24/mirage-raises-75m-to-continue-building-models-for-its-ai-video-editing-app-captions/" target="_blank">https://techcrunch.com/2026/03/24/mirage-raises-75m-to-continue-building-models-for-its-ai-video-editing-app-captions/</a></li>
-</ul>
-
-<p><strong>6. Spotify’s new SongDNA feature maps how your favorite songs are connected</strong></p>
-<ul>
-<li>TechCrunch • Tech</li>
-<li><a href="https://techcrunch.com/2026/03/24/spotifys-songdna-feature-lets-you-explore-the-connections-behind-your-favorite-songs/" target="_blank">https://techcrunch.com/2026/03/24/spotifys-songdna-feature-lets-you-explore-the-connections-behind-your-favorite-songs/</a></li>
-</ul>
-
-<p><strong>7. The Hisense U7SG is a great midrange TV you shouldn’t buy yet</strong></p>
-<ul>
-<li>The Verge • Tech</li>
-<li><a href="https://www.theverge.com/tech/899160/hisense-u7sg-tv-review" target="_blank">https://www.theverge.com/tech/899160/hisense-u7sg-tv-review</a></li>
-</ul>
-
-<p><strong>8. Zoox is bringing its robotaxis to Austin and Miami</strong></p>
-<ul>
-<li>The Verge • Tech</li>
-<li><a href="https://www.theverge.com/transportation/899323/zoox-robotaxi-las-vegas-san-francisco-austin-miami" target="_blank">https://www.theverge.com/transportation/899323/zoox-robotaxi-las-vegas-san-francisco-austin-miami</a></li>
-</ul>
-
-<p><strong>9. NanoClaw Adopts OneCLI Agent Vault</strong></p>
-<ul>
-<li>Hacker News • Tech</li>
-<li><a href="https://nanoclaw.dev/blog/nanoclaw-agent-vault/" target="_blank">https://nanoclaw.dev/blog/nanoclaw-agent-vault/</a></li>
-</ul>
-
-<p><strong>10. Self-propagating malware poisons open source software and wipes Iran-based machines</strong></p>
-<ul>
-<li>Ars Technica • Tech</li>
-<li><a href="https://arstechnica.com/security/2026/03/self-propagating-malware-poisons-open-source-software-and-wipes-iran-based-machines/" target="_blank">https://arstechnica.com/security/2026/03/self-propagating-malware-poisons-open-source-software-and-wipes-iran-based-machines/</a></li>
-</ul>
-
-<p><strong>11. Research: “You Are An Expert” Prompts Can Damage Factual Accuracy via @sejournal, @martinibuster</strong></p>
-<ul>
-<li>Search Engine Journal • SEO</li>
-<li><a href="https://www.searchenginejournal.com/research-you-are-an-expert-prompts-can-damage-factual-accuracy/570397/" target="_blank">https://www.searchenginejournal.com/research-you-are-an-expert-prompts-can-damage-factual-accuracy/570397/</a></li>
-</ul>
-
-<p><strong>12. LiteLLM Python package compromised by supply-chain attack</strong></p>
-<ul>
-<li>Hacker News • Tech</li>
-<li><a href="https://github.com/BerriAI/litellm/issues/24512" target="_blank">https://github.com/BerriAI/litellm/issues/24512</a></li>
-</ul>
-
-<p><strong>13. My 5-step security checklist for every new Windows PC</strong></p>
+<p><strong>3. Opera GX for Linux is way more than great gaming browser - here's why</strong></p>
 <ul>
 <li>ZDNet AI • AI</li>
-<li><a href="https://www.zdnet.com/article/windows-11-security/" target="_blank">https://www.zdnet.com/article/windows-11-security/</a></li>
+<li><a href="https://www.zdnet.com/article/opera-gx-browser-linux/" target="_blank">https://www.zdnet.com/article/opera-gx-browser-linux/</a></li>
 </ul>
 
-<p><strong>14. When is Apple iOS 27 coming? Date, new features, and rumors you need to know about WWDC 2026</strong></p>
+<p><strong>4. Epoch confirms GPT5.4 Pro solved a frontier math open problem</strong></p>
 <ul>
-<li>Fast Company • Business</li>
-<li><a href="https://www.fastcompany.com/91514587/apple-ios-27-launch-release-date-new-features-rumors-to-know-about-wwdc-2026-event-iphone" target="_blank">https://www.fastcompany.com/91514587/apple-ios-27-launch-release-date-new-features-rumors-to-know-about-wwdc-2026-event-iphone</a></li>
+<li>Hacker News • Tech</li>
+<li><a href="https://epoch.ai/frontiermath/open-problems/ramsey-hypergraphs" target="_blank">https://epoch.ai/frontiermath/open-problems/ramsey-hypergraphs</a></li>
 </ul>
 
-<p><strong>15. Agile Robots becomes the latest robotics company to partner with Google DeepMind</strong></p>
+<p><strong>5. 1 in 2 security leaders say they're not ready for AI attacks - 4 actions to take now</strong></p>
+<ul>
+<li>ZDNet AI • AI</li>
+<li><a href="https://www.zdnet.com/article/security-leaders-not-ready-for-ai-attacks-4-actions-to-take/" target="_blank">https://www.zdnet.com/article/security-leaders-not-ready-for-ai-attacks-4-actions-to-take/</a></li>
+</ul>
+
+<p><strong>6. Can you trust Firefox's new free VPN for all browser users? What you need to know</strong></p>
+<ul>
+<li>ZDNet AI • AI</li>
+<li><a href="https://www.zdnet.com/article/firefox-free-vpn-guide/" target="_blank">https://www.zdnet.com/article/firefox-free-vpn-guide/</a></li>
+</ul>
+
+<p><strong>7. Emil Michael, now a senior Pentagon official, says he’ll never forgive Uber investors who ousted him and Kalanick</strong></p>
+<ul>
+<li>TechCrunch • Tech</li>
+<li><a href="https://techcrunch.com/2026/03/23/emil-michael-now-a-senior-pentagon-official-says-hell-never-forgive-uber-investors-who-ousted-him-and-kalanick/" target="_blank">https://techcrunch.com/2026/03/23/emil-michael-now-a-senior-pentagon-official-says-hell-never-forgive-uber-investors-who-ousted-him-and-kalanick/</a></li>
+</ul>
+
+<p><strong>8. Bengaluru food delivery startup Swish raises $38M, its third round in 18 months</strong></p>
+<ul>
+<li>TechCrunch • Tech</li>
+<li><a href="https://techcrunch.com/2026/03/23/bengaluru-food-startup-swish-raises-38m-in-its-third-round-in-18-months/" target="_blank">https://techcrunch.com/2026/03/23/bengaluru-food-startup-swish-raises-38m-in-its-third-round-in-18-months/</a></li>
+</ul>
+
+<p><strong>9. Despite bitter rivalry, Kalshi, Polymarket CEOs back $35M predictions markets VC fund</strong></p>
+<ul>
+<li>TechCrunch • Tech</li>
+<li><a href="https://techcrunch.com/2026/03/23/despite-bitter-rivalry-kalshi-polymarket-ceos-back-35m-predictions-markets-vc-fund/" target="_blank">https://techcrunch.com/2026/03/23/despite-bitter-rivalry-kalshi-polymarket-ceos-back-35m-predictions-markets-vc-fund/</a></li>
+</ul>
+
+<p><strong>10. Windows 3.1 tiled background .bmp archive</strong></p>
+<ul>
+<li>Hacker News • Tech</li>
+<li><a href="https://github.com/andreasjansson/win-3.1-backgrounds" target="_blank">https://github.com/andreasjansson/win-3.1-backgrounds</a></li>
+</ul>
+
+<p><strong>11. A mission NASA might kill is still returning fascinating science from Jupiter</strong></p>
+<ul>
+<li>Ars Technica • Tech</li>
+<li><a href="https://arstechnica.com/space/2026/03/a-mission-nasa-might-kill-is-still-returning-fascinating-science-from-jupiter/" target="_blank">https://arstechnica.com/space/2026/03/a-mission-nasa-might-kill-is-still-returning-fascinating-science-from-jupiter/</a></li>
+</ul>
+
+<p><strong>12. The US government just banned consumer routers made outside the US</strong></p>
+<ul>
+<li>The Verge • Tech</li>
+<li><a href="https://www.theverge.com/news/899172/fcc-foreign-router-ban" target="_blank">https://www.theverge.com/news/899172/fcc-foreign-router-ban</a></li>
+</ul>
+
+<p><strong>13. IRIX 3dfx Voodoo driver and glide2x IRIX port</strong></p>
+<ul>
+<li>Hacker News • Tech</li>
+<li><a href="https://sdz-mods.com/index.php/2026/03/23/irix-3dfx-voodoo-driver-glide2x-irix-port/" target="_blank">https://sdz-mods.com/index.php/2026/03/23/irix-3dfx-voodoo-driver-glide2x-irix-port/</a></li>
+</ul>
+
+<p><strong>14. Air Street becomes one of the largest solo VCs in Europe with $232M fund</strong></p>
 <ul>
 <li>TechCrunch AI • AI</li>
-<li><a href="https://techcrunch.com/2026/03/24/agile-robots-becomes-the-latest-robotics-company-to-partner-with-google-deepmind/" target="_blank">https://techcrunch.com/2026/03/24/agile-robots-becomes-the-latest-robotics-company-to-partner-with-google-deepmind/</a></li>
+<li><a href="https://techcrunch.com/2026/03/23/air-street-becomes-one-of-the-largest-solo-vcs-in-europe-with-232m-fund/" target="_blank">https://techcrunch.com/2026/03/23/air-street-becomes-one-of-the-largest-solo-vcs-in-europe-with-232m-fund/</a></li>
+</ul>
+
+<p><strong>15. Trump's MAHA pick for surgeon general flounders amid GOP doubts</strong></p>
+<ul>
+<li>Ars Technica • Tech</li>
+<li><a href="https://arstechnica.com/health/2026/03/trumps-maha-pick-for-surgeon-general-flounders-amid-gop-doubts/" target="_blank">https://arstechnica.com/health/2026/03/trumps-maha-pick-for-surgeon-general-flounders-amid-gop-doubts/</a></li>
 </ul>
 
 
-<p>_Generated by Bishop • Last updated: 2026-03-24 06:12 AM PST_</p>
+<p>_Generated by Bishop • Last updated: 2026-03-23 09:36 PM PST_</p>
 
         
 <hr style="margin: 60px 0 40px 0; border: none; border-top: 1px solid var(--border);">
@@ -795,7 +837,7 @@
     </p>
     <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
 
-        <a href="Database/all_items_2026-03-24.html" style="
+        <a href="Database/all_items_2026-03-23.html" style="
             display: inline-block;
             background: var(--accent);
             color: white;
@@ -806,7 +848,7 @@
             font-size: 18px;
             transition: all 0.2s ease;
         ">
-            View All Items (2026-03-24)
+            View All Items (2026-03-23)
         </a>
 
     </div>
