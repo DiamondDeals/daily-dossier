@@ -46,9 +46,16 @@ class RSSNewsScanner:
                     pub_date = datetime.now()
                 
                 if pub_date > cutoff_time:
+                    # Get URL with fallback to enclosure for podcasts
+                    url = ''
+                    if hasattr(entry, 'link') and entry.link:
+                        url = entry.link
+                    elif hasattr(entry, 'enclosures') and entry.enclosures:
+                        url = entry.enclosures[0].get('href', '')
+
                     article = {
                         'title': entry.title if hasattr(entry, 'title') else 'Untitled',
-                        'url': entry.link if hasattr(entry, 'link') else '',
+                        'url': url,
                         'published': pub_date.isoformat(),
                         'summary': entry.summary if hasattr(entry, 'summary') else ''
                     }
